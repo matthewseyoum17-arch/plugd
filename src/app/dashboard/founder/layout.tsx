@@ -1,0 +1,95 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+const navItems = [
+  { name: 'Overview', href: '/dashboard/founder' },
+  { name: 'My Listings', href: '/dashboard/founder/listings' },
+  { name: 'Appointments', href: '/dashboard/founder/appointments' },
+  { name: 'Earnings', href: '/dashboard/founder/earnings' },
+]
+
+export default function FounderDashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+      } else {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        
+        if (userData?.role !== 'founder') {
+          router.push('/dashboard/setter')
+        }
+        setUser(user)
+      }
+    }
+    getUser()
+  }, [router, supabase])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  if (!user) return null
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="flex">
+        <aside className="w-64 bg-gray-800 min-h-screen p-6">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-blue-400">Plugd</h1>
+            <p className="text-sm text-gray-400">Founder Dashboard</p>
+          </div>
+          
+          <nav className="space-y-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`block px-4 py-2 rounded-lg transition-colors ${
+                  pathname === item.href
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="mt-8 pt-8 border-t border-gray-700">
+            <button
+              onClick={handleLogout}
+              className="w-full px-4 py-2 text-gray-300 hover:text-white transition-colors text-left"
+            >
+              Logout
+            </button>
+          </div>
+        </aside>
+
+        <main className="flex-1 p-8">
+          {children}
+        </main>
+      </div>
+    </div>
+  )
+}
