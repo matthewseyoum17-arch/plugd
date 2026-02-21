@@ -21,28 +21,38 @@ export default function FounderDashboardLayout({
 }) {
   const pathname = usePathname()
   const router = useRouter()
-  const supabase = createClient()
+  const [supabase] = useState(() => createClient())
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
         router.push('/login')
       } else {
-        const role = user.user_metadata?.role
+        const role = session.user.user_metadata?.role
         if (role !== 'founder') {
           router.push('/dashboard/setter')
         }
-        setUser(user)
+        setUser(session.user)
       }
-    }
-    getUser()
+      setLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
   }, [router, supabase])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/login')
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
   }
 
   if (!user) return null
