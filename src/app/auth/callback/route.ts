@@ -1,11 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { type CookieOptions } from '@supabase/ssr'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
 
   if (code) {
     const supabase = createClient()
@@ -18,8 +16,7 @@ export async function GET(request: Request) {
         .eq('id', data.user.id)
         .single()
 
-      const role = userData?.role || 'setter'
-      const redirectPath = `/dashboard/${role}`
+      const redirectPath = `/dashboard/${userData?.role || 'setter'}`
 
       return NextResponse.redirect(`${origin}${redirectPath}`)
     }
