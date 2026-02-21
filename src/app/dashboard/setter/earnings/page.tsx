@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export default async function Earnings() {
+export default async function SetterEarnings() {
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
@@ -12,24 +12,23 @@ export default async function Earnings() {
 
   const role = user.user_metadata?.role
 
-  if (role !== 'founder') {
-    redirect('/dashboard/setter')
+  if (role !== 'setter') {
+    redirect('/dashboard/founder')
   }
 
   const { data: payouts } = await supabase
     .from('payouts')
     .select('*, appointments(contact_name, listings(title))')
-    .eq('founder_id', user.id)
+    .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
 
   const totalPaid = payouts?.filter(p => p.status === 'paid').reduce((sum, p) => sum + (p.amount || 0), 0) || 0
   const totalPending = payouts?.filter(p => p.status === 'pending').reduce((sum, p) => sum + (p.amount || 0), 0) || 0
-  const totalProcessing = payouts?.filter(p => p.status === 'processing').reduce((sum, p) => sum + (p.amount || 0), 0) || 0
 
   const stats = [
-    { name: 'Total Paid', value: `$${(totalPaid / 100).toFixed(2)}`, color: 'text-[#00FF94]' },
-    { name: 'Pending', value: `$${((totalPending + totalProcessing) / 100).toFixed(2)}`, color: 'text-yellow-400' },
-    { name: 'Transactions', value: payouts?.length || 0, color: 'text-white' },
+    { name: 'Total Earned', value: `$${(totalPaid / 100).toFixed(2)}`, color: 'text-[#00FF94]' },
+    { name: 'Pending', value: `$${((totalPending) / 100).toFixed(2)}`, color: 'text-yellow-400' },
+    { name: 'Payouts', value: payouts?.length || 0, color: 'text-white' },
   ]
 
   const getStatusColor = (status: string) => {
@@ -61,7 +60,7 @@ export default async function Earnings() {
             <tr>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contact</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Listing</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Product</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
             </tr>

@@ -8,13 +8,14 @@ import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 
 const navItems = [
-  { name: 'Overview', href: '/dashboard/founder' },
-  { name: 'Listings', href: '/dashboard/founder/listings' },
-  { name: 'Appointments', href: '/dashboard/founder/appointments' },
-  { name: 'Earnings', href: '/dashboard/founder/earnings' },
+  { name: 'Overview', href: '/dashboard/setter' },
+  { name: 'Browse', href: '/dashboard/setter/browse' },
+  { name: 'My Products', href: '/dashboard/setter/products' },
+  { name: 'Appointments', href: '/dashboard/setter/appointments' },
+  { name: 'Earnings', href: '/dashboard/setter/earnings' },
 ]
 
-export default function FounderDashboardLayout({
+export default function SetterDashboardLayout({
   children,
 }: {
   children: React.ReactNode
@@ -31,8 +32,8 @@ export default function FounderDashboardLayout({
         router.push('/login')
       } else {
         const role = session.user.user_metadata?.role
-        if (role !== 'founder') {
-          router.push('/dashboard/setter')
+        if (role !== 'setter') {
+          router.push('/dashboard/founder')
         }
         setUser(session.user)
       }
@@ -59,7 +60,7 @@ export default function FounderDashboardLayout({
 
   const fullName = user.user_metadata?.first_name && user.user_metadata?.last_name
     ? `${user.user_metadata.first_name} ${user.user_metadata.last_name}`
-    : user.email?.split('@')[0] || 'Founder'
+    : user.email?.split('@')[0] || 'Setter'
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -67,7 +68,7 @@ export default function FounderDashboardLayout({
         <aside className="w-64 bg-[#111] min-h-screen p-6 fixed">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-[#00FF94]" style={{ fontFamily: 'Syne, sans-serif' }}>Plugd</h1>
-            <p className="text-sm text-gray-400">Founder Dashboard</p>
+            <p className="text-sm text-gray-400">Setter Dashboard</p>
           </div>
           
           <nav className="space-y-1">

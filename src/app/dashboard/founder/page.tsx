@@ -62,15 +62,15 @@ export default async function FounderOverview() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="bg-gray-800 rounded-lg p-6 border border-gray-700"
+            className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6"
           >
             <p className="text-gray-400 text-sm">{stat.name}</p>
-            <p className="text-3xl font-bold mt-2">{stat.value}</p>
+            <p className="text-3xl font-bold mt-2 text-[#00FF94]">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-8 bg-gray-800 rounded-lg p-6 border border-gray-700">
+      <div className="mt-8 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
         <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
         <p className="text-gray-400">No recent activity yet.</p>
       </div>

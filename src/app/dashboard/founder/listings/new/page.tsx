@@ -77,11 +77,11 @@ export default function CreateListing() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">Create New Listing</h1>
+      <h1 className="text-3xl font-bold mb-8">New Listing</h1>
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
         {error && (
-          <div className="p-4 bg-red-900/50 border border-red-700 rounded-lg text-red-300">
+          <div className="p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
             {error}
           </div>
         )}
@@ -94,7 +94,7 @@ export default function CreateListing() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             required
             placeholder="e.g., AI Receptionist for Dental Offices"
           />
@@ -107,7 +107,7 @@ export default function CreateListing() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-32"
             required
             placeholder="Describe your AI product and its key features..."
           />
@@ -121,7 +121,7 @@ export default function CreateListing() {
             type="text"
             value={idealCustomer}
             onChange={(e) => setIdealCustomer(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             placeholder="e.g., Dental practices with 2-10 locations"
           />
         </div>
@@ -134,7 +134,7 @@ export default function CreateListing() {
             type="url"
             value={productUrl}
             onChange={(e) => setProductUrl(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             placeholder="https://yourproduct.com"
           />
         </div>
@@ -150,7 +150,7 @@ export default function CreateListing() {
               min="0"
               value={commissionPerAppointment}
               onChange={(e) => setCommissionPerAppointment(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
               placeholder="25.00"
             />
           </div>
@@ -164,7 +164,7 @@ export default function CreateListing() {
               min="0"
               value={commissionPerClose}
               onChange={(e) => setCommissionPerClose(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
               placeholder="250.00"
             />
           </div>
@@ -177,9 +177,9 @@ export default function CreateListing() {
           <textarea
             value={qualifiedMeetingDefinition}
             onChange={(e) => setQualifiedMeetingDefinition(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-24"
             required
-            placeholder="Define what counts as a qualified meeting (e.g., 15+ min call, prospect has budget, decision maker present)..."
+            placeholder="Define what counts as a qualified meeting..."
           />
         </div>
 
@@ -191,8 +191,8 @@ export default function CreateListing() {
             type="url"
             value={pitchKitUrl}
             onChange={(e) => setPitchKitUrl(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://docs.google.com/... or similar"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            placeholder="https://docs.google.com/..."
           />
         </div>
 
@@ -200,14 +200,14 @@ export default function CreateListing() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-[#00FF94] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
           >
             {loading ? 'Creating...' : 'Create Listing'}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+            className="px-6 py-3 bg-[#1a1a1a] text-gray-300 border border-[#2a2a2a] rounded-lg hover:bg-[#2a2a2a] transition-colors"
           >
             Cancel
           </button>
