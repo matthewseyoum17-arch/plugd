@@ -10,13 +10,8 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data.user) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', data.user.id)
-        .single()
-
-      const redirectPath = `/dashboard/${userData?.role || 'setter'}`
+      const role = data.user.user_metadata?.role || 'setter'
+      const redirectPath = `/dashboard/${role}`
 
       return NextResponse.redirect(`${origin}${redirectPath}`)
     }

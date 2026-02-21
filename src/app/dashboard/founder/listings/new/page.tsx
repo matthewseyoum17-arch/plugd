@@ -26,13 +26,8 @@ export default function CreateListing() {
         router.push('/login')
         return
       }
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      
-      if (userData?.role !== 'founder') {
+      const role = user.user_metadata?.role
+      if (role !== 'founder') {
         router.push('/dashboard/setter')
       }
     }

@@ -30,13 +30,8 @@ export default function FounderDashboardLayout({
       if (!user) {
         router.push('/login')
       } else {
-        const { data: userData } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-        
-        if (userData?.role !== 'founder') {
+        const role = user.user_metadata?.role
+        if (role !== 'founder') {
           router.push('/dashboard/setter')
         }
         setUser(user)

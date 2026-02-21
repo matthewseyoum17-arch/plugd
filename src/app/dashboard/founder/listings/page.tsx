@@ -11,13 +11,9 @@ export default async function MyListings() {
     redirect('/login')
   }
 
-  const { data: userData } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single()
+  const role = user.user_metadata?.role
 
-  if (userData?.role !== 'founder') {
+  if (role !== 'founder') {
     redirect('/dashboard/setter')
   }
 

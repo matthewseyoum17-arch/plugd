@@ -29,13 +29,7 @@ export default function LoginPage() {
     }
 
     if (data.user) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', data.user.id)
-        .single()
-
-      const role = userData?.role || 'setter'
+      const role = data.user.user_metadata?.role || 'setter'
       router.push(`/dashboard/${role}`)
     }
 
