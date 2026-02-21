@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { ApplicationActions } from './_components/ApplicationActions'
 
-export default async function MyProducts() {
+export default async function Applications() {
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
@@ -13,15 +13,14 @@ export default async function MyProducts() {
 
   const role = user.user_metadata?.role
 
-  if (role !== 'setter') {
-    redirect('/dashboard/founder')
+  if (role !== 'founder') {
+    redirect('/dashboard/setter')
   }
 
   const { data: applications } = await supabase
     .from('setter_applications')
-    .select('*, listings(*)')
-    .eq('setter_id', user.id)
-    .eq('status', 'approved')
+    .select('*, listings(title), setter_profiles(setter_id, users!setter_profiles_setter_id_fkey(full_name, email))')
+    .eq('listings.company_id', user.id)
     .order('created_at', { ascending: false })
 
   const getStatusColor = (status: string) => {
@@ -35,45 +34,49 @@ export default async function MyProducts() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">My Products</h1>
+      <h1 className="text-3xl font-bold mb-8">Setter Applications</h1>
 
       <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
         <table className="w-full">
           <thead className="bg-[#111]">
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Product</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Company</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">$/Appt</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">$/Close</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Setter</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Listing</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Applied</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#2a2a2a]">
             {applications?.map((app) => (
               <tr key={app.id} className="hover:bg-[#1f1f1f]">
-                <td className="px-6 py-4 text-white">{app.listings?.title || 'N/A'}</td>
-                <td className="px-6 py-4 text-gray-300">{app.listings?.company_name || 'N/A'}</td>
-                <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_appointment || 0) / 100).toFixed(2)}</td>
-                <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_close || 0) / 100).toFixed(2)}</td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-white">{app.setter_profiles?.users?.full_name || 'Unknown'}</div>
+                  <div className="text-xs text-gray-500">{app.setter_profiles?.users?.email}</div>
+                </td>
+                <td className="px-6 py-4 text-gray-300">{app.listings?.title || 'N/A'}</td>
+                <td className="px-6 py-4 text-sm text-gray-500">
+                  {new Date(app.created_at).toLocaleDateString()}
+                </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(app.status)}`}>
                     {app.status}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <Link
-                    href={`/dashboard/setter/products/${app.listing_id}/submit`}
-                    className="px-3 py-1 bg-[#00FF94] text-black text-xs font-medium rounded-lg hover:bg-[#00cc76] transition-colors"
-                  >
-                    Submit Appointment
-                  </Link>
+                  <ApplicationActions
+                    applicationId={app.id}
+                    setterName={app.setter_profiles?.users?.full_name || 'Unknown'}
+                    listingTitle={app.listings?.title || ''}
+                    currentStatus={app.status}
+                  />
                 </td>
               </tr>
             ))}
             {(!applications || applications.length === 0) && (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                  You haven't applied to promote any products yet.
+                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                  No applications yet.
                 </td>
               </tr>
             )}
