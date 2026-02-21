@@ -6,15 +6,11 @@ import { useRouter } from 'next/navigation'
 
 type ApplicationActionProps = {
   applicationId: string
-  setterName: string
-  listingTitle: string
   currentStatus: string
 }
 
 export function ApplicationActions({ 
   applicationId, 
-  setterName, 
-  listingTitle,
   currentStatus 
 }: ApplicationActionProps) {
   const [loading, setLoading] = useState(false)

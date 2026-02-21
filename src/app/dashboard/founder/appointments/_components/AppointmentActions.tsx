@@ -6,18 +6,20 @@ import { useRouter } from 'next/navigation'
 
 type AppointmentActionProps = {
   appointmentId: string
-  listingId: string
-  setterId: string
   currentStatus: string
-  commissionAmount: number
+  setterId: string
+  commissionPerAppointment: number
+  commissionPerClose: number
+  appointmentType: string
 }
 
 export function AppointmentActions({ 
   appointmentId, 
-  listingId, 
-  setterId, 
   currentStatus,
-  commissionAmount 
+  setterId,
+  commissionPerAppointment,
+  commissionPerClose,
+  appointmentType
 }: AppointmentActionProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -42,6 +44,10 @@ export function AppointmentActions({
       if (updateError) throw updateError
 
       // 2. Create payout record
+      const commissionAmount = appointmentType === 'appointment' 
+        ? commissionPerAppointment 
+        : commissionPerClose
+
       const { error: payoutError } = await supabase
         .from('payouts')
         .insert({

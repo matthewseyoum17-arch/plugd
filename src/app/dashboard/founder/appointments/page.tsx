@@ -74,14 +74,11 @@ export default async function Appointments() {
                 <td className="px-6 py-4">
                   <AppointmentActions
                     appointmentId={apt.id}
-                    listingId={apt.listing_id}
-                    setterId={apt.setter_id}
                     currentStatus={apt.status}
-                    commissionAmount={
-                      apt.appointment_type === 'appointment'
-                        ? apt.listings?.commission_per_appointment || 0
-                        : apt.listings?.commission_per_close || 0
-                    }
+                    setterId={apt.setter_id}
+                    commissionPerAppointment={apt.listings?.commission_per_appointment || 0}
+                    commissionPerClose={apt.listings?.commission_per_close || 0}
+                    appointmentType={apt.appointment_type}
                   />
                 </td>
               </tr>

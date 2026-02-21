@@ -57,18 +57,18 @@ export default async function Home() {
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
             The platform where B2B founders list their products and top appointment setters earn commissions for qualified meetings.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col md:flex-row gap-6 justify-center">
             <Link 
-              href="/signup?role=founder"
-              className="px-8 py-4 bg-[#00FF94] text-black font-semibold rounded-xl hover:bg-[#00cc76] transition-colors text-lg"
+              href="/signup?role=founder" 
+              className="px-8 py-4 bg-[#00FF94] text-black font-bold rounded-xl hover:bg-[#00cc76] transition-colors text-lg"
             >
-              I'm a Founder
+              Start as Founder
             </Link>
             <Link 
-              href="/signup?role=setter"
-              className="px-8 py-4 bg-[#1a1a1a] border border-[#2a2a2a] text-white font-semibold rounded-xl hover:bg-[#2a2a2a] transition-colors text-lg"
+              href="/signup?role=setter" 
+              className="px-8 py-4 bg-[#1a1a1a] text-white border border-[#2a2a2a] font-bold rounded-xl hover:bg-[#2a2a2a] transition-colors text-lg"
             >
-              I'm an Appointment Setter
+              Start as Setter
             </Link>
           </div>
         </div>
@@ -82,8 +82,8 @@ export default async function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-bold mb-4 text-white">List your product</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Founders can create listings with custom commission structures for appointments and closed deals.
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              Everything you need to manage your setters, track appointments, and grow your revenue.
             </p>
           </div>
 
@@ -94,8 +94,8 @@ export default async function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-bold mb-4 text-white">Find opportunities</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Setters browse high-converting B2B products and apply to promote the ones that fit their network.
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              High-ticket products ready for promotion. Earn what you&apos;re worth.
             </p>
           </div>
 

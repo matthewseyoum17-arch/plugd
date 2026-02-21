@@ -4,8 +4,19 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useParams } from 'next/navigation'
 
+interface Listing {
+  id: string
+  title: string
+  company_id: string
+  commission_per_appointment: number
+  commission_per_close: number
+  founder_profiles?: {
+    company_name: string
+  }
+}
+
 export default function SubmitAppointment() {
-  const [listing, setListing] = useState<any>(null)
+  const [listing, setListing] = useState<Listing | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -84,8 +95,8 @@ export default function SubmitAppointment() {
       if (insertError) throw insertError
 
       router.push('/dashboard/setter/appointments')
-    } catch (err: any) {
-      setError(err.message || 'Failed to submit appointment')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to submit appointment')
     } finally {
       setSubmitting(false)
     }

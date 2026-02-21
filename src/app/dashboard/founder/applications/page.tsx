@@ -64,12 +64,10 @@ export default async function Applications() {
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <ApplicationActions
-                    applicationId={app.id}
-                    setterName={app.setter_profiles?.users?.full_name || 'Unknown'}
-                    listingTitle={app.listings?.title || ''}
-                    currentStatus={app.status}
-                  />
+                    <ApplicationActions
+                      applicationId={app.id}
+                      currentStatus={app.status}
+                    />
                 </td>
               </tr>
             ))}

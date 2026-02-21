@@ -73,7 +73,7 @@ export default async function MyProducts() {
             {(!applications || applications.length === 0) && (
               <tr>
                 <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                  You haven't applied to promote any products yet.
+                  You haven&apos;t applied to promote any products yet.
                 </td>
               </tr>
             )}
