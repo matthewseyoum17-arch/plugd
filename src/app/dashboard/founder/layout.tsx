@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { User } from '@supabase/supabase-js'
 
 const navItems = [
   { name: 'Overview', href: '/dashboard/founder' },
@@ -21,7 +22,7 @@ export default function FounderDashboardLayout({
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     const getUser = async () => {
