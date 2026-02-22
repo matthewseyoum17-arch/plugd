@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { createClient } from '@/lib/supabase/server'
 import { ArrowRight, CheckCircle2, TrendingUp, Shield, Zap } from 'lucide-react'
-
-// You'd typically extract this to a separate client component file if you want to use Framer Motion
-// But to keep it in one file and avoid 'use client' on the whole page, we'll use CSS animations for the background
-// For scroll animations, we'll use pure CSS with target or intersection observer in a small client wrapper if needed,
-// but for now, CSS keyframes + tailwind provide a great 60fps baseline without JS overhead.
+import HeroBackground3D from '@/components/HeroBackground3D'
 
 export default async function Home() {
   const supabase = createClient()
@@ -26,11 +22,8 @@ export default async function Home() {
         style={{ backgroundImage: 'url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png")' }}
       ></div>
 
-      {/* Animated Subtle Gradient Mesh Background */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#00FF94]/10 blur-[120px] mix-blend-screen animate-pulse-slow"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#06b6d4]/10 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-      </div>
+      {/* 3D Low-Poly Background (CSS fallback if WebGL unavailable) */}
+      <HeroBackground3D />
 
       {/* Navigation */}
       <nav className="fixed w-full z-40 border-b border-white/[0.05] bg-black/50 backdrop-blur-xl">
