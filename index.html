@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pluggd | The High-Ticket AI Automation Marketplace</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Syne', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#000103',
+                            panel: 'rgba(10, 15, 26, 0.4)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            primary: '#00ff9d',
+                            primaryHover: '#00cc7d',
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(0, 255, 157, 0.1)' },
+                            '100%': { boxShadow: '0 0 30px rgba(0, 255, 157, 0.3)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        
+        body {
+            background-color: #000103;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, #0a0f1a 0%, #000103 100%);
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: var(--tw-colors-brand-panel);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--tw-colors-brand-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(20, 25, 40, 0.6) 0%, rgba(10, 15, 26, 0.4) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 255, 157, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 255, 157, 0.1), inset 0 0 0 1px rgba(0, 255, 157, 0.1);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-gradient-brand {
+            background: linear-gradient(135deg, #00ff9d 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000103;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 157, 0.3);
+        }
+
+        /* Film Grain Overlay */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-primary/30 selection:text-white">
+
+    <!-- WebGL Background -->
+    <div id="canvas-container"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-6 py-4 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-primary to-brand-cyan p-[1px] group-hover:shadow-[0_0_15px_rgba(0,255,157,0.4)] transition-all">
+                    <div class="w-full h-full bg-brand-dark rounded-[7px] flex items-center justify-center">
+                        <i data-lucide="zap" class="w-4 h-4 text-brand-primary"></i>
+                    </div>
+                </div>
+                <span class="font-display font-bold text-xl tracking-tight text-white">Pluggd</span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#how-it-works" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">How it Works</a>
+                <a href="#benefits" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Benefits</a>
+                <a href="#network" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Network</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-colors hidden sm:block">Log in</a>
+                <a href="/dashboard" class="group relative px-5 py-2.5 rounded-full bg-white/5 border border-white/10 hover:border-brand-primary/50 transition-all overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-primary/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    <span class="relative text-sm font-semibold text-white">Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center z-10 gs-reveal">
+                
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel mb-8 border-brand-primary/30 text-brand-primary text-xs font-semibold tracking-wide uppercase">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-primary"></span>
+                    </span>
+                    The Premium AI Automation Network
+                </div>
+
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-6">
+                    Connecting elite <span class="text-gradient-brand">AI products</span><br class="hidden md:block"/> with top closers.
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
+                    The high-ticket marketplace where AI SaaS founders list powerful agents, and elite appointment setters earn serious commissions on qualified meetings & closed deals.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                    <a href="/signup?role=founder" class="w-full sm:w-auto px-8 py-4 bg-brand-primary text-brand-dark font-bold rounded-xl hover:bg-brand-primaryHover transition-all transform hover:scale-[1.02] shadow-[0_0_20px_rgba(0,255,157,0.3)] flex items-center justify-center gap-2">
+                        Start as Founder
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="/signup?role=setter" class="w-full sm:w-auto px-8 py-4 glass-panel text-white font-bold rounded-xl hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                        Start as Setter
+                    </a>
+                </div>
+
+                <!-- Trust Bar -->
+                <div class="mt-20 pt-8 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm text-gray-500 font-medium gs-reveal-delay">
+                    <div class="flex items-center justify-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
+                        Vetted Opportunities
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i data-lucide="banknote" class="w-4 h-4 text-brand-primary"></i>
+                        High-Ticket Deals
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 text-brand-purple"></i>
+                        Automated Payouts
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i data-lucide="users" class="w-4 h-4 text-brand-cyan"></i>
+                        Elite Network
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works" class="py-24 px-6 relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 gs-fade-up">
+                    <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">How Pluggd Works</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">A seamless ecosystem designed for maximum leverage, transparent tracking, and instant scalability.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step 1 -->
+                    <div class="glass-card rounded-2xl p-8 gs-stagger">
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center mb-6">
+                            <i data-lucide="plus-square" class="w-6 h-6 text-brand-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">List your AI Product</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Founders list their SaaS agents, set commission rates for appointments and closed deals, and define qualified meeting criteria.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> Control margins</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> Review setter profiles</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="glass-card rounded-2xl p-8 gs-stagger">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center mb-6">
+                            <i data-lucide="search" class="w-6 h-6 text-brand-cyan"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Find Opportunities</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Setters browse a curated marketplace of high-ticket AI products, apply to promote, and leverage provided pitch kits.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-cyan"></i> Filter by niche</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-cyan"></i> Access sales assets</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="glass-card rounded-2xl p-8 gs-stagger">
+                        <div class="w-12 h-12 rounded-xl bg-brand-purple/10 border border-brand-purple/20 flex items-center justify-center mb-6">
+                            <i data-lucide="circle-dollar-sign" class="w-6 h-6 text-brand-purple"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Get Paid Directly</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Submit appointments via the dashboard. Founders confirm meetings, triggering automated, transparent commission payouts.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-purple"></i> Dispute resolution</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-purple"></i> Instant ledgers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats / Parallax Section -->
+        <section id="benefits" class="py-24 px-6 relative z-10 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-primary/5 to-transparent skew-y-[-3deg] transform origin-top-left -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="gs-fade-right">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 leading-tight">Scale revenue without<br/><span class="text-gradient">scaling headcount.</span></h2>
+                    <p class="text-gray-400 mb-8 text-lg">Pluggd aligns incentives perfectly. Founders get qualified pipeline with zero base salaries. Closers get access to the most lucrative AI products in the market.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-brand-primary/10 flex items-center justify-center shrink-0">
+                                <span class="text-brand-primary font-bold text-sm">1</span>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Transparent Tracking</h4>
+                                <p class="text-sm text-gray-500">Real-time status updates on every submitted appointment and closed deal.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-brand-cyan/10 flex items-center justify-center shrink-0">
+                                <span class="text-brand-cyan font-bold text-sm">2</span>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Auto-Approval Windows</h4>
+                                <p class="text-sm text-gray-500">Appointments auto-approve if not disputed within 72 hours, protecting setter commissions.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-brand-purple/10 flex items-center justify-center shrink-0">
+                                <span class="text-brand-purple font-bold text-sm">3</span>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Role-Based Workflows</h4>
+                                <p class="text-sm text-gray-500">Dedicated dashboards customized for the exact needs of Founders vs Setters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative gs-fade-left">
+                    <!-- Decorative UI Elements mimicking the app -->
+                    <div class="glass-panel rounded-2xl p-6 relative z-10 shadow-2xl border-brand-primary/20">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                                    <i data-lucide="bot" class="w-5 h-5 text-gray-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium text-sm">AI Voice Receptionist</h4>
+                                    <p class="text-xs text-gray-500">Dental Practices</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-green-500/10 text-brand-primary text-xs rounded-full border border-green-500/20">Active</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-black/40 rounded-lg p-4 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">Commission / Appt</p>
+                                <p class="text-xl font-bold text-brand-primary">$150</p>
+                            </div>
+                            <div class="bg-black/40 rounded-lg p-4 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">Commission / Close</p>
+                                <p class="text-xl font-bold text-brand-cyan">$1,200</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>12 Setters Active</span>
+                            <span>4 Pending Appts</span>
+                        </div>
+                    </div>
+
+                    <!-- Background blur decorative cards -->
+                    <div class="absolute -top-10 -right-10 w-full h-full glass-panel rounded-2xl border-white/5 -z-10 scale-95 opacity-50 blur-sm"></div>
+                    <div class="absolute -bottom-10 -left-10 w-full h-full glass-panel rounded-2xl border-white/5 -z-20 scale-90 opacity-20 blur-md"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-32 px-6 relative z-10 text-center gs-fade-up">
+            <div class="max-w-3xl mx-auto glass-panel rounded-3xl p-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/10 to-brand-purple/10 z-0"></div>
+                <div class="relative z-10">
+                    <h2 class="font-display text-4xl font-bold mb-6 text-white">Ready to plug into the network?</h2>
+                    <p class="text-gray-400 mb-10 text-lg">Join the premier marketplace for AI automation SaaS sales.</p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="/signup" class="w-full sm:w-auto px-8 py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                            Create Account
+                        </a>
+                        <a href="/login" class="w-full sm:w-auto px-8 py-4 border border-white/20 text-white font-bold rounded-xl hover:bg-white/5 transition-all">
+                            Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/50 backdrop-blur-md relative z-10 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <i data-lucide="zap" class="w-5 h-5 text-brand-primary"></i>
+                <span class="font-display font-bold text-lg text-white">Pluggd</span>
+            </div>
+            
+            <div class="flex gap-6 text-sm text-gray-500">
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+                <a href="#" class="hover:text-white transition-colors">Contact</a>
+            </div>
+            
+            <p class="text-sm text-gray-600">© 2026 Pluggd Network. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- Three.js + GSAP Logic -->
+    <script>
+        // --- THREE.JS SETUP ---
+        const container = document.getElementById('canvas-container');
+        
+        // Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+        // Slightly tinted fog to match the dark theme
+        scene.fog = new THREE.FogExp2(0x000103, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 12;
+        camera.position.y = 2;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap DPR for performance
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.physicallyCorrectLights = true;
+        container.appendChild(renderer.domElement);
+
+        // --- GEOMETRY & MATERIALS ---
+        const group = new THREE.Group();
+        scene.add(group);
+
+        // Core central shape - abstract node network
+        // Icosahedron base
+        const geometry = new THREE.IcosahedronGeometry(4, 2);
+        
+        // Premium Frosted Glass Material
+        const material = new THREE.MeshPhysicalMaterial({
+            color: 0x111111,
+            emissive: 0x000000,
+            roughness: 0.2,
+            metalness: 0.8,
+            reflectivity: 0.9,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1,
+            transmission: 0.9, // glass effect
+            ior: 1.5,
+            thickness: 2.0,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        group.add(mesh);
+
+        // Inner glowing core
+        const coreGeo = new THREE.IcosahedronGeometry(2.5, 1);
+        const coreMat = new THREE.MeshPhysicalMaterial({
+            color: 0x00ff9d,
+            emissive: 0x00ff9d,
+            emissiveIntensity: 0.5,
+            roughness: 0.4,
+            metalness: 0.8,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        group.add(core);
+
+        // Floating Particles (nodes)
+        const particlesGeo = new THREE.BufferGeometry();
+        const particleCount = 100;
+        const posArray = new Float32Array(particleCount * 3);
+        
+        for(let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 25;
+        }
+        
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMat = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x06b6d4,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particleMesh = new THREE.Points(particlesGeo, particlesMat);
+        scene.add(particleMesh);
+
+        // --- LIGHTING ---
+        // Cinematic 3-point lighting
+        const keyLight = new THREE.SpotLight(0x00ff9d, 50); // Neon Green
+        keyLight.position.set(-10, 10, 10);
+        keyLight.angle = Math.PI / 4;
+        keyLight.penumbra = 0.5;
+        scene.add(keyLight);
+
+        const fillLight = new THREE.PointLight(0x8b5cf6, 30); // Deep Purple
+        fillLight.position.set(10, 0, 5);
+        scene.add(fillLight);
+
+        const rimLight = new THREE.PointLight(0x06b6d4, 40); // Cyan
+        rimLight.position.set(0, -10, -10);
+        scene.add(rimLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        scene.add(ambientLight);
+
+        // --- ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Gentle rotation
+            group.rotation.y = elapsedTime * 0.05;
+            group.rotation.x = Math.sin(elapsedTime * 0.2) * 0.1;
+            
+            core.rotation.y = elapsedTime * -0.1;
+            core.rotation.z = elapsedTime * 0.05;
+
+            // Breathing effect on outer mesh scale
+            const scale = 1 + Math.sin(elapsedTime * 0.5) * 0.03;
+            mesh.scale.set(scale, scale, scale);
+
+            // Particles rotation
+            particleMesh.rotation.y = elapsedTime * 0.02;
+
+            // Mouse parallax effect
+            camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 2 - camera.position.y + 2) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) / windowHalfX;
+            mouseY = (event.clientY - windowHalfY) / windowHalfY;
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+
+        // --- GSAP SCROLL ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Initial Load Animations
+        const tl = gsap.timeline();
+        
+        tl.from(".gs-reveal", {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.2
+        })
+        .from(".gs-reveal-delay", {
+            y: 20,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.4");
+
+        // 2. Scroll Triggered Animations
+        
+        // Navbar blur effect on scroll
+        ScrollTrigger.create({
+            start: 'top -50',
+            end: 99999,
+            toggleClass: {className: 'bg-black/40 backdrop-blur-md border-b border-white/5 shadow-lg', targets: '#navbar'}
+        });
+
+        // Fade up sections
+        gsap.utils.toArray('.gs-fade-up').forEach(element => {
+            gsap.from(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // Stagger cards in How it Works
+        gsap.from(".gs-stagger", {
+            scrollTrigger: {
+                trigger: "#how-it-works",
+                start: "top 75%",
+            },
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out"
+        });
+
+        // Split section animations
+        gsap.from(".gs-fade-right", {
+            scrollTrigger: {
+                trigger: "#benefits",
+                start: "top 75%",
+            },
+            x: -50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        gsap.from(".gs-fade-left", {
+            scrollTrigger: {
+                trigger: "#benefits",
+                start: "top 75%",
+            },
+            x: 50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            delay: 0.2
+        });
+
+        // 3. 3D Background Scroll Parallax
+        // Move camera deeper into the scene as user scrolls down
+        gsap.to(camera.position, {
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1
+            },
+            z: 4, // push in
+            y: -2  // move down slightly
+        });
+        
+        // Rotate the entire group on scroll
+        gsap.to(group.rotation, {
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5
+            },
+            x: Math.PI / 4,
+            y: Math.PI
+        });
+
+    </script>
+</body>
+</html>
