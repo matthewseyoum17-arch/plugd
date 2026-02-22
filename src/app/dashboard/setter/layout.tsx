@@ -10,7 +10,7 @@ import { User } from '@supabase/supabase-js'
 const navItems = [
   { name: 'Overview', href: '/dashboard/setter' },
   { name: 'Browse', href: '/dashboard/setter/browse' },
-  { name: 'My Products', href: '/dashboard/setter/products' },
+  { name: 'Applications', href: '/dashboard/setter/applications' },
   { name: 'Appointments', href: '/dashboard/setter/appointments' },
   { name: 'Earnings', href: '/dashboard/setter/earnings' },
 ]

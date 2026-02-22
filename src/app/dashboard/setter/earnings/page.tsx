@@ -3,18 +3,9 @@ import { redirect } from 'next/navigation'
 
 export default async function SetterEarnings() {
   const supabase = createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  const role = user.user_metadata?.role
-
-  if (role !== 'setter') {
-    redirect('/dashboard/founder')
-  }
+  if (!user) redirect('/login')
 
   const { data: payouts } = await supabase
     .from('payouts')
@@ -22,75 +13,70 @@ export default async function SetterEarnings() {
     .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
 
-  const totalPaid = payouts?.filter(p => p.status === 'paid').reduce((sum, p) => sum + (p.amount || 0), 0) || 0
-  const totalPending = payouts?.filter(p => p.status === 'pending').reduce((sum, p) => sum + (p.amount || 0), 0) || 0
+  const paidPayouts = payouts?.filter(p => p.status === 'paid') || []
+  const pendingPayouts = payouts?.filter(p => p.status === 'pending') || []
 
-  const stats = [
-    { name: 'Total Earned', value: `$${(totalPaid / 100).toFixed(2)}`, color: 'text-[#00FF94]' },
-    { name: 'Pending', value: `$${((totalPending) / 100).toFixed(2)}`, color: 'text-yellow-400' },
-    { name: 'Payouts', value: payouts?.length || 0, color: 'text-white' },
-  ]
+  // After 7% fee
+  const totalEarned = paidPayouts.reduce((sum, p) => {
+    const fee = Math.round((p.amount || 0) * 0.07)
+    return sum + ((p.amount || 0) - fee)
+  }, 0) / 100
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid': return 'bg-green-900/30 text-green-400 border border-green-800'
-      case 'pending': return 'bg-yellow-900/30 text-yellow-400 border border-yellow-800'
-      case 'processing': return 'bg-blue-900/30 text-blue-400 border border-blue-800'
-      case 'failed': return 'bg-red-900/30 text-red-400 border border-red-800'
-      default: return 'bg-gray-800/30 text-gray-400 border border-gray-700'
-    }
+  const totalPending = pendingPayouts.reduce((sum, p) => {
+    const fee = Math.round((p.amount || 0) * 0.07)
+    return sum + ((p.amount || 0) - fee)
+  }, 0) / 100
+
+  const statusColor: Record<string, string> = {
+    paid: 'bg-green-900 text-green-300',
+    pending: 'bg-yellow-900 text-yellow-300',
+    processing: 'bg-blue-900 text-blue-300',
+    failed: 'bg-red-900 text-red-300',
   }
 
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Earnings</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {stats.map((stat) => (
-          <div key={stat.name} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
-            <p className="text-gray-400 text-sm">{stat.name}</p>
-            <p className={`text-3xl font-bold mt-2 ${stat.color}`}>{stat.value}</p>
-          </div>
-        ))}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5">
+          <p className="text-gray-400 text-sm">Total Earned</p>
+          <p className="text-3xl font-bold mt-2 text-[#00FF94]">${totalEarned.toFixed(2)}</p>
+        </div>
+        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5">
+          <p className="text-gray-400 text-sm">Pending</p>
+          <p className="text-3xl font-bold mt-2 text-yellow-300">${totalPending.toFixed(2)}</p>
+        </div>
       </div>
 
-      <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-[#111]">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contact</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Product</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#2a2a2a]">
-            {payouts?.map((payout) => (
-              <tr key={payout.id} className="hover:bg-[#1f1f1f]">
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {new Date(payout.created_at).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 text-white">{payout.appointments?.contact_name || 'N/A'}</td>
-                <td className="px-6 py-4 text-gray-300">{payout.appointments?.listings?.title || 'N/A'}</td>
-                <td className="px-6 py-4 text-[#00FF94] font-medium">${((payout.amount || 0) / 100).toFixed(2)}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(payout.status)}`}>
+      {(!payouts || payouts.length === 0) ? (
+        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 text-center">
+          <p className="text-gray-400">No payouts yet. Submit appointments and get confirmed to start earning.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {payouts.map((payout) => {
+            const fee = Math.round((payout.amount || 0) * 0.07)
+            const netAmount = ((payout.amount || 0) - fee) / 100
+            return (
+              <div key={payout.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
+                <div>
+                  <p className="text-white font-medium">{payout.appointments?.listings?.title || 'N/A'}</p>
+                  <p className="text-gray-400 text-sm">{payout.appointments?.contact_name || ''}</p>
+                  <p className="text-gray-500 text-xs mt-1">{new Date(payout.created_at).toLocaleDateString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[#00FF94] font-semibold">${netAmount.toFixed(2)}</p>
+                  <p className="text-gray-500 text-xs">7% fee: ${(fee / 100).toFixed(2)}</p>
+                  <span className={`px-3 py-1 rounded-full text-xs mt-1 inline-block ${statusColor[payout.status] || 'bg-gray-800 text-gray-400'}`}>
                     {payout.status}
                   </span>
-                </td>
-              </tr>
-            ))}
-            {(!payouts || payouts.length === 0) && (
-              <tr>
-                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                  No payouts yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,0 +1,256 @@
+'use client'
+
+import { useState } from 'react'
+import { submitAppointment } from '../actions'
+
+type ApprovedListing = {
+  listing_id: string
+  title: string
+  commission_per_appointment: number
+  commission_per_close: number
+}
+
+type Appointment = {
+  id: string
+  listing_title: string
+  contact_name: string
+  commission_amount: number
+  status: string
+  auto_approve_at: string | null
+  created_at: string
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const colors: Record<string, string> = {
+    submitted: 'bg-yellow-900 text-yellow-300',
+    confirmed: 'bg-green-900 text-green-300',
+    disputed: 'bg-red-900 text-red-300',
+    auto_approved: 'bg-blue-900 text-blue-300',
+  }
+  return (
+    <span className={`px-3 py-1 rounded-full text-xs ${colors[status] || 'bg-gray-800 text-gray-400'}`}>
+      {status.replace('_', ' ')}
+    </span>
+  )
+}
+
+function Countdown({ autoApproveAt }: { autoApproveAt: string }) {
+  const diff = new Date(autoApproveAt).getTime() - Date.now()
+  if (diff <= 0) return <span className="text-blue-300 text-xs">Auto-approved</span>
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  return <span className="text-yellow-300 text-xs">{hours}h {mins}m left</span>
+}
+
+export function AppointmentsClient({
+  approvedListings,
+  appointments,
+}: {
+  approvedListings: ApprovedListing[]
+  appointments: Appointment[]
+}) {
+  const [tab, setTab] = useState<'submit' | 'list'>('list')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [selectedListing, setSelectedListing] = useState('')
+  const [appointmentType, setAppointmentType] = useState('appointment')
+
+  const selected = approvedListings.find((l) => l.listing_id === selectedListing)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setError('')
+    setSuccess(false)
+
+    const formData = new FormData(e.currentTarget)
+    formData.set('appointment_type', appointmentType)
+
+    const result = await submitAppointment(formData)
+    if (result.error) {
+      console.error('Submit appointment error:', result.error)
+      setError(result.error)
+    } else {
+      setSuccess(true)
+      ;(e.target as HTMLFormElement).reset()
+      setSelectedListing('')
+    }
+    setSubmitting(false)
+  }
+
+  const tabs = [
+    { key: 'list' as const, label: 'My Appointments' },
+    { key: 'submit' as const, label: 'Submit New' },
+  ]
+
+  return (
+    <div>
+      <div className="flex gap-1 mb-6">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              tab === t.key
+                ? 'text-[#00FF94] border-[#00FF94]'
+                : 'text-gray-400 border-transparent hover:text-white'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'submit' && (
+        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 max-w-2xl">
+          {error && (
+            <div className="p-3 bg-red-900/20 border border-red-800 rounded-md text-red-400 text-sm mb-4">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="p-3 bg-green-900/20 border border-green-800 rounded-md text-green-400 text-sm mb-4">
+              Appointment submitted successfully!
+            </div>
+          )}
+
+          {approvedListings.length === 0 ? (
+            <p className="text-gray-400">No approved listings yet. Apply to listings first.</p>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Listing *</label>
+                <select
+                  name="listing_id"
+                  value={selectedListing}
+                  onChange={(e) => setSelectedListing(e.target.value)}
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  required
+                >
+                  <option value="">Select a listing</option>
+                  {approvedListings.map((l) => (
+                    <option key={l.listing_id} value={l.listing_id}>
+                      {l.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">Contact Name *</label>
+                  <input
+                    type="text"
+                    name="contact_name"
+                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                    required
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">Contact Email *</label>
+                  <input
+                    type="email"
+                    name="contact_email"
+                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                    required
+                    placeholder="john@company.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Contact Company *</label>
+                <input
+                  type="text"
+                  name="contact_company"
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  required
+                  placeholder="Acme Corp"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Calendly Event URL</label>
+                <input
+                  type="url"
+                  name="calendly_event_url"
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  placeholder="https://calendly.com/..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Appointment Type *</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="appointment_type_radio"
+                      value="appointment"
+                      checked={appointmentType === 'appointment'}
+                      onChange={() => setAppointmentType('appointment')}
+                      className="w-4 h-4 accent-[#00FF94]"
+                    />
+                    <span className="text-white text-sm">
+                      Appointment{selected ? ` ($${((selected.commission_per_appointment || 0) / 100).toFixed(2)})` : ''}
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="appointment_type_radio"
+                      value="close"
+                      checked={appointmentType === 'close'}
+                      onChange={() => setAppointmentType('close')}
+                      className="w-4 h-4 accent-[#00FF94]"
+                    />
+                    <span className="text-white text-sm">
+                      Close{selected ? ` ($${((selected.commission_per_close || 0) / 100).toFixed(2)})` : ''}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="bg-[#00FF94] text-black font-semibold rounded-md px-4 py-2 hover:brightness-90 disabled:opacity-50"
+              >
+                {submitting ? 'Submitting...' : 'Submit Appointment'}
+              </button>
+            </form>
+          )}
+        </div>
+      )}
+
+      {tab === 'list' && (
+        <div className="space-y-3">
+          {appointments.length === 0 ? (
+            <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 text-center">
+              <p className="text-gray-400">No appointments yet. Submit your first appointment.</p>
+            </div>
+          ) : (
+            appointments.map((apt) => (
+              <div key={apt.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
+                <div>
+                  <p className="text-white font-medium">{apt.listing_title}</p>
+                  <p className="text-gray-400 text-sm">Contact: {apt.contact_name}</p>
+                  <p className="text-[#00FF94] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</p>
+                  {apt.status === 'submitted' && apt.auto_approve_at && (
+                    <div className="mt-1"><Countdown autoApproveAt={apt.auto_approve_at} /></div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <StatusBadge status={apt.status} />
+                  <p className="text-gray-500 text-xs mt-2">{new Date(apt.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
