@@ -22,12 +22,6 @@ export async function createListing(formData: FormData): Promise<{ error: string
   const qualifiedMeetingDefinition = formData.get('qualified_meeting_definition') as string
   const pitchKitUrl = formData.get('pitch_kit_url') as string
 
-  const { data: founderProfile } = await supabase
-    .from('founder_profiles')
-    .select('company_name')
-    .eq('founder_id', user.id)
-    .single()
-
   const { error: insertError } = await supabase.from('listings').insert({
     company_id: user.id,
     title,
@@ -38,7 +32,6 @@ export async function createListing(formData: FormData): Promise<{ error: string
     commission_per_close: Math.round(parseFloat(commissionPerClose || '0') * 100),
     qualified_meeting_definition: qualifiedMeetingDefinition,
     pitch_kit_url: pitchKitUrl,
-    company_name: founderProfile?.company_name || 'My Company',
     status: 'active',
   })
 

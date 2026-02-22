@@ -19,7 +19,7 @@ export default async function MyProducts() {
 
   const { data: applications } = await supabase
     .from('setter_applications')
-    .select('*, listings(*)')
+    .select('*, listings(*, users!listings_company_id_fkey(full_name))')
     .eq('setter_id', user.id)
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
@@ -52,7 +52,7 @@ export default async function MyProducts() {
             {applications?.map((app) => (
               <tr key={app.id} className="hover:bg-[#1f1f1f]">
                 <td className="px-6 py-4 text-white">{app.listings?.title || 'N/A'}</td>
-                <td className="px-6 py-4 text-gray-300">{app.listings?.company_name || 'N/A'}</td>
+                <td className="px-6 py-4 text-gray-300">{app.listings?.users?.full_name || 'N/A'}</td>
                 <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_appointment || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_close || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4">

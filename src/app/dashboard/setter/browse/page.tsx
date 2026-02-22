@@ -19,7 +19,7 @@ export default async function BrowseListings() {
 
   const { data: listings } = await supabase
     .from('listings')
-    .select('*, founder_profiles(company_name)')
+    .select('*, users!listings_company_id_fkey(full_name)')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 
@@ -50,7 +50,7 @@ export default async function BrowseListings() {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-white">{listing.title}</h3>
-                <p className="text-sm text-gray-400">{listing.founder_profiles?.company_name}</p>
+                <p className="text-sm text-gray-400">{listing.users?.full_name}</p>
               </div>
               <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
                 active

@@ -10,8 +10,8 @@ interface Listing {
   company_id: string
   commission_per_appointment: number
   commission_per_close: number
-  founder_profiles?: {
-    company_name: string
+  users?: {
+    full_name: string
   }
 }
 
@@ -48,7 +48,7 @@ export default function SubmitAppointment() {
       // Fetch listing details
       const { data: listingData } = await supabase
         .from('listings')
-        .select('*, founder_profiles(company_name)')
+        .select('*, users!listings_company_id_fkey(full_name)')
         .eq('id', listingId)
         .single()
 
@@ -130,7 +130,7 @@ export default function SubmitAppointment() {
     <div>
       <h1 className="text-3xl font-bold mb-2">Submit Appointment</h1>
       <p className="text-gray-400 mb-8">
-        Promoting: <span className="text-white">{listing.title}</span> by {listing.founder_profiles?.company_name}
+        Promoting: <span className="text-white">{listing.title}</span> by {listing.users?.full_name}
       </p>
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">

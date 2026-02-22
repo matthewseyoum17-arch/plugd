@@ -60,7 +60,6 @@ export default async function MyListings() {
               <tr key={listing.id} className="hover:bg-[#1f1f1f]">
                 <td className="px-6 py-4">
                   <div className="font-medium text-white">{listing.title}</div>
-                  <div className="text-sm text-gray-400">{listing.company_name}</div>
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(listing.status)}`}>
