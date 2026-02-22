@@ -82,8 +82,19 @@ export default function LoginPage() {
     }
 
     if (data.user) {
-      const role = data.user.user_metadata?.role || 'setter'
-      router.push(`/dashboard/${role}`)
+      // Try users table first, fallback to user_metadata
+      let role = data.user.user_metadata?.role
+      try {
+        const { data: userRow } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', data.user.id)
+          .single()
+        if (userRow?.role) role = userRow.role
+      } catch {
+        // users row may not exist yet — use metadata role
+      }
+      router.push(`/dashboard/${role || 'setter'}`)
     }
   }
 
