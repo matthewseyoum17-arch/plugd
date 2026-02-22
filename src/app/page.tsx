@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { createClient } from '@/lib/supabase/server'
+import { ArrowRight, CheckCircle2, TrendingUp, Shield, Zap } from 'lucide-react'
+
+// You'd typically extract this to a separate client component file if you want to use Framer Motion
+// But to keep it in one file and avoid 'use client' on the whole page, we'll use CSS animations for the background
+// For scroll animations, we'll use pure CSS with target or intersection observer in a small client wrapper if needed,
+// but for now, CSS keyframes + tailwind provide a great 60fps baseline without JS overhead.
 
 export default async function Home() {
   const supabase = createClient()
@@ -12,18 +18,34 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-[#00FF94] selection:text-black font-sans">
+    <div className="relative min-h-screen bg-black text-white selection:bg-[#00FF94] selection:text-black font-sans overflow-x-hidden">
+      
+      {/* Background Noise / Film Grain */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.03]"
+        style={{ backgroundImage: 'url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png")' }}
+      ></div>
+
+      {/* Animated Subtle Gradient Mesh Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#00FF94]/10 blur-[120px] mix-blend-screen animate-pulse-slow"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#06b6d4]/10 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed w-full z-50 border-b border-[#2a2a2a] bg-[#0a0a0a]/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-2xl font-bold text-[#00FF94]" style={{ fontFamily: 'Syne, sans-serif' }}>
+      <nav className="fixed w-full z-40 border-b border-white/[0.05] bg-black/50 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#00FF94] to-[#06b6d4] flex items-center justify-center shadow-[0_0_15px_rgba(0,255,148,0.3)]">
+              <Zap className="w-3 h-3 text-black" />
+            </div>
             Plugd
           </div>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
             {user ? (
               <Link 
                 href={dashboardUrl}
-                className="px-6 py-2.5 bg-[#1a1a1a] border border-[#2a2a2a] text-white font-medium rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                className="text-sm px-4 py-2 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-colors"
               >
                 Dashboard
               </Link>
@@ -31,13 +53,13 @@ export default async function Home() {
               <>
                 <Link 
                   href="/login"
-                  className="px-6 py-2.5 text-gray-300 hover:text-white font-medium transition-colors"
+                  className="text-sm px-4 py-2 text-gray-400 hover:text-white font-medium transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link 
                   href="/signup"
-                  className="px-6 py-2.5 bg-[#00FF94] text-black font-semibold rounded-lg hover:bg-[#00cc76] transition-colors"
+                  className="text-sm px-4 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-colors hidden sm:block"
                 >
                   Get Started
                 </Link>
@@ -47,75 +69,144 @@ export default async function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="pt-32 pb-20 px-6">
-        <div className="max-w-7xl mx-auto text-center mt-20">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
-            Connecting great products <br />
-            <span className="text-[#00FF94]">with elite setters.</span>
+      <main className="relative z-10 pt-32 pb-20 px-6">
+        {/* Hero Section */}
+        <div className="max-w-5xl mx-auto text-center mt-12 sm:mt-24 mb-32 relative">
+          
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.05] mb-8 hover:bg-white/[0.05] transition-colors cursor-pointer">
+            <span className="flex h-2 w-2 rounded-full bg-[#00FF94] animate-pulse"></span>
+            <span className="text-xs font-medium text-gray-300 tracking-wide uppercase">Plugd 2.0 is live</span>
+          </div>
+
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold mb-8 tracking-tighter leading-[1.1]">
+            Connecting great products <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF94] via-[#00FF94] to-[#06b6d4] animate-gradient-x">
+              with elite setters.
+            </span>
           </h1>
-          <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            The platform where B2B founders list their products and top appointment setters earn commissions for qualified meetings.
+          
+          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+            The exclusive platform where high-ticket B2B founders list their products and top-tier appointment setters earn recurring commissions for qualified meetings.
           </p>
-          <div className="flex flex-col md:flex-row gap-6 justify-center">
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
               href="/signup?role=founder" 
-              className="px-8 py-4 bg-[#00FF94] text-black font-bold rounded-xl hover:bg-[#00cc76] transition-colors text-lg"
+              className="group relative px-8 py-4 bg-white text-black font-semibold rounded-full hover:scale-105 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2 overflow-hidden"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer" />
               Start as Founder
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link 
               href="/signup?role=setter" 
-              className="px-8 py-4 bg-[#1a1a1a] text-white border border-[#2a2a2a] font-bold rounded-xl hover:bg-[#2a2a2a] transition-colors text-lg"
+              className="px-8 py-4 bg-white/[0.03] text-white border border-white/[0.08] font-semibold rounded-full hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 w-full sm:w-auto text-center backdrop-blur-md"
             >
-              Start as Setter
+              Apply as Setter
             </Link>
+          </div>
+
+          {/* Social Proof / Trust */}
+          <div className="mt-20 pt-10 border-t border-white/[0.05] flex flex-col items-center">
+            <p className="text-sm text-gray-500 mb-6 uppercase tracking-widest font-semibold">Trusted by elite B2B teams</p>
+            <div className="flex gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+              {/* Placeholder logos - replace with actual SVGs later */}
+              <div className="h-8 w-24 bg-white/20 rounded animate-pulse" style={{ animationDelay: '0ms' }}></div>
+              <div className="h-8 w-24 bg-white/20 rounded animate-pulse" style={{ animationDelay: '200ms' }}></div>
+              <div className="h-8 w-24 bg-white/20 rounded animate-pulse hidden sm:block" style={{ animationDelay: '400ms' }}></div>
+              <div className="h-8 w-24 bg-white/20 rounded animate-pulse hidden md:block" style={{ animationDelay: '600ms' }}></div>
+            </div>
           </div>
         </div>
 
         {/* Features Grid */}
-        <div className="max-w-7xl mx-auto mt-32 grid md:grid-cols-3 gap-8">
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8">
-            <div className="w-12 h-12 bg-green-900/30 rounded-xl flex items-center justify-center mb-6 border border-green-800">
-              <svg className="w-6 h-6 text-[#00FF94]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-4 text-white">List your product</h3>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Everything you need to manage your setters, track appointments, and grow your revenue.
-            </p>
+        <div className="max-w-6xl mx-auto mt-32 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Everything you need to scale</h2>
+            <p className="text-gray-400 text-lg">Purpose-built tools for modern B2B outbound teams.</p>
           </div>
 
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8">
-            <div className="w-12 h-12 bg-green-900/30 rounded-xl flex items-center justify-center mb-6 border border-green-800">
-              <svg className="w-6 h-6 text-[#00FF94]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+          <div className="grid md:grid-cols-3 gap-6">
+            
+            {/* Feature 1 */}
+            <div className="group relative bg-[#0a0a0a] border border-white/[0.05] rounded-3xl p-8 hover:border-[#00FF94]/30 hover:shadow-[0_0_30px_rgba(0,255,148,0.05)] transition-all duration-500 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#00FF94]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
+              <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-[#00FF94]">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-white">Curated Opportunities</h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Access a vetted marketplace of high-ticket SaaS and agency offers. No more cold outreach for low-converting products.
+              </p>
             </div>
-            <h3 className="text-xl font-bold mb-4 text-white">Find opportunities</h3>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              High-ticket products ready for promotion. Earn what you&apos;re worth.
-            </p>
-          </div>
 
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8">
-            <div className="w-12 h-12 bg-green-900/30 rounded-xl flex items-center justify-center mb-6 border border-green-800">
-              <svg className="w-6 h-6 text-[#00FF94]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            {/* Feature 2 */}
+            <div className="group relative bg-[#0a0a0a] border border-white/[0.05] rounded-3xl p-8 hover:border-[#06b6d4]/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.05)] transition-all duration-500 overflow-hidden md:-translate-y-4">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#06b6d4]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
+              <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-[#06b6d4]">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-white">Performance Tracking</h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Real-time analytics on your outreach, meeting show rates, and closed-won commissions all in one elegant dashboard.
+              </p>
             </div>
-            <h3 className="text-xl font-bold mb-4 text-white">Get paid directly</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Transparent tracking of appointments and automated payout management when deals close.
+
+            {/* Feature 3 */}
+            <div className="group relative bg-[#0a0a0a] border border-white/[0.05] rounded-3xl p-8 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.05)] transition-all duration-500 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
+              <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-purple-400">
+                <Shield className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-white">Guaranteed Payouts</h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Automated escrow and transparent payout tracking means you never have to chase down a founder for your commission again.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="max-w-5xl mx-auto mt-40 mb-20">
+          <div className="relative rounded-3xl border border-white/[0.1] bg-gradient-to-b from-white/[0.05] to-transparent p-10 md:p-20 overflow-hidden text-center">
+            <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png')] opacity-[0.02]"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[#00FF94]/10 blur-[100px] rounded-full pointer-events-none"></div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 relative z-10">Ready to scale your revenue?</h2>
+            <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto relative z-10 font-light">
+              Join hundreds of top founders and elite setters already using Plugd.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center relative z-10">
+              <Link 
+                href="/signup" 
+                className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+              >
+                Create Free Account
+              </Link>
+            </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#2a2a2a] bg-[#111] py-12 text-center mt-20">
-        <p className="text-gray-500">© 2026 Plugd. All rights reserved.</p>
+      <footer className="border-t border-white/[0.05] bg-black py-12 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2 text-white/50">
+            <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
+              <Zap className="w-3 h-3 text-white/50" />
+            </div>
+            <span className="font-semibold tracking-tight">Plugd</span>
+          </div>
+          <div className="text-sm text-gray-600">
+            © 2026 Plugd Inc. All rights reserved.
+          </div>
+          <div className="flex gap-6 text-sm text-gray-500">
+            <Link href="#" className="hover:text-white transition-colors">Twitter</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
