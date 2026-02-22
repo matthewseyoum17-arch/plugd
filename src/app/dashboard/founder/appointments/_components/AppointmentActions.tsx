@@ -48,6 +48,8 @@ export function AppointmentActions({
         ? commissionPerAppointment 
         : commissionPerClose
 
+      const platformFee = Math.round(commissionAmount * 0.07)
+
       const { error: payoutError } = await supabase
         .from('payouts')
         .insert({
@@ -55,6 +57,7 @@ export function AppointmentActions({
           setter_id: setterId,
           appointment_id: appointmentId,
           amount: commissionAmount,
+          platform_fee: platformFee,
           status: 'pending'
         })
 

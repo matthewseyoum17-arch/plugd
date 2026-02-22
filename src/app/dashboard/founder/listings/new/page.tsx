@@ -1,78 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createListing } from './actions'
 
 export default function CreateListing() {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [idealCustomer, setIdealCustomer] = useState('')
-  const [productUrl, setProductUrl] = useState('')
-  const [commissionPerAppointment, setCommissionPerAppointment] = useState('')
-  const [commissionPerClose, setCommissionPerClose] = useState('')
-  const [qualifiedMeetingDefinition, setQualifiedMeetingDefinition] = useState('')
-  const [pitchKitUrl, setPitchKitUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  
   const router = useRouter()
-  const supabase = createClient()
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/login')
-        return
-      }
-      const role = user.user_metadata?.role
-      if (role !== 'founder') {
-        router.push('/dashboard/setter')
-      }
-    }
-    checkUser()
-  }, [router, supabase])
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      setError('You must be logged in')
+    const formData = new FormData(e.currentTarget)
+    const result = await createListing(formData)
+
+    if (result?.error) {
+      console.error('Error creating listing:', result.error)
+      setError(result.error)
       setLoading(false)
-      return
     }
-
-    const { data: founderProfile } = await supabase
-      .from('founder_profiles')
-      .select('company_name')
-      .eq('founder_id', user.id)
-      .single()
-
-    const { error: insertError } = await supabase.from('listings').insert({
-      company_id: user.id,
-      title,
-      description,
-      ideal_customer: idealCustomer,
-      product_url: productUrl,
-      commission_per_appointment: Math.round(parseFloat(commissionPerAppointment) * 100),
-      commission_per_close: Math.round(parseFloat(commissionPerClose) * 100),
-      qualified_meeting_definition: qualifiedMeetingDefinition,
-      pitch_kit_url: pitchKitUrl,
-      company_name: founderProfile?.company_name || 'My Company',
-      status: 'active',
-    })
-
-    if (insertError) {
-      setError(insertError.message)
-      setLoading(false)
-      return
-    }
-
-    router.push('/dashboard/founder/listings')
   }
 
   return (
@@ -92,8 +41,7 @@ export default function CreateListing() {
           </label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             required
             placeholder="e.g., AI Receptionist for Dental Offices"
@@ -105,8 +53,7 @@ export default function CreateListing() {
             Description *
           </label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-32"
             required
             placeholder="Describe your AI product and its key features..."
@@ -119,8 +66,7 @@ export default function CreateListing() {
           </label>
           <input
             type="text"
-            value={idealCustomer}
-            onChange={(e) => setIdealCustomer(e.target.value)}
+            name="ideal_customer"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             placeholder="e.g., Dental practices with 2-10 locations"
           />
@@ -132,8 +78,7 @@ export default function CreateListing() {
           </label>
           <input
             type="url"
-            value={productUrl}
-            onChange={(e) => setProductUrl(e.target.value)}
+            name="product_url"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             placeholder="https://yourproduct.com"
           />
@@ -148,8 +93,7 @@ export default function CreateListing() {
               type="number"
               step="0.01"
               min="0"
-              value={commissionPerAppointment}
-              onChange={(e) => setCommissionPerAppointment(e.target.value)}
+              name="commission_per_appointment"
               className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
               placeholder="25.00"
             />
@@ -162,8 +106,7 @@ export default function CreateListing() {
               type="number"
               step="0.01"
               min="0"
-              value={commissionPerClose}
-              onChange={(e) => setCommissionPerClose(e.target.value)}
+              name="commission_per_close"
               className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
               placeholder="250.00"
             />
@@ -175,8 +118,7 @@ export default function CreateListing() {
             Qualified Meeting Definition *
           </label>
           <textarea
-            value={qualifiedMeetingDefinition}
-            onChange={(e) => setQualifiedMeetingDefinition(e.target.value)}
+            name="qualified_meeting_definition"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-24"
             required
             placeholder="Define what counts as a qualified meeting..."
@@ -189,8 +131,7 @@ export default function CreateListing() {
           </label>
           <input
             type="url"
-            value={pitchKitUrl}
-            onChange={(e) => setPitchKitUrl(e.target.value)}
+            name="pitch_kit_url"
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             placeholder="https://docs.google.com/..."
           />

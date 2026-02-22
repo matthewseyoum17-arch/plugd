@@ -40,12 +40,28 @@ export default function SignupPage() {
     }
 
     if (data.user) {
-      await supabase.from('users').insert({
+      const { error: userInsertError } = await supabase.from('users').insert({
         id: data.user.id,
         email,
         full_name: `${firstName} ${lastName}`,
         role,
       })
+
+      if (userInsertError) {
+        console.error('Error inserting user row:', userInsertError)
+        setError(userInsertError.message)
+        setLoading(false)
+        return
+      }
+
+      if (role === 'setter') {
+        const { error: profileError } = await supabase.from('setter_profiles').insert({
+          setter_id: data.user.id,
+        })
+        if (profileError) {
+          console.error('Error inserting setter_profiles row:', profileError)
+        }
+      }
 
       router.push(`/dashboard/${role}`)
     }

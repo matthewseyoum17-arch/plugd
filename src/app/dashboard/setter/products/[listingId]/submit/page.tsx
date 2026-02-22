@@ -80,6 +80,12 @@ export default function SubmitAppointment() {
         throw new Error('You do not have an approved application for this listing')
       }
 
+      const commissionAmount = appointmentType === 'appointment'
+        ? listing?.commission_per_appointment || 0
+        : listing?.commission_per_close || 0
+
+      const autoApproveAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
+
       const { error: insertError } = await supabase.from('appointments').insert({
         setter_id: user.id,
         listing_id: listingId,
@@ -89,7 +95,9 @@ export default function SubmitAppointment() {
         contact_company: contactCompany,
         appointment_type: appointmentType,
         notes: notes,
-        status: 'submitted'
+        status: 'submitted',
+        commission_amount: commissionAmount,
+        auto_approve_at: autoApproveAt,
       })
 
       if (insertError) throw insertError

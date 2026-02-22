@@ -82,9 +82,39 @@ export default function LoginPage() {
     }
 
     if (data.user) {
-      const role = data.user.user_metadata?.role || 'setter'
-      router.push(`/dashboard/${role}`)
+      // Read role from public.users table (source of truth)
+      const { data: userRow, error: userError } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', data.user.id)
+        .single()
+
+      if (userError || !userRow) {
+        // Users row missing — create it from auth metadata
+        console.error('Users row missing on login, creating from metadata:', userError)
+        const meta = data.user.user_metadata || {}
+        const fallbackRole = meta.role || 'setter'
+        const fullName = meta.first_name && meta.last_name
+          ? `${meta.first_name} ${meta.last_name}`
+          : data.user.email?.split('@')[0] || 'User'
+
+        const { error: insertErr } = await supabase.from('users').insert({
+          id: data.user.id,
+          email: data.user.email,
+          full_name: fullName,
+          role: fallbackRole,
+        })
+        if (insertErr) {
+          console.error('Error creating users row on login:', insertErr)
+        }
+
+        router.push(`/dashboard/${fallbackRole}`)
+      } else {
+        router.push(`/dashboard/${userRow.role}`)
+      }
     }
+
+    setLoading(false)
   }
 
   // Animation variants
