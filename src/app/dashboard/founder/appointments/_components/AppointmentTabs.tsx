@@ -23,13 +23,13 @@ export function AppointmentTabs({ appointments }: { appointments: Appointment[] 
   const renderList = (list: Appointment[]) => {
     if (list.length === 0) {
       return (
-        <div className="bg-[#1a1a1a] border border-[#222] rounded-xl p-12 text-center">
-          <p className="text-gray-500">No appointments in this category.</p>
+        <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-16 text-center shadow-sm">
+          <p className="text-gray-400 font-medium">No appointments in this category.</p>
         </div>
       )
     }
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {list.map(apt => (
           <AppointmentCard
             key={apt.id}

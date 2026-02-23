@@ -62,14 +62,14 @@ export function ApplicationActions({
       <button
         onClick={handleApprove}
         disabled={loading}
-        className="px-3 py-1 bg-green-900/30 text-green-400 border border-green-800 rounded-lg hover:bg-green-900/50 transition-colors text-xs font-medium disabled:opacity-50"
+        className="px-4 py-2 bg-primary text-white border border-transparent rounded-lg hover:bg-primary-hover transition-colors text-xs font-button font-semibold disabled:opacity-50 shadow-[0_0_15px_rgba(123,57,252,0.2)]"
       >
         Approve
       </button>
       <button
         onClick={handleReject}
         disabled={loading}
-        className="px-3 py-1 bg-red-900/30 text-red-400 border border-red-800 rounded-lg hover:bg-red-900/50 transition-colors text-xs font-medium disabled:opacity-50"
+        className="px-4 py-2 bg-transparent text-gray-400 border border-white/10 rounded-lg hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-colors text-xs font-button font-medium disabled:opacity-50"
       >
         Reject
       </button>
