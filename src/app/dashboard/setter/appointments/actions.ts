@@ -36,10 +36,10 @@ export async function submitAppointment(formData: FormData): Promise<{ error?: s
     return { error: 'You do not have an approved application for this listing' }
   }
 
-  // Get listing for company_id and commission amounts
+  // Get listing for company_id
   const { data: listing, error: listingError } = await supabase
     .from('listings')
-    .select('company_id, commission_per_appointment, commission_per_close')
+    .select('company_id')
     .eq('id', listingId)
     .single()
 
@@ -47,12 +47,6 @@ export async function submitAppointment(formData: FormData): Promise<{ error?: s
     console.error('Error fetching listing:', listingError)
     return { error: 'Listing not found' }
   }
-
-  const commissionAmount = appointmentType === 'appointment'
-    ? listing.commission_per_appointment || 0
-    : listing.commission_per_close || 0
-
-  const autoApproveAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
 
   const { error } = await supabase.from('appointments').insert({
     setter_id: user.id,
@@ -63,9 +57,7 @@ export async function submitAppointment(formData: FormData): Promise<{ error?: s
     contact_company: contactCompany,
     calendly_event_url: calendlyEventUrl || null,
     appointment_type: appointmentType,
-    commission_amount: commissionAmount,
     status: 'submitted',
-    auto_approve_at: autoApproveAt,
   })
 
   if (error) {

@@ -55,7 +55,7 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
   const handleConfirm = async () => {
     setLoading(true)
     setError('')
-    const result = await confirmAppointment(apt.id, apt.setter_id, apt.commission_amount, apt.appointment_type)
+    const result = await confirmAppointment(apt.id)
     if (result.error) {
       console.error('Confirm error:', result.error)
       setError(result.error)

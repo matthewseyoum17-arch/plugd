@@ -25,22 +25,30 @@ export default async function SetterAppointments() {
     }
   })
 
-  // Get setter's appointments
+  // Get setter's appointments with listing commission data
   const { data: appointments } = await supabase
     .from('appointments')
-    .select('*, listings(title)')
+    .select('*, listings(title, commission_per_appointment, commission_per_close)')
     .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
 
-  const mapped = (appointments || []).map((apt) => ({
-    id: apt.id,
-    listing_title: apt.listings?.title || 'N/A',
-    contact_name: apt.contact_name || '',
-    commission_amount: apt.commission_amount || 0,
-    status: apt.status,
-    auto_approve_at: apt.auto_approve_at,
-    created_at: apt.created_at,
-  }))
+  const mapped = (appointments || []).map((apt) => {
+    const commission = apt.appointment_type === 'close'
+      ? apt.listings?.commission_per_close || 0
+      : apt.listings?.commission_per_appointment || 0
+    const autoApproveAt = apt.submitted_at
+      ? new Date(new Date(apt.submitted_at).getTime() + 48 * 60 * 60 * 1000).toISOString()
+      : null
+    return {
+      id: apt.id,
+      listing_title: apt.listings?.title || 'N/A',
+      contact_name: apt.contact_name || '',
+      commission_amount: commission,
+      status: apt.status,
+      auto_approve_at: autoApproveAt,
+      created_at: apt.created_at,
+    }
+  })
 
   return (
     <div>

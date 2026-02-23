@@ -37,10 +37,10 @@ export default async function SetterOverview() {
     { name: 'Total Earned', value: `$${totalEarned.toFixed(2)}` },
   ]
 
-  // Recent 3 appointments
+  // Recent 3 appointments with listing commission data
   const { data: recentAppointments } = await supabase
     .from('appointments')
-    .select('*, listings(title)')
+    .select('*, listings(title, commission_per_appointment, commission_per_close)')
     .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
     .limit(3)
@@ -84,9 +84,14 @@ export default async function SetterOverview() {
                   <span className={`px-3 py-1 rounded-full text-xs ${statusColor[apt.status] || 'bg-gray-800 text-gray-400'}`}>
                     {apt.status.replace('_', ' ')}
                   </span>
-                  {apt.commission_amount > 0 && (
-                    <p className="text-[#00FF94] text-sm font-medium mt-1">${(apt.commission_amount / 100).toFixed(2)}</p>
-                  )}
+                  {(() => {
+                    const commission = apt.appointment_type === 'close'
+                      ? apt.listings?.commission_per_close || 0
+                      : apt.listings?.commission_per_appointment || 0
+                    return commission > 0
+                      ? <p className="text-[#00FF94] text-sm font-medium mt-1">${(commission / 100).toFixed(2)}</p>
+                      : null
+                  })()}
                 </div>
               </div>
             ))}

@@ -14,21 +14,27 @@ export default async function Appointments() {
     .eq('company_id', user.id)
     .order('created_at', { ascending: false })
 
-  const mapped = (appointments || []).map((apt) => ({
-    id: apt.id,
-    setter_id: apt.setter_id,
-    setter_name: apt.users?.full_name || 'Setter',
-    contact_name: apt.contact_name || '',
-    contact_company: apt.contact_company || '',
-    listing_title: apt.listings?.title || 'N/A',
-    appointment_type: apt.appointment_type || 'appointment',
-    commission_amount: apt.commission_amount || (apt.appointment_type === 'appointment'
-      ? apt.listings?.commission_per_appointment || 0
-      : apt.listings?.commission_per_close || 0),
-    status: apt.status,
-    auto_approve_at: apt.auto_approve_at,
-    created_at: apt.created_at,
-  }))
+  const mapped = (appointments || []).map((apt) => {
+    const commission = apt.appointment_type === 'close'
+      ? apt.listings?.commission_per_close || 0
+      : apt.listings?.commission_per_appointment || 0
+    const autoApproveAt = apt.submitted_at
+      ? new Date(new Date(apt.submitted_at).getTime() + 48 * 60 * 60 * 1000).toISOString()
+      : null
+    return {
+      id: apt.id,
+      setter_id: apt.setter_id,
+      setter_name: apt.users?.full_name || 'Setter',
+      contact_name: apt.contact_name || '',
+      contact_company: apt.contact_company || '',
+      listing_title: apt.listings?.title || 'N/A',
+      appointment_type: apt.appointment_type || 'appointment',
+      commission_amount: commission,
+      status: apt.status,
+      auto_approve_at: autoApproveAt,
+      created_at: apt.created_at,
+    }
+  })
 
   return (
     <div>

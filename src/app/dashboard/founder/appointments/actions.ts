@@ -4,10 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function confirmAppointment(
-  appointmentId: string,
-  setterId: string,
-  commissionAmount: number,
-  appointmentType: string
+  appointmentId: string
 ): Promise<{ error?: string }> {
   const supabase = createClient()
 
@@ -15,6 +12,19 @@ export async function confirmAppointment(
   if (authError || !user) {
     console.error('Auth error in confirmAppointment:', authError)
     return { error: 'Not authenticated' }
+  }
+
+  // Fetch appointment with listing commission data — also verifies ownership
+  const { data: appointment, error: fetchError } = await supabase
+    .from('appointments')
+    .select('id, setter_id, appointment_type, listings(commission_per_appointment, commission_per_close)')
+    .eq('id', appointmentId)
+    .eq('company_id', user.id)
+    .single()
+
+  if (fetchError || !appointment) {
+    console.error('Error fetching appointment:', fetchError)
+    return { error: 'Appointment not found or not authorized' }
   }
 
   const { error: updateError } = await supabase
@@ -28,14 +38,18 @@ export async function confirmAppointment(
     return { error: updateError.message }
   }
 
-  const feeRate = appointmentType === 'close' ? 0.05 : 0.07
-  const amount = Math.round(commissionAmount * (1 - feeRate))
+  const listing = appointment.listings as unknown as { commission_per_appointment: number; commission_per_close: number } | null
+  const grossCommission = appointment.appointment_type === 'close'
+    ? listing?.commission_per_close || 0
+    : listing?.commission_per_appointment || 0
+  const feeRate = appointment.appointment_type === 'close' ? 0.05 : 0.07
+  const amount = Math.round(grossCommission * (1 - feeRate))
 
   const { error: payoutError } = await supabase
     .from('payouts')
     .insert({
       founder_id: user.id,
-      setter_id: setterId,
+      setter_id: appointment.setter_id,
       appointment_id: appointmentId,
       amount,
       status: 'pending',
