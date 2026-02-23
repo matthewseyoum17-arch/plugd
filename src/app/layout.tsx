@@ -5,7 +5,11 @@ import "./globals.css";
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
-const instrumentSerif = Instrument_Serif({ weight: "400", subsets: ["latin"], variable: "--font-instrument" });
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-instrument",
+});
 
 export const metadata: Metadata = {
   title: "Plugd | The Premium AI Automation Network",

@@ -17,9 +17,9 @@ export default async function SetterAppointments() {
 
   const { data: appointments } = await supabase
     .from('appointments')
-    .select('listing_id, listings(id, title, company_id, commission_per_appointment, commission_per_close)')
+    .select('*, listings(title, commission_per_appointment, commission_per_close)')
     .eq('setter_id', user.id)
-    .eq('status', 'approved')
+    .order('submitted_at', { ascending: false })
 
   const { data: approvedApps } = await supabase
     .from('setter_applications')
@@ -31,7 +31,7 @@ export default async function SetterAppointments() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-heading font-semibold text-white tracking-tight">Appointments</h1>
-        <p className="text-gray-400 mt-2 font-medium">Track the status of appointments you've submitted to founders.</p>
+        <p className="text-gray-400 mt-2 font-medium">Track the status of appointments you&apos;ve submitted to founders.</p>
       </div>
       <SetterAppointmentTabs appointments={appointments || []} approvedListings={approvedApps || []} />
     </div>

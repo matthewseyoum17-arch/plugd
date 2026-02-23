@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
 type TabsProps = {
-  tabs: string[]
-  defaultTab?: string
-  children: (activeTab: string) => React.ReactNode
-}
+  tabs: string[];
+  defaultTab?: string;
+  children: (activeTab: string) => React.ReactNode;
+};
 
 export function Tabs({ tabs, defaultTab, children }: TabsProps) {
-  const [active, setActive] = useState(defaultTab || tabs[0])
+  const [active, setActive] = useState(defaultTab || tabs[0]);
 
   return (
     <div>
@@ -20,8 +20,8 @@ export function Tabs({ tabs, defaultTab, children }: TabsProps) {
             onClick={() => setActive(tab)}
             className={`px-4 py-3 text-sm font-button font-medium transition-colors relative ${
               active === tab
-                ? 'text-white'
-                : 'text-gray-500 hover:text-gray-300'
+                ? "text-white"
+                : "text-gray-500 hover:text-gray-300"
             }`}
           >
             {tab}
@@ -33,5 +33,5 @@ export function Tabs({ tabs, defaultTab, children }: TabsProps) {
       </div>
       {children(active)}
     </div>
-  )
+  );
 }

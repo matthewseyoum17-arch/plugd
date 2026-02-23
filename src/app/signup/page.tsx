@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignupPage() {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState<'founder' | 'setter'>('setter')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
-  const supabase = createClient()
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"founder" | "setter">("setter");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const supabase = createClient();
 
   const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     const { data, error: authError } = await supabase.auth.signUp({
       email,
@@ -31,36 +31,41 @@ export default function SignupPage() {
           role: role,
         },
       },
-    })
+    });
 
     if (authError) {
-      setError(authError.message)
-      setLoading(false)
-      return
+      setError(authError.message);
+      setLoading(false);
+      return;
     }
 
     if (data.user) {
-      await supabase.from('users').insert({
+      await supabase.from("users").insert({
         id: data.user.id,
         email,
         full_name: `${firstName} ${lastName}`,
         role,
-      })
+      });
 
-      router.push(`/dashboard/${role}`)
+      router.push(`/dashboard/${role}`);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>Plugd</h1>
+          <h1
+            className="text-4xl font-bold text-white mb-2"
+            style={{ fontFamily: "Syne, sans-serif" }}
+          >
+            Plugd
+          </h1>
           <p className="text-gray-400">Create your account</p>
         </div>
-        
+
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400 text-sm">
@@ -128,32 +133,44 @@ export default function SignupPage() {
                 I am a...
               </label>
               <div className="flex gap-4">
-                <label className={`flex-1 p-4 border rounded-xl cursor-pointer transition-all ${role === 'founder' ? 'border-[#00FF94] bg-[#00FF94]/10' : 'border-[#2a2a2a] hover:border-[#3a3a3a]'}`}>
+                <label
+                  className={`flex-1 p-4 border rounded-xl cursor-pointer transition-all ${role === "founder" ? "border-[#00FF94] bg-[#00FF94]/10" : "border-[#2a2a2a] hover:border-[#3a3a3a]"}`}
+                >
                   <input
                     type="radio"
                     name="role"
                     value="founder"
-                    checked={role === 'founder'}
-                    onChange={() => setRole('founder')}
+                    checked={role === "founder"}
+                    onChange={() => setRole("founder")}
                     className="sr-only"
                   />
                   <div className="text-center">
-                    <div className="text-lg font-semibold text-white">Founder</div>
-                    <div className="text-xs text-gray-400 mt-1">List your product</div>
+                    <div className="text-lg font-semibold text-white">
+                      Founder
+                    </div>
+                    <div className="text-xs text-gray-400 mt-1">
+                      List your product
+                    </div>
                   </div>
                 </label>
-                <label className={`flex-1 p-4 border rounded-xl cursor-pointer transition-all ${role === 'setter' ? 'border-[#00FF94] bg-[#00FF94]/10' : 'border-[#2a2a2a] hover:border-[#3a3a3a]'}`}>
+                <label
+                  className={`flex-1 p-4 border rounded-xl cursor-pointer transition-all ${role === "setter" ? "border-[#00FF94] bg-[#00FF94]/10" : "border-[#2a2a2a] hover:border-[#3a3a3a]"}`}
+                >
                   <input
                     type="radio"
                     name="role"
                     value="setter"
-                    checked={role === 'setter'}
-                    onChange={() => setRole('setter')}
+                    checked={role === "setter"}
+                    onChange={() => setRole("setter")}
                     className="sr-only"
                   />
                   <div className="text-center">
-                    <div className="text-lg font-semibold text-white">Setter</div>
-                    <div className="text-xs text-gray-400 mt-1">Promote products</div>
+                    <div className="text-lg font-semibold text-white">
+                      Setter
+                    </div>
+                    <div className="text-xs text-gray-400 mt-1">
+                      Promote products
+                    </div>
                   </div>
                 </label>
               </div>
@@ -164,12 +181,12 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full py-3 px-4 bg-[#00FF94] text-black font-semibold rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? "Creating account..." : "Create Account"}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-400">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" className="text-[#00FF94] hover:underline">
               Sign in
             </Link>
@@ -177,5 +194,5 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

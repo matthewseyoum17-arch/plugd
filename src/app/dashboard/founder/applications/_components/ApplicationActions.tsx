@@ -1,61 +1,61 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 type ApplicationActionProps = {
-  applicationId: string
-  currentStatus: string
-}
+  applicationId: string;
+  currentStatus: string;
+};
 
-export function ApplicationActions({ 
-  applicationId, 
-  currentStatus 
+export function ApplicationActions({
+  applicationId,
+  currentStatus,
 }: ApplicationActionProps) {
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClient()
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
 
-  if (currentStatus !== 'pending') {
-    return null
+  if (currentStatus !== "pending") {
+    return null;
   }
 
   const handleApprove = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const { error } = await supabase
-        .from('setter_applications')
-        .update({ status: 'approved' })
-        .eq('id', applicationId)
+        .from("setter_applications")
+        .update({ status: "approved" })
+        .eq("id", applicationId);
 
-      if (error) throw error
-      router.refresh()
+      if (error) throw error;
+      router.refresh();
     } catch (error) {
-      console.error('Error approving application:', error)
-      alert('Failed to approve application')
+      console.error("Error approving application:", error);
+      alert("Failed to approve application");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleReject = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const { error } = await supabase
-        .from('setter_applications')
-        .update({ status: 'rejected' })
-        .eq('id', applicationId)
+        .from("setter_applications")
+        .update({ status: "rejected" })
+        .eq("id", applicationId);
 
-      if (error) throw error
-      router.refresh()
+      if (error) throw error;
+      router.refresh();
     } catch (error) {
-      console.error('Error rejecting application:', error)
-      alert('Failed to reject application')
+      console.error("Error rejecting application:", error);
+      alert("Failed to reject application");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex gap-2">
@@ -74,5 +74,5 @@ export function ApplicationActions({
         Reject
       </button>
     </div>
-  )
+  );
 }
