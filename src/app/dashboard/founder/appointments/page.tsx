@@ -6,13 +6,11 @@ export default async function Appointments() {
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) {
     redirect('/login')
   }
 
   const role = user.user_metadata?.role
-
   if (role !== 'founder') {
     redirect('/dashboard/setter')
   }
@@ -24,8 +22,11 @@ export default async function Appointments() {
     .order('submitted_at', { ascending: false })
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Appointments</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-heading font-semibold text-white tracking-tight">Appointments</h1>
+        <p className="text-gray-400 mt-2 font-medium">Review and manage the meetings your setters have booked.</p>
+      </div>
       <AppointmentTabs appointments={appointments || []} />
     </div>
   )
