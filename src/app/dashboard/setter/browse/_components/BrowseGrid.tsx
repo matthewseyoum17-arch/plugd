@@ -16,18 +16,17 @@ type Listing = {
 }
 
 const CATEGORIES = ['All', 'AI Receptionist', 'Chatbot', 'Lead Gen', 'Other'] as const
-const PAGE_SIZE = 20
-
-function matchesCategory(title: string, category: string): boolean {
-  if (category === 'All') return true
-  const lower = title.toLowerCase()
-  if (category === 'AI Receptionist') return lower.includes('receptionist') || lower.includes('ai phone') || lower.includes('voice')
-  if (category === 'Chatbot') return lower.includes('chatbot') || lower.includes('chat bot') || lower.includes('conversational')
-  if (category === 'Lead Gen') return lower.includes('lead') || lower.includes('outbound') || lower.includes('prospecting')
-  return !matchesCategory(title, 'AI Receptionist') && !matchesCategory(title, 'Chatbot') && !matchesCategory(title, 'Lead Gen')
 }
 
-export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appliedIds: string[] }) {
+const PAGE_SIZE = 12
+
+export function BrowseGrid({
+  listings,
+  appliedIds
+}: {
+  listings: any[]
+  appliedIds: string[]
+}) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<string>('All')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
@@ -66,30 +65,35 @@ export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appl
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-
-      {/* Search bar */}
-      <div className="mb-4">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search listings by title or ideal customer..."
-          className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-xl focus:outline-none focus:border-[#00FF94] text-white placeholder:text-gray-600"
-        />
+      
+      {/* Search & Filter Bar */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <Search className="w-5 h-5 text-gray-500" />
+          </div>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products or ideal customers..."
+            className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 text-white placeholder:text-gray-500 backdrop-blur-md transition-all font-medium"
+          />
+        </div>
       </div>
 
       {/* Filter chips */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 pb-2">
         {CATEGORIES.map(cat => (
           <button
             key={cat}
             onClick={() => { setCategory(cat); setVisibleCount(PAGE_SIZE) }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-button font-semibold transition-all ${
               category === cat
-                ? 'bg-[#00FF94] text-black'
-                : 'bg-[#1a1a1a] text-gray-400 border border-[#333] hover:border-[#00FF94]/50'
+                ? 'bg-white text-black shadow-lg shadow-white/10'
+                : 'bg-white/5 text-gray-400 border border-transparent hover:bg-white/10 hover:text-white'
             }`}
           >
             {cat}
@@ -99,12 +103,12 @@ export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appl
 
       {/* Grid */}
       {visible.length === 0 ? (
-        <div className="bg-[#1a1a1a] border border-[#222] rounded-xl p-12 text-center">
-          <p className="text-gray-500">No listings match your search.</p>
+        <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-16 text-center shadow-sm">
+          <p className="text-gray-400 font-medium">No products match your search criteria.</p>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 browse-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {visible.map(listing => {
               const isApplied = appliedSet.has(listing.id)
               const isLoading = isPending && pendingId === listing.id
@@ -112,51 +116,62 @@ export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appl
               return (
                 <div
                   key={listing.id}
-                  className="bg-[#1a1a1a] border border-[#222] rounded-xl p-5 flex flex-col hover:border-[#00FF94]/40 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(0,255,148,0.06)] transition-all duration-200"
+                  className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 flex flex-col hover:border-primary/50 transition-all duration-300 group shadow-sm hover:shadow-[0_10px_40px_rgba(123,57,252,0.1)]"
                 >
                   {/* Header */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm text-gray-400 truncate">
-                      {listing.founder_profiles?.company_name || listing.company_name}
-                    </span>
-                    {listing.founder_profiles?.verified && (
-                      <span className="inline-flex items-center justify-center w-4 h-4 bg-[#00FF94]/20 rounded-full shrink-0" title="Verified">
-                        <svg className="w-2.5 h-2.5 text-[#00FF94]" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                    )}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1 min-w-0 pr-4">
+                      <h3 className="text-lg font-heading font-semibold text-white truncate group-hover:text-primary transition-colors">{listing.title}</h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-gray-400 truncate">
+                          {listing.founder_profiles?.company_name || listing.company_name}
+                        </span>
+                        {listing.founder_profiles?.verified && (
+                          <span className="inline-flex items-center justify-center w-4 h-4 bg-primary/20 rounded-full shrink-0" title="Verified">
+                            <svg className="w-2.5 h-2.5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-white font-semibold mb-2">{listing.title}</h3>
 
                   {/* Ideal customer */}
                   {listing.ideal_customer && (
-                    <p className="text-sm text-gray-500 line-clamp-2 mb-4">{listing.ideal_customer}</p>
+                    <p className="text-sm text-gray-400 line-clamp-2 mb-6 font-medium leading-relaxed flex-1">
+                      {listing.ideal_customer}
+                    </p>
                   )}
 
                   {/* Commission pills */}
-                  <div className="flex gap-2 mb-4 mt-auto">
-                    <span className="px-2.5 py-1 bg-[#00FF94]/10 text-[#00FF94] text-xs font-semibold rounded-full">
-                      ${((listing.commission_per_appointment || 0) / 100).toFixed(0)}/appt
-                    </span>
-                    <span className="px-2.5 py-1 bg-[#222] text-gray-400 text-xs font-medium rounded-full">
-                      ${((listing.commission_per_close || 0) / 100).toFixed(0)}/close
-                    </span>
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="bg-black/40 border border-white/5 rounded-xl p-3">
+                      <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-1 font-heading">$/Appt</p>
+                      <p className="text-accent font-semibold">${((listing.commission_per_appointment || 0) / 100).toFixed(0)}</p>
+                    </div>
+                    <div className="bg-black/40 border border-white/5 rounded-xl p-3">
+                      <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-1 font-heading">$/Close</p>
+                      <p className="text-primary font-semibold">${((listing.commission_per_close || 0) / 100).toFixed(0)}</p>
+                    </div>
                   </div>
 
                   {/* CTA */}
-                  <div className="flex justify-end">
+                  <div className="mt-auto pt-5 border-t border-white/5">
                     {isApplied ? (
-                      <span className="px-4 py-2 text-[#00FF94] text-sm font-medium">Applied ✓</span>
+                      <div className="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-center text-gray-400 text-sm font-button font-medium flex items-center justify-center gap-2">
+                        <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Applied
+                      </div>
                     ) : (
                       <button
                         onClick={() => handleApply(listing.id)}
                         disabled={isLoading}
-                        className="px-4 py-2 bg-[#00FF94] text-black text-sm font-semibold rounded-lg hover:brightness-90 transition-all disabled:opacity-50"
+                        className="w-full py-3 bg-white text-black text-sm font-button font-semibold rounded-xl hover:bg-gray-200 transition-colors disabled:opacity-50 shadow-lg"
                       >
-                        {isLoading ? 'Applying...' : 'Promote This'}
+                        {isLoading ? 'Applying...' : 'Apply to Promote'}
                       </button>
                     )}
                   </div>
@@ -167,10 +182,10 @@ export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appl
 
           {/* Load more */}
           {hasMore && (
-            <div className="text-center mt-8">
+            <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)}
-                className="px-6 py-2.5 bg-transparent text-gray-400 border border-[#333] rounded-lg hover:border-[#00FF94]/50 hover:text-white transition-all text-sm"
+                className="px-8 py-3 bg-glass-bg border border-glass-border text-white text-sm font-button font-semibold rounded-xl hover:bg-white/10 transition-colors backdrop-blur-md"
               >
                 Load More ({filtered.length - visibleCount} remaining)
               </button>
@@ -178,12 +193,6 @@ export function BrowseGrid({ listings, appliedIds }: { listings: Listing[]; appl
           )}
         </>
       )}
-
-      <style jsx>{`
-        .browse-grid::-webkit-scrollbar { width: 6px; }
-        .browse-grid::-webkit-scrollbar-track { background: transparent; }
-        .browse-grid::-webkit-scrollbar-thumb { background: #00FF94; border-radius: 3px; }
-      `}</style>
     </div>
   )
 }
