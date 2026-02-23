@@ -6,13 +6,11 @@ export default async function BrowseListings() {
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) {
     redirect('/login')
   }
 
   const role = user.user_metadata?.role
-
   if (role !== 'setter') {
     redirect('/dashboard/founder')
   }
@@ -31,8 +29,11 @@ export default async function BrowseListings() {
   const appliedIds = userApplications?.map(app => app.listing_id) || []
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Browse Listings</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-heading font-semibold text-white tracking-tight">Browse Products</h1>
+        <p className="text-gray-400 mt-2 font-medium">Discover high-ticket SaaS products to promote and earn commissions.</p>
+      </div>
       <BrowseGrid listings={listings || []} appliedIds={appliedIds} />
     </div>
   )
