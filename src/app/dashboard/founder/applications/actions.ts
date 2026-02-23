@@ -12,6 +12,14 @@ export async function approveApplication(applicationId: string): Promise<{ error
     return { error: 'Not authenticated' }
   }
 
+  const { data: owned } = await supabase
+    .from('setter_applications')
+    .select('listings!inner(company_id)')
+    .eq('id', applicationId)
+    .eq('listings.company_id', user.id)
+    .single()
+  if (!owned) return { error: 'Not authorized' }
+
   const { error } = await supabase
     .from('setter_applications')
     .update({ status: 'approved' })
@@ -34,6 +42,14 @@ export async function rejectApplication(applicationId: string): Promise<{ error?
     console.error('Auth error in rejectApplication:', authError)
     return { error: 'Not authenticated' }
   }
+
+  const { data: owned } = await supabase
+    .from('setter_applications')
+    .select('listings!inner(company_id)')
+    .eq('id', applicationId)
+    .eq('listings.company_id', user.id)
+    .single()
+  if (!owned) return { error: 'Not authorized' }
 
   const { error } = await supabase
     .from('setter_applications')

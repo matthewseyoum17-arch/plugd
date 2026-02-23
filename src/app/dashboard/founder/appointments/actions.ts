@@ -20,6 +20,7 @@ export async function confirmAppointment(
     .from('appointments')
     .update({ status: 'confirmed' })
     .eq('id', appointmentId)
+    .eq('company_id', user.id)
 
   if (updateError) {
     console.error('Error confirming appointment:', updateError)
@@ -61,6 +62,7 @@ export async function disputeAppointment(appointmentId: string): Promise<{ error
     .from('appointments')
     .update({ status: 'disputed' })
     .eq('id', appointmentId)
+    .eq('company_id', user.id)
 
   if (error) {
     console.error('Error disputing appointment:', error)

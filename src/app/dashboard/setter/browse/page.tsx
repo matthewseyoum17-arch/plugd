@@ -10,7 +10,7 @@ export default async function BrowseListings() {
 
   const { data: listings } = await supabase
     .from('listings')
-    .select('*, users!listings_company_id_fkey(full_name)')
+    .select('*, founder_profiles!inner(company_name)')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 
@@ -28,7 +28,7 @@ export default async function BrowseListings() {
     ideal_customer: l.ideal_customer,
     commission_per_appointment: l.commission_per_appointment || 0,
     commission_per_close: l.commission_per_close || 0,
-    company_name: l.users?.full_name || 'Company',
+    company_name: l.founder_profiles?.company_name || 'Company',
   }))
 
   return <BrowseClient listings={mapped} appliedIds={appliedIds} />

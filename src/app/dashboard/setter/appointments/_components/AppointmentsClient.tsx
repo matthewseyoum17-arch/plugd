@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { submitAppointment } from '../actions'
 
 type ApprovedListing = {
@@ -35,11 +35,19 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function Countdown({ autoApproveAt }: { autoApproveAt: string }) {
-  const diff = new Date(autoApproveAt).getTime() - Date.now()
-  if (diff <= 0) return <span className="text-blue-300 text-xs">Auto-approved</span>
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  return <span className="text-yellow-300 text-xs">{hours}h {mins}m left</span>
+  const getRemaining = () => Math.max(0, new Date(autoApproveAt).getTime() - Date.now())
+  const [remaining, setRemaining] = useState(getRemaining())
+
+  useEffect(() => {
+    const interval = setInterval(() => setRemaining(getRemaining()), 1000)
+    return () => clearInterval(interval)
+  }, [autoApproveAt])
+
+  if (remaining <= 0) return <span className="text-blue-300 text-xs">Auto-approved</span>
+  const h = Math.floor(remaining / 3600000)
+  const m = Math.floor((remaining % 3600000) / 60000)
+  const s = Math.floor((remaining % 60000) / 1000)
+  return <span className="text-yellow-300 text-xs font-mono">{h}h {m}m {s}s</span>
 }
 
 export function AppointmentsClient({

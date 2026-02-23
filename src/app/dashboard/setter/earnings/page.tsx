@@ -16,16 +16,11 @@ export default async function SetterEarnings() {
   const paidPayouts = payouts?.filter(p => p.status === 'paid') || []
   const pendingPayouts = payouts?.filter(p => p.status === 'pending') || []
 
-  // After 7% fee
-  const totalEarned = paidPayouts.reduce((sum, p) => {
-    const fee = Math.round((p.amount || 0) * 0.07)
-    return sum + ((p.amount || 0) - fee)
-  }, 0) / 100
+  const totalEarned = paidPayouts.reduce((sum, p) =>
+    sum + ((p.amount || 0) - (p.platform_fee || 0)), 0) / 100
 
-  const totalPending = pendingPayouts.reduce((sum, p) => {
-    const fee = Math.round((p.amount || 0) * 0.07)
-    return sum + ((p.amount || 0) - fee)
-  }, 0) / 100
+  const totalPending = pendingPayouts.reduce((sum, p) =>
+    sum + ((p.amount || 0) - (p.platform_fee || 0)), 0) / 100
 
   const statusColor: Record<string, string> = {
     paid: 'bg-green-900 text-green-300',
@@ -56,7 +51,7 @@ export default async function SetterEarnings() {
       ) : (
         <div className="space-y-3">
           {payouts.map((payout) => {
-            const fee = Math.round((payout.amount || 0) * 0.07)
+            const fee = payout.platform_fee || 0
             const netAmount = ((payout.amount || 0) - fee) / 100
             return (
               <div key={payout.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">

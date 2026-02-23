@@ -11,6 +11,7 @@ const navItems = [
   { name: 'Overview', href: '/dashboard/setter' },
   { name: 'Browse', href: '/dashboard/setter/browse' },
   { name: 'Applications', href: '/dashboard/setter/applications' },
+  { name: 'My Products', href: '/dashboard/setter/products' },
   { name: 'Appointments', href: '/dashboard/setter/appointments' },
   { name: 'Earnings', href: '/dashboard/setter/earnings' },
 ]
