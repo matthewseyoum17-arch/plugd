@@ -16,11 +16,9 @@ export default async function SetterEarnings() {
   const paidPayouts = payouts?.filter(p => p.status === 'paid') || []
   const pendingPayouts = payouts?.filter(p => p.status === 'pending') || []
 
-  const totalEarned = paidPayouts.reduce((sum, p) =>
-    sum + ((p.amount || 0) - (p.platform_fee || 0)), 0) / 100
+  const totalEarned = paidPayouts.reduce((sum, p) => sum + (p.amount || 0), 0) / 100
 
-  const totalPending = pendingPayouts.reduce((sum, p) =>
-    sum + ((p.amount || 0) - (p.platform_fee || 0)), 0) / 100
+  const totalPending = pendingPayouts.reduce((sum, p) => sum + (p.amount || 0), 0) / 100
 
   const statusColor: Record<string, string> = {
     paid: 'bg-green-900 text-green-300',
@@ -51,8 +49,7 @@ export default async function SetterEarnings() {
       ) : (
         <div className="space-y-3">
           {payouts.map((payout) => {
-            const fee = payout.platform_fee || 0
-            const netAmount = ((payout.amount || 0) - fee) / 100
+            const displayAmount = (payout.amount || 0) / 100
             return (
               <div key={payout.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
                 <div>
@@ -61,8 +58,7 @@ export default async function SetterEarnings() {
                   <p className="text-gray-500 text-xs mt-1">{new Date(payout.created_at).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[#00FF94] font-semibold">${netAmount.toFixed(2)}</p>
-                  <p className="text-gray-500 text-xs">7% fee: ${(fee / 100).toFixed(2)}</p>
+                  <p className="text-[#00FF94] font-semibold">${displayAmount.toFixed(2)}</p>
                   <span className={`px-3 py-1 rounded-full text-xs mt-1 inline-block ${statusColor[payout.status] || 'bg-gray-800 text-gray-400'}`}>
                     {payout.status}
                   </span>

@@ -24,6 +24,7 @@ export default function SubmitAppointment() {
   const [contactName, setContactName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
   const [contactCompany, setContactCompany] = useState('')
+  const [calendlyEventUrl, setCalendlyEventUrl] = useState('')
   const [appointmentType, setAppointmentType] = useState<'appointment' | 'close'>('appointment')
   const [notes, setNotes] = useState('')
   
@@ -93,6 +94,7 @@ export default function SubmitAppointment() {
         contact_name: contactName,
         contact_email: contactEmail,
         contact_company: contactCompany,
+        calendly_event_url: calendlyEventUrl,
         appointment_type: appointmentType,
         notes: notes,
         status: 'submitted',
@@ -180,6 +182,20 @@ export default function SubmitAppointment() {
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
             required
             placeholder="Acme Corp"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Calendly Event URL *
+          </label>
+          <input
+            type="url"
+            value={calendlyEventUrl}
+            onChange={(e) => setCalendlyEventUrl(e.target.value)}
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            required
+            placeholder="https://calendly.com/..."
           />
         </div>
 

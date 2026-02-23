@@ -6,7 +6,8 @@ import { revalidatePath } from 'next/cache'
 export async function confirmAppointment(
   appointmentId: string,
   setterId: string,
-  commissionAmount: number
+  commissionAmount: number,
+  appointmentType: string
 ): Promise<{ error?: string }> {
   const supabase = createClient()
 
@@ -27,7 +28,8 @@ export async function confirmAppointment(
     return { error: updateError.message }
   }
 
-  const platformFee = Math.round(commissionAmount * 0.07)
+  const feeRate = appointmentType === 'close' ? 0.05 : 0.07
+  const amount = Math.round(commissionAmount * (1 - feeRate))
 
   const { error: payoutError } = await supabase
     .from('payouts')
@@ -35,8 +37,7 @@ export async function confirmAppointment(
       founder_id: user.id,
       setter_id: setterId,
       appointment_id: appointmentId,
-      amount: commissionAmount,
-      platform_fee: platformFee,
+      amount,
       status: 'pending',
     })
 

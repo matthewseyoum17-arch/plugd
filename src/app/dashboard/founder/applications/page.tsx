@@ -8,11 +8,20 @@ export default async function Applications() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: applications } = await supabase
-    .from('setter_applications')
-    .select('*, listings!inner(id, title, company_id), users!setter_applications_setter_id_fkey!inner(full_name, email)')
-    .eq('listings.company_id', user.id)
-    .order('created_at', { ascending: false })
+  const { data: myListings } = await supabase
+    .from('listings')
+    .select('id')
+    .eq('company_id', user.id)
+
+  const myListingIds = (myListings || []).map(l => l.id)
+
+  const { data: applications } = myListingIds.length
+    ? await supabase
+        .from('setter_applications')
+        .select('*, listings(id, title), users!setter_applications_setter_id_fkey(full_name, email)')
+        .in('listing_id', myListingIds)
+        .order('created_at', { ascending: false })
+    : { data: [] as any[] }
 
   // Group by listing
   const grouped: Record<string, { title: string; apps: typeof applications }> = {}
