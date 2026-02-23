@@ -6,16 +6,37 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-manrope)", "sans-serif"],
+        heading: ["var(--font-inter)", "sans-serif"],
+        button: ["var(--font-cabin)", "sans-serif"],
+        serif: ["var(--font-instrument)", "serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: '#7b39fc',
+          hover: '#6a2ce0'
+        },
+        secondary: {
+          DEFAULT: '#2b2344',
+          hover: '#352b54'
+        },
+        accent: '#f87b52',
+        glass: {
+          border: 'rgba(164,132,215,0.5)',
+          bg: 'rgba(85,80,110,0.4)'
+        }
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'glass-gradient': 'linear-gradient(180deg, rgba(85,80,110,0.4) 0%, rgba(43,35,68,0.2) 100%)',
       },
       animation: {
         'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
