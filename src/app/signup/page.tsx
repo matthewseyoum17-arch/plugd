@@ -10,6 +10,7 @@ export default function SignupPage() {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [companyName, setCompanyName] = useState('')
   const [role, setRole] = useState<'founder' | 'setter'>('setter')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -60,6 +61,16 @@ export default function SignupPage() {
         })
         if (profileError) {
           console.error('Error inserting setter_profiles row:', profileError)
+        }
+      }
+
+      if (role === 'founder') {
+        const { error: profileError } = await supabase.from('founder_profiles').insert({
+          founder_id: data.user.id,
+          company_name: companyName,
+        })
+        if (profileError) {
+          console.error('Error inserting founder_profiles row:', profileError)
         }
       }
 
@@ -174,6 +185,22 @@ export default function SignupPage() {
                 </label>
               </div>
             </div>
+
+            {role === 'founder' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+                  required
+                  placeholder="Your company name"
+                />
+              </div>
+            )}
 
             <button
               type="submit"

@@ -10,7 +10,7 @@ export default async function MyListings() {
 
   const { data: listings } = await supabase
     .from('listings')
-    .select('*, setter_applications(id), appointments(id, status)')
+    .select('*, setter_applications(id, status), appointments(id, status)')
     .eq('company_id', user.id)
     .order('created_at', { ascending: false })
 
@@ -34,7 +34,7 @@ export default async function MyListings() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {listings?.map((listing) => {
-          const setterCount = listing.setter_applications?.length || 0
+          const setterCount = listing.setter_applications?.filter((a: { status: string }) => a.status === 'approved').length || 0
           const pendingCount = listing.appointments?.filter((a: { status: string }) => a.status === 'submitted').length || 0
           const statusColor = listing.status === 'active'
             ? 'bg-green-900 text-green-300'

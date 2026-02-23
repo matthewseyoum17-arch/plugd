@@ -10,7 +10,7 @@ export default async function Applications() {
 
   const { data: applications } = await supabase
     .from('setter_applications')
-    .select('*, listings!inner(id, title, company_id), users!setter_applications_setter_id_fkey(full_name, email)')
+    .select('*, listings!inner(id, title, company_id), users!setter_applications_setter_id_fkey!inner(full_name, email)')
     .eq('listings.company_id', user.id)
     .order('created_at', { ascending: false })
 
