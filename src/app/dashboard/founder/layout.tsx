@@ -5,17 +5,17 @@ import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { User } from '@supabase/supabase-js'
+import { Sidebar } from '@/components/ui/Sidebar'
 
-const navItems = [
-  { name: 'Overview', href: '/dashboard/founder' },
-  { name: 'Listings', href: '/dashboard/founder/listings' },
-  { name: 'Applications', href: '/dashboard/founder/applications' },
-  { name: 'Appointments', href: '/dashboard/founder/appointments' },
-  { name: 'Earnings', href: '/dashboard/founder/earnings' },
+const founderLinks = [
+  { href: '/dashboard/founder', label: 'Overview' },
+  { href: '/dashboard/founder/listings', label: 'My Products' },
+  { href: '/dashboard/founder/applications', label: 'Setter Applications' },
+  { href: '/dashboard/founder/appointments', label: 'Appointments' },
+  { href: '/dashboard/founder/earnings', label: 'Earnings & Payouts' },
 ]
 
-export default function FounderDashboardLayout({
+export default function FounderLayout({
   children,
 }: {
   children: React.ReactNode
@@ -89,23 +89,9 @@ export default function FounderDashboardLayout({
 
           <div className="mt-8 pt-8 border-t border-[#2a2a2a]">
             <div className="text-sm text-gray-400 mb-2">Signed in as</div>
-            <div className="text-white font-medium truncate">{fullName}</div>
-          </div>
-
-          <div className="mt-4">
-            <button
-              onClick={handleLogout}
-              className="w-full px-4 py-2 text-gray-400 hover:text-white transition-colors text-left text-sm"
-            >
-              Sign out
-            </button>
-          </div>
-        </aside>
-
-        <main className="flex-1 p-8 ml-64">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

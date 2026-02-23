@@ -1,17 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { StatCard } from '@/components/ui/StatCard'
 
 export default async function SetterOverview() {
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) {
     redirect('/login')
   }
 
   const role = user.user_metadata?.role
-
   if (role !== 'setter') {
     redirect('/dashboard/founder')
   }
@@ -47,24 +46,23 @@ export default async function SetterOverview() {
   ]
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Overview</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-heading font-semibold text-white tracking-tight">Overview</h1>
+        <p className="text-gray-400 mt-2 font-medium">Welcome back to Datacore. Here's your performance snapshot.</p>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <div
-            key={stat.name}
-            className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6"
-          >
-            <p className="text-gray-400 text-sm">{stat.name}</p>
-            <p className="text-3xl font-bold mt-2 text-[#00FF94]">{stat.value}</p>
-          </div>
+          <StatCard key={stat.name} label={stat.name} value={stat.value} />
         ))}
       </div>
 
-      <div className="mt-8 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-        <p className="text-gray-400">No recent activity yet.</p>
+      <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-8 shadow-sm">
+        <h2 className="text-xl font-heading font-semibold text-white mb-4">Recent Activity</h2>
+        <div className="py-12 text-center border-2 border-dashed border-white/10 rounded-xl bg-white/5">
+          <p className="text-gray-400 font-medium">No recent activity yet.</p>
+        </div>
       </div>
     </div>
   )
