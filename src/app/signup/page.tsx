@@ -1,16 +1,18 @@
 "use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function SignupPage() {
+  const searchParams = useSearchParams();
+  const initialRole = searchParams.get("role") === "founder" ? "founder" : "setter";
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [role, setRole] = useState<"founder" | "setter">("setter");
+  const [role, setRole] = useState<"founder" | "setter">(initialRole);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();

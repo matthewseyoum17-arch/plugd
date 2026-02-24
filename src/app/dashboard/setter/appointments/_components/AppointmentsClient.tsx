@@ -73,9 +73,14 @@ export function AppointmentsClient({
     setSuccess(false)
 
     const formData = new FormData(e.currentTarget)
-    formData.set('appointment_type', appointmentType)
-
-    const result = await submitAppointment(formData)
+    const result = await submitAppointment({
+      listing_id: formData.get('listing_id') as string,
+      contact_name: formData.get('contact_name') as string,
+      contact_email: formData.get('contact_email') as string,
+      contact_company: formData.get('contact_company') as string,
+      calendly_event_url: (formData.get('calendly_event_url') as string) || '',
+      appointment_type: appointmentType as 'appointment' | 'close',
+    })
     if (result.error) {
       console.error('Submit appointment error:', result.error)
       setError(result.error)

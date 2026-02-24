@@ -9,7 +9,7 @@ export default async function SetterApplications() {
 
   const { data: applications } = await supabase
     .from('setter_applications')
-    .select('*, listings(title, users!listings_company_id_fkey(full_name))')
+    .select('*, listings(title, company_name)')
     .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
 
@@ -33,7 +33,7 @@ export default async function SetterApplications() {
             <div key={app.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
               <div>
                 <p className="text-white font-medium">{app.listings?.title || 'Unknown Listing'}</p>
-                <p className="text-gray-400 text-sm">{app.listings?.users?.full_name || 'Company'}</p>
+                <p className="text-gray-400 text-sm">{app.listings?.company_name || 'Company'}</p>
                 <p className="text-gray-500 text-xs mt-1">Applied {new Date(app.created_at).toLocaleDateString()}</p>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs ${statusColor[app.status] || 'bg-gray-800 text-gray-400'}`}>

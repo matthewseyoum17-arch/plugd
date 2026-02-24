@@ -104,8 +104,20 @@ export default function LoginPage() {
           full_name: fullName,
           role: fallbackRole,
         })
-        if (insertErr) {
+        if (insertErr && !insertErr.message.includes('duplicate')) {
           console.error('Error creating users row on login:', insertErr)
+        }
+
+        // Create role-specific profile if missing
+        if (fallbackRole === 'founder') {
+          await supabase.from('founder_profiles').insert({
+            founder_id: data.user.id,
+            company_name: meta.company_name || null,
+          })
+        } else {
+          await supabase.from('setter_profiles').insert({
+            setter_id: data.user.id,
+          })
         }
 
         router.push(`/dashboard/${fallbackRole}`)

@@ -2,48 +2,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-type CreateListingInput = {
-  title: string;
-  description: string;
-  ideal_customer: string;
-  product_url: string;
-  commission_per_appointment: number;
-  commission_per_close: number;
-  qualified_meeting_definition: string;
-  pitch_kit_url: string;
-};
+// ─── Listings ────────────────────────────────────────────────────────
 
-export async function createListing(input: CreateListingInput) {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
-
-  const { data: profile } = await supabase
-    .from("founder_profiles")
-    .select("company_name")
-    .eq("founder_id", user.id)
-    .single();
-
-  const { error } = await supabase.from("listings").insert({
-    company_id: user.id,
-    company_name: profile?.company_name || "",
-    title: input.title,
-    description: input.description,
-    ideal_customer: input.ideal_customer,
-    product_url: input.product_url,
-    commission_per_appointment: input.commission_per_appointment,
-    commission_per_close: input.commission_per_close,
-    qualified_meeting_definition: input.qualified_meeting_definition,
-    pitch_kit_url: input.pitch_kit_url,
-    status: "active",
-  });
-
-  if (error) return { error: error.message };
-  revalidatePath("/dashboard/founder/listings");
-  return { success: true };
-}
-
-export async function toggleListingStatus(listingId: string, newStatus: string) {
+export async function toggleListingStatus(listingId: string, newStatus: "active" | "paused") {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
@@ -59,10 +20,21 @@ export async function toggleListingStatus(listingId: string, newStatus: string) 
   return { success: true };
 }
 
-export async function applyToListing(listingId: string, sampleEmail?: string) {
+// ─── Applications ────────────────────────────────────────────────────
+
+export async function applyToListing(listingId: string, sampleEmail: string) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
+
+  // Prevent duplicates
+  const { data: existing } = await supabase
+    .from("setter_applications")
+    .select("id")
+    .eq("setter_id", user.id)
+    .eq("listing_id", listingId)
+    .single();
+  if (existing) return { error: "Already applied" };
 
   const { error } = await supabase.from("setter_applications").insert({
     setter_id: user.id,
@@ -71,10 +43,7 @@ export async function applyToListing(listingId: string, sampleEmail?: string) {
     status: "pending",
   });
 
-  if (error) {
-    if (error.code === "23505") return { error: "Already applied" };
-    return { error: error.message };
-  }
+  if (error) return { error: error.message };
   revalidatePath("/dashboard/setter/browse");
   return { success: true };
 }
@@ -84,6 +53,15 @@ export async function updateApplicationStatus(applicationId: string, status: "ap
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
+  // Verify founder owns the listing this application belongs to
+  const { data: owned } = await supabase
+    .from("setter_applications")
+    .select("id, listings!inner(company_id)")
+    .eq("id", applicationId)
+    .eq("listings.company_id", user.id)
+    .single();
+  if (!owned) return { error: "Not authorized" };
+
   const { error } = await supabase
     .from("setter_applications")
     .update({ status })
@@ -91,8 +69,11 @@ export async function updateApplicationStatus(applicationId: string, status: "ap
 
   if (error) return { error: error.message };
   revalidatePath("/dashboard/founder/applications");
+  revalidatePath("/dashboard/setter/applications");
   return { success: true };
 }
+
+// ─── Appointments ────────────────────────────────────────────────────
 
 type SubmitAppointmentInput = {
   listing_id: string;
@@ -109,6 +90,9 @@ export async function submitAppointment(input: SubmitAppointmentInput) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
+  if (!input.listing_id) return { error: "Please select a listing" };
+
+  // Verify setter has approved application for this listing
   const { data: application } = await supabase
     .from("setter_applications")
     .select("id")
@@ -116,15 +100,14 @@ export async function submitAppointment(input: SubmitAppointmentInput) {
     .eq("listing_id", input.listing_id)
     .eq("status", "approved")
     .single();
-
   if (!application) return { error: "No approved application for this listing" };
 
+  // Get listing for company_id
   const { data: listing } = await supabase
     .from("listings")
     .select("company_id")
     .eq("id", input.listing_id)
     .single();
-
   if (!listing) return { error: "Listing not found" };
 
   const { error } = await supabase.from("appointments").insert({
@@ -146,16 +129,20 @@ export async function submitAppointment(input: SubmitAppointmentInput) {
   return { success: true };
 }
 
-export async function confirmAppointment(
-  appointmentId: string,
-  setterId: string,
-  commissionPerAppointment: number,
-  commissionPerClose: number,
-  appointmentType: string
-) {
+export async function confirmAppointment(appointmentId: string) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
+
+  // Fetch appointment with listing commission data — also verifies ownership
+  const { data: appointment, error: fetchError } = await supabase
+    .from("appointments")
+    .select("id, setter_id, appointment_type, listings(commission_per_appointment, commission_per_close)")
+    .eq("id", appointmentId)
+    .eq("company_id", user.id)
+    .single();
+
+  if (fetchError || !appointment) return { error: "Appointment not found or not authorized" };
 
   const { error: updateError } = await supabase
     .from("appointments")
@@ -165,13 +152,20 @@ export async function confirmAppointment(
 
   if (updateError) return { error: updateError.message };
 
-  const base = appointmentType === "close" ? commissionPerClose : commissionPerAppointment;
-  const fee = appointmentType === "close" ? 0.05 : 0.07;
-  const amount = Math.round(base * (1 - fee));
+  // Calculate payout with platform fee deduction
+  const listing = appointment.listings as unknown as {
+    commission_per_appointment: number;
+    commission_per_close: number;
+  } | null;
+  const grossCommission = appointment.appointment_type === "close"
+    ? listing?.commission_per_close || 0
+    : listing?.commission_per_appointment || 0;
+  const feeRate = appointment.appointment_type === "close" ? 0.05 : 0.07;
+  const amount = Math.round(grossCommission * (1 - feeRate));
 
   const { error: payoutError } = await supabase.from("payouts").insert({
     founder_id: user.id,
-    setter_id: setterId,
+    setter_id: appointment.setter_id,
     appointment_id: appointmentId,
     amount,
     status: "pending",
