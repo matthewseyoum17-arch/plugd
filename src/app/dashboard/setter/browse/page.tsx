@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { BrowseClient } from './_components/BrowseClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BrowseListings() {
   const supabase = createClient()
 
@@ -10,7 +12,7 @@ export default async function BrowseListings() {
 
   const { data: listings } = await supabase
     .from('listings')
-    .select('*')
+    .select('*, setter_applications(id, status)')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 
@@ -29,6 +31,9 @@ export default async function BrowseListings() {
     commission_per_appointment: l.commission_per_appointment || 0,
     commission_per_close: l.commission_per_close || 0,
     company_name: l.company_name || 'Company',
+    product_url: l.product_url || null,
+    created_at: l.created_at,
+    setter_count: l.setter_applications?.filter((a: { status: string }) => a.status === 'approved').length || 0,
   }))
 
   return <BrowseClient listings={mapped} appliedIds={appliedIds} />

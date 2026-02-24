@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ApplicationActions } from "./_components/ApplicationActions";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Applications() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();

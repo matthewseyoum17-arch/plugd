@@ -6,13 +6,14 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
+import { LayoutDashboard, Package, UserCheck, CalendarCheck, DollarSign, LogOut, Zap } from 'lucide-react'
 
 const navItems = [
-  { name: 'Overview', href: '/dashboard/founder' },
-  { name: 'Listings', href: '/dashboard/founder/listings' },
-  { name: 'Applications', href: '/dashboard/founder/applications' },
-  { name: 'Appointments', href: '/dashboard/founder/appointments' },
-  { name: 'Earnings', href: '/dashboard/founder/earnings' },
+  { name: 'Overview', href: '/dashboard/founder', icon: LayoutDashboard },
+  { name: 'Listings', href: '/dashboard/founder/listings', icon: Package },
+  { name: 'Applications', href: '/dashboard/founder/applications', icon: UserCheck },
+  { name: 'Appointments', href: '/dashboard/founder/appointments', icon: CalendarCheck },
+  { name: 'Earnings', href: '/dashboard/founder/earnings', icon: DollarSign },
 ]
 
 export default function FounderDashboardLayout({
@@ -50,59 +51,87 @@ export default function FounderDashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+      <div className="min-h-screen bg-[#060606] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[#00FF94]/30 border-t-[#00FF94] rounded-full animate-spin" />
       </div>
     )
   }
 
   if (!user) return null
 
-  const fullName = user.user_metadata?.first_name && user.user_metadata?.last_name
-    ? `${user.user_metadata.first_name} ${user.user_metadata.last_name}`
-    : user.email?.split('@')[0] || 'Founder'
+  const fullName = user.user_metadata?.full_name
+    || (user.user_metadata?.first_name && user.user_metadata?.last_name
+      ? `${user.user_metadata.first_name} ${user.user_metadata.last_name}`
+      : user.email?.split('@')[0] || 'Founder')
+
+  const initials = fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
+
+  const isActive = (href: string) => {
+    if (href === '/dashboard/founder') return pathname === href
+    return pathname.startsWith(href)
+  }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#060606] text-white">
       <div className="flex">
-        <aside className="w-64 bg-[#111] min-h-screen p-6 fixed">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-[#00FF94]" style={{ fontFamily: 'Syne, sans-serif' }}>Plugd</h1>
-            <p className="text-sm text-gray-400">Founder Dashboard</p>
+        <aside className="w-64 bg-[#0a0a0a] min-h-screen fixed border-r border-[#141414] flex flex-col">
+          {/* Logo */}
+          <div className="p-6 pb-4">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+                <Zap className="w-4 h-4 text-black" />
+              </div>
+              <span className="text-lg font-bold text-white tracking-tight">Plugd</span>
+            </Link>
+            <div className="mt-1 ml-[42px]">
+              <span className="text-[10px] font-medium text-[#00FF94]/60 uppercase tracking-widest">Founder</span>
+            </div>
           </div>
-          
-          <nav className="space-y-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block px-4 py-3 rounded-lg transition-colors ${
-                  pathname === item.href
-                    ? 'bg-[#00FF94] text-black font-medium'
-                    : 'text-gray-300 hover:bg-[#1a1a1a]'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+
+          {/* Nav */}
+          <nav className="px-3 mt-2 space-y-0.5 flex-1">
+            {navItems.map((item) => {
+              const active = isActive(item.href)
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                    active
+                      ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20'
+                      : 'text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-[#00FF94]' : ''}`} />
+                  {item.name}
+                </Link>
+              )
+            })}
           </nav>
 
-          <div className="mt-8 pt-8 border-t border-[#2a2a2a]">
-            <div className="text-sm text-gray-400 mb-2">Signed in as</div>
-            <div className="text-white font-medium truncate">{fullName}</div>
-          </div>
-
-          <div className="mt-4">
+          {/* User footer */}
+          <div className="p-4 border-t border-[#141414]">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+                <span className="text-xs font-semibold text-white">{initials}</span>
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-white truncate">{fullName}</p>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+              </div>
+            </div>
             <button
               onClick={handleLogout}
-              className="w-full px-4 py-2 text-gray-400 hover:text-white transition-colors text-left text-sm"
+              className="flex items-center gap-2 w-full px-3 py-2 text-gray-500 hover:text-red-400 transition-colors text-xs rounded-lg hover:bg-red-500/5"
             >
+              <LogOut className="w-3.5 h-3.5" />
               Sign out
             </button>
           </div>
         </aside>
 
-        <main className="flex-1 p-8 ml-64">
+        <main className="flex-1 ml-64 p-8 min-h-screen">
           {children}
         </main>
       </div>
