@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateSetterProfile } from "@/app/actions-profile";
@@ -37,7 +35,7 @@ export default function SetterProfilePage() {
         .from("setter_profiles")
         .select("*")
         .eq("setter_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (profile) {
         setHeadline(profile.headline || "");

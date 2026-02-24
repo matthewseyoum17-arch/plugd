@@ -31,7 +31,7 @@ export default function SubmitAppointment() {
         .from("listings")
         .select("*, founder_profiles(company_name)")
         .eq("id", listingId)
-        .single();
+        .maybeSingle();
       setListing(data);
       setLoading(false);
     };

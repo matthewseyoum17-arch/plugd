@@ -11,40 +11,38 @@ export async function GET(request: Request) {
 
     if (!error && data.user) {
       // Read role from public.users table
-      const { data: userRow, error: userError } = await supabase
+      const { data: userRow } = await supabase
         .from('users')
         .select('role')
         .eq('id', data.user.id)
-        .single()
+        .maybeSingle()
 
       let role: string
 
-      if (userError || !userRow) {
+      if (!userRow) {
         // Users row missing — create from auth metadata
-        console.error('Users row missing in auth callback, creating:', userError)
         const meta = data.user.user_metadata || {}
         role = meta.role || 'setter'
         const fullName = meta.first_name && meta.last_name
           ? `${meta.first_name} ${meta.last_name}`
           : data.user.email?.split('@')[0] || 'User'
 
-        const { error: insertErr } = await supabase.from('users').insert({
+        await supabase.from('users').upsert({
           id: data.user.id,
           email: data.user.email,
           full_name: fullName,
           role,
-        })
-        if (insertErr) {
-          console.error('Error creating users row in auth callback:', insertErr)
-        }
+        }, { onConflict: 'id' })
 
-        if (role === 'setter') {
-          const { error: profileErr } = await supabase.from('setter_profiles').insert({
+        if (role === 'founder') {
+          await supabase.from('founder_profiles').upsert({
+            founder_id: data.user.id,
+            company_name: meta.company_name || null,
+          }, { onConflict: 'founder_id' })
+        } else {
+          await supabase.from('setter_profiles').upsert({
             setter_id: data.user.id,
-          })
-          if (profileErr) {
-            console.error('Error creating setter_profiles in auth callback:', profileErr)
-          }
+          }, { onConflict: 'setter_id' })
         }
       } else {
         role = userRow.role

@@ -11,7 +11,7 @@ export async function getPublicProfile(userId: string) {
     .from("users")
     .select("id, full_name, role, created_at")
     .eq("id", userId)
-    .single();
+    .maybeSingle();
 
   if (!user) return { error: "User not found" };
 
@@ -21,14 +21,14 @@ export async function getPublicProfile(userId: string) {
       .from("setter_profiles")
       .select("*")
       .eq("setter_id", userId)
-      .single();
+      .maybeSingle();
     profile = data;
   } else {
     const { data } = await supabase
       .from("founder_profiles")
       .select("*")
       .eq("founder_id", userId)
-      .single();
+      .maybeSingle();
     profile = data;
   }
 
@@ -111,14 +111,14 @@ export async function updateSetterProfile(input: SetterProfileInput) {
 
   const { error } = await supabase
     .from("setter_profiles")
-    .update({
+    .upsert({
+      setter_id: user.id,
       headline: input.headline?.trim() || null,
       bio: input.bio?.trim() || null,
       industries: input.industries?.trim() || null,
       location: input.location?.trim() || null,
       linkedin_url: input.linkedin_url?.trim() || null,
-    })
-    .eq("setter_id", user.id);
+    }, { onConflict: "setter_id" });
 
   if (error) return { error: error.message };
   revalidatePath("/dashboard/setter/profile");
@@ -135,15 +135,15 @@ export async function updateFounderProfile(input: FounderProfileInput) {
 
   const { error } = await supabase
     .from("founder_profiles")
-    .update({
+    .upsert({
+      founder_id: user.id,
       headline: input.headline?.trim() || null,
       bio: input.bio?.trim() || null,
       website: input.website?.trim() || null,
       location: input.location?.trim() || null,
       industry: input.industry?.trim() || null,
       company_name: input.company_name?.trim() || null,
-    })
-    .eq("founder_id", user.id);
+    }, { onConflict: "founder_id" });
 
   if (error) return { error: error.message };
   revalidatePath("/dashboard/founder/profile");

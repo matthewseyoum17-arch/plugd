@@ -80,6 +80,7 @@ function SignupForm() {
     const fullName =
       `${firstName} ${lastName}`.trim() || email.split("@")[0] || "User";
 
+    // Step 1: Create the auth user
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -96,10 +97,55 @@ function SignupForm() {
     });
 
     if (authError) {
+      // If the trigger failed, the user may already exist in auth but not
+      // in public.users. Try signing in instead.
       if (authError.message.includes("Database error")) {
-        setError(
-          "Account setup failed. Please try again or contact support."
-        );
+        const { data: signInData, error: signInError } =
+          await supabase.auth.signInWithPassword({ email, password });
+
+        if (signInError) {
+          setError(
+            "Account setup failed. Please try again or contact support."
+          );
+          setLoading(false);
+          return;
+        }
+
+        if (signInData.user) {
+          // Auth user exists but public row may be missing — create it
+          await supabase.from("users").upsert(
+            {
+              id: signInData.user.id,
+              email: signInData.user.email,
+              full_name: fullName,
+              role,
+            },
+            { onConflict: "id" }
+          );
+
+          if (role === "founder") {
+            await supabase
+              .from("founder_profiles")
+              .upsert(
+                { founder_id: signInData.user.id, company_name: companyName || null },
+                { onConflict: "founder_id" }
+              );
+          } else {
+            await supabase
+              .from("setter_profiles")
+              .upsert(
+                { setter_id: signInData.user.id },
+                { onConflict: "setter_id" }
+              );
+          }
+
+          router.push(`/dashboard/${role}`);
+          return;
+        }
+      }
+
+      if (authError.message.includes("already registered")) {
+        setError("An account with this email already exists. Please sign in.");
       } else {
         setError(authError.message);
       }
@@ -108,7 +154,7 @@ function SignupForm() {
     }
 
     if (data.user) {
-      // Create public.users row — use upsert to avoid conflicts with any DB trigger
+      // Step 2: Create public.users row — upsert to avoid conflicts with DB trigger
       await supabase.from("users").upsert(
         {
           id: data.user.id,
@@ -119,7 +165,7 @@ function SignupForm() {
         { onConflict: "id" }
       );
 
-      // Create role-specific profile (ignore duplicates)
+      // Step 3: Create role-specific profile (ignore duplicates)
       if (role === "founder") {
         await supabase
           .from("founder_profiles")

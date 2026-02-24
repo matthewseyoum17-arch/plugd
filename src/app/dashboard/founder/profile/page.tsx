@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateFounderProfile } from "@/app/actions-profile";
@@ -38,7 +36,7 @@ export default function FounderProfilePage() {
         .from("founder_profiles")
         .select("*")
         .eq("founder_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (profile) {
         setCompanyName(profile.company_name || "");

@@ -32,7 +32,7 @@ export default function EditListing() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/login"); return; }
-      const { data: listing } = await supabase.from("listings").select("*").eq("id", listingId).single();
+      const { data: listing } = await supabase.from("listings").select("*").eq("id", listingId).maybeSingle();
       if (!listing || listing.company_id !== user.id) { router.push("/dashboard/founder/listings"); return; }
       setTitle(listing.title || "");
       setDescription(listing.description || "");

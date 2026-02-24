@@ -55,20 +55,24 @@ export default function LoginPage() {
     })
 
     if (authError) {
-      setError(authError.message)
+      if (authError.message === 'Invalid login credentials') {
+        setError('Invalid email or password. Please try again.')
+      } else {
+        setError(authError.message)
+      }
       setLoading(false)
       return
     }
 
     if (data.user) {
-      const { data: userRow, error: userError } = await supabase
+      const { data: userRow } = await supabase
         .from('users')
         .select('role')
         .eq('id', data.user.id)
-        .single()
+        .maybeSingle()
 
-      if (userError || !userRow) {
-        console.error('Users row missing on login, creating from metadata:', userError)
+      if (!userRow) {
+        // Users row missing — recreate from auth metadata
         const meta = data.user.user_metadata || {}
         const fallbackRole = meta.role || 'setter'
         const fullName = meta.first_name && meta.last_name
