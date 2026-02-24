@@ -33,7 +33,35 @@ export default function SignupPage() {
       },
     });
     if (authError) { setError(authError.message); setLoading(false); return; }
-    if (data.user) router.push(`/dashboard/${role}`);
+
+    if (data.user) {
+      const fullName = `${firstName} ${lastName}`.trim() || email.split("@")[0] || "User";
+
+      // Create public.users row immediately so it exists before any redirect
+      const { error: insertErr } = await supabase.from("users").insert({
+        id: data.user.id,
+        email: data.user.email,
+        full_name: fullName,
+        role,
+      });
+      if (insertErr && !insertErr.message.includes("duplicate")) {
+        console.error("Error creating users row on signup:", insertErr);
+      }
+
+      // Create role-specific profile
+      if (role === "founder") {
+        await supabase.from("founder_profiles").insert({
+          founder_id: data.user.id,
+          company_name: companyName || null,
+        });
+      } else {
+        await supabase.from("setter_profiles").insert({
+          setter_id: data.user.id,
+        });
+      }
+
+      router.push(`/dashboard/${role}`);
+    }
     setLoading(false);
   };
 
