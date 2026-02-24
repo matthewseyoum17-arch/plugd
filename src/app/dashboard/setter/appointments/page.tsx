@@ -30,7 +30,7 @@ export default async function SetterAppointments() {
   // Get setter's appointments with listing commission data
   const { data: appointments } = await supabase
     .from('appointments')
-    .select('*, listings(title, commission_per_appointment, commission_per_close)')
+    .select('*, listings(title, commission_per_appointment, commission_per_close), users!appointments_company_id_fkey(full_name)')
     .eq('setter_id', user.id)
     .order('created_at', { ascending: false })
 
@@ -43,6 +43,8 @@ export default async function SetterAppointments() {
       : null
     return {
       id: apt.id,
+      company_id: apt.company_id,
+      company_name: (apt.users as { full_name?: string } | null)?.full_name || 'Founder',
       listing_title: apt.listings?.title || 'N/A',
       contact_name: apt.contact_name || '',
       commission_amount: commission,

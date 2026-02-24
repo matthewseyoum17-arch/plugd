@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { submitAppointment } from '../actions'
+import ReviewModal from '@/components/review-modal'
+import { Star } from 'lucide-react'
 
 type ApprovedListing = {
   listing_id: string
@@ -12,6 +14,8 @@ type ApprovedListing = {
 
 type Appointment = {
   id: string
+  company_id: string
+  company_name: string
   listing_title: string
   contact_name: string
   commission_amount: number
@@ -48,6 +52,52 @@ function Countdown({ autoApproveAt }: { autoApproveAt: string }) {
   const m = Math.floor((remaining % 3600000) / 60000)
   const s = Math.floor((remaining % 60000) / 1000)
   return <span className="text-yellow-300 text-xs font-mono">{h}h {m}m {s}s</span>
+}
+
+function SetterAppointmentCard({ apt }: { apt: Appointment }) {
+  const [showReview, setShowReview] = useState(false)
+  const [reviewed, setReviewed] = useState(false)
+  const isConfirmed = apt.status === 'confirmed' || apt.status === 'auto_approved'
+
+  return (
+    <>
+      <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
+        <div>
+          <p className="text-white font-medium">{apt.listing_title}</p>
+          <p className="text-gray-400 text-sm">Contact: {apt.contact_name}</p>
+          <p className="text-gray-500 text-xs">Founder: {apt.company_name}</p>
+          <p className="text-[#00FF94] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</p>
+          {apt.status === 'submitted' && apt.auto_approve_at && (
+            <div className="mt-1"><Countdown autoApproveAt={apt.auto_approve_at} /></div>
+          )}
+        </div>
+        <div className="text-right space-y-2">
+          <StatusBadge status={apt.status} />
+          <p className="text-gray-500 text-xs">{new Date(apt.created_at).toLocaleDateString()}</p>
+          {isConfirmed && !reviewed && (
+            <button
+              onClick={() => setShowReview(true)}
+              className="flex items-center gap-1 border border-yellow-800/50 text-yellow-400 rounded-md px-3 py-1.5 text-xs hover:bg-yellow-900/20 transition-colors ml-auto"
+            >
+              <Star className="w-3 h-3" /> Review Founder
+            </button>
+          )}
+          {reviewed && (
+            <span className="text-green-400 text-xs flex items-center gap-1 justify-end"><Star className="w-3 h-3 fill-green-400" /> Reviewed</span>
+          )}
+        </div>
+      </div>
+      {showReview && (
+        <ReviewModal
+          appointmentId={apt.id}
+          revieweeId={apt.company_id}
+          revieweeName={apt.company_name}
+          onClose={() => setShowReview(false)}
+          onSubmitted={() => { setShowReview(false); setReviewed(true) }}
+        />
+      )}
+    </>
+  )
 }
 
 export function AppointmentsClient({
@@ -246,20 +296,7 @@ export function AppointmentsClient({
             </div>
           ) : (
             appointments.map((apt) => (
-              <div key={apt.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
-                <div>
-                  <p className="text-white font-medium">{apt.listing_title}</p>
-                  <p className="text-gray-400 text-sm">Contact: {apt.contact_name}</p>
-                  <p className="text-[#00FF94] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</p>
-                  {apt.status === 'submitted' && apt.auto_approve_at && (
-                    <div className="mt-1"><Countdown autoApproveAt={apt.auto_approve_at} /></div>
-                  )}
-                </div>
-                <div className="text-right">
-                  <StatusBadge status={apt.status} />
-                  <p className="text-gray-500 text-xs mt-2">{new Date(apt.created_at).toLocaleDateString()}</p>
-                </div>
-              </div>
+              <SetterAppointmentCard key={apt.id} apt={apt} />
             ))
           )}
         </div>

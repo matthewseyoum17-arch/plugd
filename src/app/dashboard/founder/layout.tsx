@@ -6,14 +6,16 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { LayoutDashboard, Package, UserCheck, CalendarCheck, DollarSign, LogOut, Zap } from 'lucide-react'
+import { LayoutDashboard, Package, UserCheck, CalendarCheck, DollarSign, LogOut, Zap, UserCircle, MessageSquare } from 'lucide-react'
 
 const navItems = [
   { name: 'Overview', href: '/dashboard/founder', icon: LayoutDashboard },
   { name: 'Listings', href: '/dashboard/founder/listings', icon: Package },
   { name: 'Applications', href: '/dashboard/founder/applications', icon: UserCheck },
   { name: 'Appointments', href: '/dashboard/founder/appointments', icon: CalendarCheck },
+  { name: 'Messages', href: '/dashboard/founder/messages', icon: MessageSquare },
   { name: 'Earnings', href: '/dashboard/founder/earnings', icon: DollarSign },
+  { name: 'Company Profile', href: '/dashboard/founder/profile', icon: UserCircle },
 ]
 
 export default function FounderDashboardLayout({

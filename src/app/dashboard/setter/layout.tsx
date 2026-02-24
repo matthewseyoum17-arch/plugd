@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { LayoutDashboard, Compass, Send, Package, CalendarCheck, DollarSign, LogOut, Zap } from 'lucide-react'
+import { LayoutDashboard, Compass, Send, Package, CalendarCheck, DollarSign, LogOut, Zap, UserCircle, MessageSquare } from 'lucide-react'
 
 const navItems = [
   { name: 'Overview', href: '/dashboard/setter', icon: LayoutDashboard },
@@ -14,7 +14,9 @@ const navItems = [
   { name: 'Applications', href: '/dashboard/setter/applications', icon: Send },
   { name: 'My Products', href: '/dashboard/setter/products', icon: Package },
   { name: 'Appointments', href: '/dashboard/setter/appointments', icon: CalendarCheck },
+  { name: 'Messages', href: '/dashboard/setter/messages', icon: MessageSquare },
   { name: 'Earnings', href: '/dashboard/setter/earnings', icon: DollarSign },
+  { name: 'My Profile', href: '/dashboard/setter/profile', icon: UserCircle },
 ]
 
 export default function SetterDashboardLayout({

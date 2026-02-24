@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { confirmAppointment, disputeAppointment } from '../actions'
+import ReviewModal from '@/components/review-modal'
+import { Star } from 'lucide-react'
 
 type Appointment = {
   id: string
@@ -51,6 +53,8 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [currentStatus, setCurrentStatus] = useState(apt.status)
+  const [showReview, setShowReview] = useState(false)
+  const [reviewed, setReviewed] = useState(false)
 
   const handleConfirm = async () => {
     setLoading(true)
@@ -120,8 +124,28 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
             </button>
           </div>
         )}
+        {(currentStatus === 'confirmed' || currentStatus === 'auto_approved') && !reviewed && (
+          <button
+            onClick={() => setShowReview(true)}
+            className="flex items-center gap-1 border border-yellow-800/50 text-yellow-400 rounded-md px-3 py-1.5 text-xs hover:bg-yellow-900/20 transition-colors"
+          >
+            <Star className="w-3 h-3" /> Review
+          </button>
+        )}
+        {reviewed && (
+          <span className="text-green-400 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-green-400" /> Reviewed</span>
+        )}
         {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
       </td>
+      {showReview && (
+        <ReviewModal
+          appointmentId={apt.id}
+          revieweeId={apt.setter_id}
+          revieweeName={apt.setter_name}
+          onClose={() => setShowReview(false)}
+          onSubmitted={() => { setShowReview(false); setReviewed(true) }}
+        />
+      )}
     </tr>
   )
 }

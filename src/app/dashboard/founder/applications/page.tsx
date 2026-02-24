@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ApplicationActions } from "./_components/ApplicationActions";
+import { SetterActions } from "./_components/SetterActions";
 
 export const dynamic = 'force-dynamic'
 
@@ -52,7 +53,8 @@ export default async function Applications() {
               <tr key={app.id} className="hover:bg-white/5 transition-colors">
                 <td className="px-6 py-4">
                   <div className="text-sm font-medium text-white">{app.users?.full_name || "Unknown"}</div>
-                  <div className="text-xs text-gray-500">{app.users?.email}</div>
+                  <div className="text-xs text-gray-500 mb-2">{app.users?.email}</div>
+                  <SetterActions setterId={app.setter_id} setterName={app.users?.full_name || "Setter"} />
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">{app.listings?.title || "N/A"}</td>
                 <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">{app.sample_email || "—"}</td>
