@@ -1,3 +1,6 @@
 "use server";
-// Re-export from central actions to avoid duplication
-export { applyToListing } from "@/app/actions";
+import { applyToListing as _applyToListing } from "@/app/actions";
+
+export async function applyToListing(listingId: string, sampleEmail: string) {
+  return _applyToListing(listingId, sampleEmail);
+}

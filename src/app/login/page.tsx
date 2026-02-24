@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { Eye, EyeOff, Bot, Users, Globe } from 'lucide-react'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = localFont({ src: '../fonts/GeistVF.woff', weight: '100 900' })
 
 // Teaser features data
 const features = [

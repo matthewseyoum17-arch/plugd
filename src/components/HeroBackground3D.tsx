@@ -2,43 +2,15 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const VERTEX_SHADER = `
-  uniform float uTime;
-  varying vec3 vNormal;
-  varying float vDisplacement;
-
-  void main() {
-    vNormal = normalize(normalMatrix * normal);
-
-    float displacement = sin(position.x * 1.5 + uTime * 0.4) *
-                         cos(position.y * 1.5 + uTime * 0.3) *
-                         sin(position.z * 1.5 + uTime * 0.5) * 0.15;
-    vDisplacement = displacement;
-
-    vec3 newPosition = position + normal * displacement;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-  }
-`
-
-const FRAGMENT_SHADER = `
-  uniform vec3 uColor1;
-  uniform vec3 uColor2;
-  varying vec3 vNormal;
-  varying float vDisplacement;
-
-  void main() {
-    float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
-    vec3 color = mix(uColor1, uColor2, fresnel + vDisplacement);
-    float alpha = 0.08 + fresnel * 0.12;
-    gl_FragColor = vec4(color, alpha);
-  }
-`
+gsap.registerPlugin(ScrollTrigger)
 
 function hasWebGL(): boolean {
   try {
     const c = document.createElement('canvas')
-    return !!(c.getContext('webgl') || c.getContext('experimental-webgl'))
+    return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl'))
   } catch {
     return false
   }
@@ -52,56 +24,109 @@ export default function HeroBackground3D() {
     const el = containerRef.current
     if (!el || !hasWebGL()) return
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'low-power' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(el.clientWidth, el.clientHeight)
     renderer.setClearColor(0x000000, 0)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.2
     el.appendChild(renderer.domElement)
 
-    // Scene + Camera
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(45, el.clientWidth / el.clientHeight, 0.1, 100)
-    camera.position.z = 5
+    scene.fog = new THREE.FogExp2(0x000000, 0.06)
 
-    // Low-poly icosahedron with custom shader
-    const geo = new THREE.IcosahedronGeometry(2.5, 2)
-    const mat = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uColor1: { value: new THREE.Color('#00FF94') },
-        uColor2: { value: new THREE.Color('#06b6d4') },
-      },
-      vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
+    const camera = new THREE.PerspectiveCamera(50, el.clientWidth / el.clientHeight, 0.1, 100)
+    camera.position.set(0, 0, 5.5)
+
+    // Torus Knot — frosted glass + dark metal
+    const torusGeo = new THREE.TorusKnotGeometry(1.4, 0.45, 200, 32, 2, 3)
+    const torusMat = new THREE.MeshPhysicalMaterial({
+      color: 0x111111,
+      metalness: 0.2,
+      roughness: 0.6,
+      transmission: 0.7,
+      thickness: 1.5,
+      ior: 1.5,
+      iridescence: 0.3,
+      iridescenceIOR: 1.3,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.25,
+      envMapIntensity: 0.8,
       transparent: true,
-      wireframe: true,
+      opacity: 0.9,
       side: THREE.DoubleSide,
     })
-    const mesh = new THREE.Mesh(geo, mat)
-    scene.add(mesh)
+    const torusMesh = new THREE.Mesh(torusGeo, torusMat)
+    scene.add(torusMesh)
 
-    // Floating particles
-    const particleCount = 200
+    // Subtle wireframe overlay
+    const wireGeo = new THREE.TorusKnotGeometry(1.42, 0.46, 100, 16, 2, 3)
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: 0x00ff94,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.04,
+    })
+    const wireMesh = new THREE.Mesh(wireGeo, wireMat)
+    scene.add(wireMesh)
+
+    // 3-Point Lighting
+    const keyLight = new THREE.DirectionalLight(0x0088ff, 3)
+    keyLight.position.set(3, 2, 4)
+    scene.add(keyLight)
+
+    const fillLight = new THREE.PointLight(0x7722cc, 2.5, 15)
+    fillLight.position.set(-4, -2, 2)
+    scene.add(fillLight)
+
+    const rimLight = new THREE.DirectionalLight(0x00ff94, 1.2)
+    rimLight.position.set(0, 3, -5)
+    scene.add(rimLight)
+
+    scene.add(new THREE.AmbientLight(0x111122, 0.4))
+
+    // Particles
+    const particleCount = 350
     const positions = new Float32Array(particleCount * 3)
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 10
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 10
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10
+      positions[i * 3] = (Math.random() - 0.5) * 16
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 16
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 16
     }
     const particleGeo = new THREE.BufferGeometry()
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     const particleMat = new THREE.PointsMaterial({
-      size: 0.015,
-      color: '#00FF94',
+      size: 0.02,
+      color: 0x00ff94,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.35,
       sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     })
-    const points = new THREE.Points(particleGeo, particleMat)
-    scene.add(points)
+    const particles = new THREE.Points(particleGeo, particleMat)
+    scene.add(particles)
 
-    // Resize handler
+    // Camera scroll state
+    const cameraState = { scrollZ: 5.5, scrollRotY: 0 }
+
+    // GSAP scroll-driven camera push
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.5,
+      onUpdate: (self) => {
+        const p = self.progress
+        cameraState.scrollZ = 5.5 - p * 3.5
+        cameraState.scrollRotY = p * Math.PI * 0.6
+      },
+    })
+
     const onResize = () => {
       if (!el) return
       camera.aspect = el.clientWidth / el.clientHeight
@@ -110,7 +135,6 @@ export default function HeroBackground3D() {
     }
     window.addEventListener('resize', onResize)
 
-    // Animation loop
     const clock = new THREE.Clock()
     let rafId: number
 
@@ -118,22 +142,35 @@ export default function HeroBackground3D() {
       rafId = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()
 
-      mat.uniforms.uTime.value = t
-      mesh.rotation.x = t * 0.05
-      mesh.rotation.y = t * 0.08
-      points.rotation.y = t * 0.02
+      torusMesh.rotation.x = t * 0.08
+      torusMesh.rotation.y = t * 0.12
+      torusMesh.rotation.z = t * 0.03
+      wireMesh.rotation.copy(torusMesh.rotation)
+
+      // Breathing float
+      camera.position.x = Math.sin(t * 0.5) * 0.08 + Math.sin(cameraState.scrollRotY) * 0.5
+      camera.position.y = Math.cos(t * 0.7) * 0.06
+      camera.position.z = cameraState.scrollZ
+      camera.lookAt(0, 0, 0)
+
+      particles.rotation.y = t * 0.015
+      particles.rotation.x = t * 0.008
+
+      fillLight.intensity = 2.5 + Math.sin(t * 1.5) * 0.5
 
       renderer.render(scene, camera)
     }
     animate()
 
-    // Cleanup
     cleanupRef.current = () => {
       cancelAnimationFrame(rafId)
+      scrollTrigger.kill()
       window.removeEventListener('resize', onResize)
       renderer.dispose()
-      geo.dispose()
-      mat.dispose()
+      torusGeo.dispose()
+      torusMat.dispose()
+      wireGeo.dispose()
+      wireMat.dispose()
       particleGeo.dispose()
       particleMat.dispose()
       if (el.contains(renderer.domElement)) {
@@ -149,13 +186,11 @@ export default function HeroBackground3D() {
 
   return (
     <>
-      {/* Three.js canvas container */}
       <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none" />
-      {/* CSS fallback (hidden once canvas mounts, visible if WebGL fails) */}
       <noscript>
         <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#00FF94]/10 blur-[120px] mix-blend-screen animate-pulse-slow" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#06b6d4]/10 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#0088ff]/10 blur-[120px] mix-blend-screen animate-pulse-slow" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#7722cc]/10 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }} />
         </div>
       </noscript>
     </>

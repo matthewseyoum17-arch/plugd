@@ -1,3 +1,16 @@
 "use server";
-// Re-export from central actions to avoid duplication
-export { submitAppointment } from "@/app/actions";
+import { submitAppointment as _submitAppointment } from "@/app/actions";
+
+type SubmitAppointmentInput = {
+  listing_id: string;
+  contact_name: string;
+  contact_email: string;
+  contact_company: string;
+  calendly_event_url: string;
+  appointment_type: "appointment" | "close";
+  notes?: string;
+};
+
+export async function submitAppointment(input: SubmitAppointmentInput) {
+  return _submitAppointment(input);
+}
