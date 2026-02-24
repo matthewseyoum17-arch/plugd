@@ -1,74 +1,75 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { ApplicationCard } from './_components/ApplicationCard'
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { ApplicationActions } from "./_components/ApplicationActions";
 
 export default async function Applications() {
-  const supabase = createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  if (user.user_metadata?.role !== "founder") redirect("/dashboard/setter");
 
   const { data: myListings } = await supabase
-    .from('listings')
-    .select('id')
-    .eq('company_id', user.id)
+    .from("listings")
+    .select("id")
+    .eq("company_id", user.id);
 
-  const myListingIds = (myListings || []).map(l => l.id)
+  const myListingIds = (myListings || []).map((l) => l.id);
 
   const { data: applications } = myListingIds.length
     ? await supabase
-        .from('setter_applications')
-        .select('*, listings(id, title), users!setter_applications_setter_id_fkey(full_name, email)')
-        .in('listing_id', myListingIds)
-        .order('created_at', { ascending: false })
-    : { data: [] as any[] }
+        .from("setter_applications")
+        .select("*, listings(title), users!setter_applications_setter_id_fkey(full_name, email)")
+        .in("listing_id", myListingIds)
+        .order("created_at", { ascending: false })
+    : { data: [] };
 
-  // Group by listing
-  const grouped: Record<string, { title: string; apps: typeof applications }> = {}
-  for (const app of applications || []) {
-    const listingId = app.listings?.id || app.listing_id
-    const listingTitle = app.listings?.title || 'Unknown Listing'
-    if (!grouped[listingId]) {
-      grouped[listingId] = { title: listingTitle, apps: [] }
-    }
-    grouped[listingId].apps!.push(app)
-  }
-
-  const hasApplications = Object.keys(grouped).length > 0
+  const statusColor = (s: string) => {
+    if (s === "approved") return "bg-green-900/20 text-green-400 border border-green-800";
+    if (s === "rejected") return "bg-red-900/20 text-red-400 border border-red-800";
+    return "bg-orange-900/20 text-orange-400 border border-orange-800";
+  };
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Setter Applications</h1>
-
-      {!hasApplications && (
-        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 text-center">
-          <p className="text-gray-400">No applications yet — share your listing to start getting setters.</p>
-        </div>
-      )}
-
-      <div className="space-y-6">
-        {Object.entries(grouped).map(([listingId, { title, apps }]) => (
-          <div key={listingId} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5">
-            <h2 className="text-lg font-semibold text-white mb-4">{title}</h2>
-            <div className="divide-y divide-[#222]">
-              {apps!.map((app) => (
-                <ApplicationCard
-                  key={app.id}
-                  app={{
-                    id: app.id,
-                    status: app.status,
-                    sample_email: app.sample_email,
-                    created_at: app.created_at,
-                    setter_id: app.setter_id,
-                    setter_name: app.users?.full_name || 'Unknown',
-                    setter_email: app.users?.email || '',
-                  }}
-                />
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-heading font-semibold text-white tracking-tight">Setter Applications</h1>
+        <p className="text-gray-400 mt-2">Review and manage setters who want to promote your products.</p>
+      </div>
+      <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-black/40 border-b border-white/5">
+            <tr>
+              {["Setter","Product","Sample Email","Applied","Status","Actions"].map(h => (
+                <th key={h} className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">{h}</th>
               ))}
-            </div>
-          </div>
-        ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {(applications || []).map((app: any) => (
+              <tr key={app.id} className="hover:bg-white/5 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="text-sm font-medium text-white">{app.users?.full_name || "Unknown"}</div>
+                  <div className="text-xs text-gray-500">{app.users?.email}</div>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-300">{app.listings?.title || "N/A"}</td>
+                <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">{app.sample_email || "—"}</td>
+                <td className="px-6 py-4 text-sm text-gray-500">{new Date(app.created_at).toLocaleDateString()}</td>
+                <td className="px-6 py-4">
+                  <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold uppercase ${statusColor(app.status)}`}>
+                    {app.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <ApplicationActions applicationId={app.id} currentStatus={app.status} />
+                </td>
+              </tr>
+            ))}
+            {(!applications || applications.length === 0) && (
+              <tr><td colSpan={6} className="px-6 py-16 text-center text-gray-400">No applications yet.</td></tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
-  )
+  );
 }
