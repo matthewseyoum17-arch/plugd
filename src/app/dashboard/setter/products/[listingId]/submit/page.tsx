@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { submitAppointment } from "@/app/actions";
 
 export default function SubmitAppointment() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [listing, setListing] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

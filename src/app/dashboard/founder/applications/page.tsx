@@ -45,6 +45,7 @@ export default async function Applications() {
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(applications || []).map((app: any) => (
               <tr key={app.id} className="hover:bg-white/5 transition-colors">
                 <td className="px-6 py-4">
