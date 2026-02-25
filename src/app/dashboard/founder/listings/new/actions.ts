@@ -21,6 +21,10 @@ export async function createListing(formData: FormData): Promise<{ error: string
   const commissionPerClose = formData.get('commission_per_close') as string
   const qualifiedMeetingDefinition = formData.get('qualified_meeting_definition') as string
   const pitchKitUrl = formData.get('pitch_kit_url') as string
+  const categoryId = formData.get('category_id') as string
+  const coverImageUrl = formData.get('cover_image_url') as string
+  const tagsRaw = formData.get('tags') as string
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : null
 
   // Fetch company name from founder profile
   const { data: profile } = await supabase
@@ -40,6 +44,9 @@ export async function createListing(formData: FormData): Promise<{ error: string
     commission_per_close: Math.round(parseFloat(commissionPerClose || '0') * 100),
     qualified_meeting_definition: qualifiedMeetingDefinition,
     pitch_kit_url: pitchKitUrl,
+    category_id: categoryId || null,
+    cover_image_url: coverImageUrl || null,
+    tags: tags,
     status: 'active',
   })
 

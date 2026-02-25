@@ -1,24 +1,91 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createListing } from './actions'
+import { createClient } from '@/lib/supabase/client'
+import { X, Image as ImageIcon } from 'lucide-react'
 
 export default function CreateListing() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
   const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    supabase.from('categories').select('id, name').order('sort_order').then(({ data }) => {
+      if (data) setCategories(data)
+    })
+  }, [supabase])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image must be under 5MB')
+      return
+    }
+
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+  }
+
+  const removeImage = () => {
+    setImageFile(null)
+    if (imagePreview) URL.revokeObjectURL(imagePreview)
+    setImagePreview(null)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
+    let coverImageUrl = ''
+
+    // Upload image if selected
+    if (imageFile) {
+      setUploadingImage(true)
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setError('You must be logged in')
+        setLoading(false)
+        return
+      }
+
+      const ext = imageFile.name.split('.').pop()
+      const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('listing-images')
+        .upload(path, imageFile, { cacheControl: '3600', upsert: false })
+
+      if (uploadError) {
+        setError(`Image upload failed: ${uploadError.message}`)
+        setLoading(false)
+        setUploadingImage(false)
+        return
+      }
+
+      const { data: publicUrl } = supabase.storage
+        .from('listing-images')
+        .getPublicUrl(path)
+
+      coverImageUrl = publicUrl.publicUrl
+      setUploadingImage(false)
+    }
+
     const formData = new FormData(e.currentTarget)
+    formData.set('cover_image_url', coverImageUrl)
+
     const result = await createListing(formData)
 
     if (result?.error) {
-      console.error('Error creating listing:', result.error)
       setError(result.error)
       setLoading(false)
     }
@@ -58,6 +125,59 @@ export default function CreateListing() {
             required
             placeholder="Describe your AI product and its key features..."
           />
+        </div>
+
+        {/* Category dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Category
+          </label>
+          <select
+            name="category_id"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white appearance-none cursor-pointer"
+          >
+            <option value="">Select a category...</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Cover image upload */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Cover Image
+          </label>
+          {imagePreview ? (
+            <div className="relative rounded-lg overflow-hidden border border-[#2a2a2a]">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-48 object-cover"
+              />
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute top-2 right-2 w-8 h-8 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center w-full h-48 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a2a] rounded-lg cursor-pointer hover:border-[#00FF94]/50 transition-colors">
+              <ImageIcon className="w-8 h-8 text-gray-600 mb-2" />
+              <span className="text-sm text-gray-500">Click to upload cover image</span>
+              <span className="text-xs text-gray-600 mt-1">PNG, JPG up to 5MB</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </label>
+          )}
         </div>
 
         <div>
@@ -137,13 +257,26 @@ export default function CreateListing() {
           />
         </div>
 
+        {/* Tags */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Tags (comma-separated)
+          </label>
+          <input
+            type="text"
+            name="tags"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            placeholder="e.g., AI, SaaS, Healthcare, B2B"
+          />
+        </div>
+
         <div className="flex gap-4">
           <button
             type="submit"
             disabled={loading}
             className="px-6 py-3 bg-[#00FF94] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
           >
-            {loading ? 'Creating...' : 'Create Listing'}
+            {uploadingImage ? 'Uploading image...' : loading ? 'Creating...' : 'Create Listing'}
           </button>
           <button
             type="button"

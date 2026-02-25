@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { createClient } from '@/lib/supabase/server'
-import { ArrowRight, CheckCircle2, TrendingUp, Shield, Zap, Target, DollarSign, Users } from 'lucide-react'
+import { ArrowRight, CheckCircle2, TrendingUp, Shield, Zap, Target, DollarSign, Users, Bot, Cloud, Megaphone, Code, MoreHorizontal } from 'lucide-react'
 import HeroBackground3D from '@/components/HeroBackground3D'
+import { GigCard, type GigCardData } from '@/components/gig-card'
+import { ThemeToggle } from '@/components/theme-toggle'
+
+export const dynamic = 'force-dynamic'
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  'Bot': <Bot className="w-5 h-5" />,
+  'Cloud': <Cloud className="w-5 h-5" />,
+  'Megaphone': <Megaphone className="w-5 h-5" />,
+  'Target': <Target className="w-5 h-5" />,
+  'Code': <Code className="w-5 h-5" />,
+  'DollarSign': <DollarSign className="w-5 h-5" />,
+  'Users': <Users className="w-5 h-5" />,
+  'MoreHorizontal': <MoreHorizontal className="w-5 h-5" />,
+}
 
 export default async function Home() {
   const supabase = createClient()
@@ -12,6 +27,62 @@ export default async function Home() {
     const role = user.user_metadata?.role
     dashboardUrl = `/dashboard/${role || 'setter'}`
   }
+
+  // Fetch categories
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('id, name, slug, icon, description')
+    .order('sort_order')
+
+  // Fetch featured listings (top 6)
+  const { data: listings } = await supabase
+    .from('listings')
+    .select('*, categories(name, slug), users!listings_company_id_fkey(full_name), setter_applications(id, status)')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(6)
+
+  // Fetch reviews for rating
+  const companyIds = Array.from(new Set(listings?.map(l => l.company_id) || []))
+  const reviewsMap: Record<string, { avg: number; count: number }> = {}
+  if (companyIds.length > 0) {
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('reviewee_id, rating')
+      .in('reviewee_id', companyIds)
+    if (reviews) {
+      const grouped: Record<string, number[]> = {}
+      reviews.forEach(r => {
+        if (!grouped[r.reviewee_id]) grouped[r.reviewee_id] = []
+        grouped[r.reviewee_id].push(r.rating)
+      })
+      Object.entries(grouped).forEach(([id, ratings]) => {
+        reviewsMap[id] = {
+          avg: ratings.reduce((a, b) => a + b, 0) / ratings.length,
+          count: ratings.length,
+        }
+      })
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const gigs: GigCardData[] = (listings || []).map((l: any) => ({
+    id: l.id,
+    title: l.title,
+    description: l.description || '',
+    cover_image_url: l.cover_image_url || null,
+    commission_per_appointment: l.commission_per_appointment || 0,
+    commission_per_close: l.commission_per_close || 0,
+    company_name: l.company_name || 'Company',
+    category_name: l.categories?.name || null,
+    category_slug: l.categories?.slug || null,
+    avg_rating: reviewsMap[l.company_id]?.avg || null,
+    review_count: reviewsMap[l.company_id]?.count || 0,
+    setter_count: l.setter_applications?.filter((a: { status: string }) => a.status === 'approved').length || 0,
+    created_at: l.created_at,
+    seller_name: l.users?.full_name || 'Seller',
+    ideal_customer: l.ideal_customer || null,
+  }))
 
   return (
     <div className="relative min-h-screen bg-[#030305] text-white selection:bg-[#00FF94] selection:text-black font-sans overflow-x-hidden">
@@ -33,6 +104,10 @@ export default async function Home() {
             Plugd
           </div>
           <div className="flex items-center gap-3">
+            <Link href="/browse" className="text-sm px-4 py-2 text-gray-400 hover:text-white font-medium transition-colors hidden sm:block">
+              Browse
+            </Link>
+            <ThemeToggle />
             {user ? (
               <Link href={dashboardUrl}
                 className="text-sm px-5 py-2 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all">
@@ -99,6 +174,56 @@ export default async function Home() {
             <div className="w-px h-8 bg-gradient-to-b from-gray-600 to-transparent" />
           </div>
         </section>
+
+        {/* Browse Categories */}
+        {categories && categories.length > 0 && (
+          <section className="py-20 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <p className="text-[#00FF94] text-xs font-bold tracking-[0.3em] uppercase mb-4">Explore</p>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Browse by Category</h2>
+              </div>
+
+              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide justify-center flex-wrap">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/browse?category=${cat.slug}`}
+                    className="group flex-shrink-0 bg-white/[0.02] border border-white/[0.06] rounded-2xl px-6 py-5 backdrop-blur-xl hover:border-[#00FF94]/30 hover:bg-white/[0.04] transition-all duration-300 text-center min-w-[140px]"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mx-auto mb-3 text-gray-400 group-hover:text-[#00FF94] transition-colors">
+                      {categoryIcons[cat.icon || ''] || <MoreHorizontal className="w-5 h-5" />}
+                    </div>
+                    <p className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">{cat.name}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Featured Listings */}
+        {gigs.length > 0 && (
+          <section className="py-20 px-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-10">
+                <div>
+                  <p className="text-[#0088ff] text-xs font-bold tracking-[0.3em] uppercase mb-3">Featured</p>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Latest Listings</h2>
+                </div>
+                <Link href="/browse" className="text-sm text-gray-400 hover:text-[#00FF94] font-medium transition-colors flex items-center gap-1">
+                  View All <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {gigs.map((gig) => (
+                  <GigCard key={gig.id} gig={gig} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* How It Works */}
         <section className="py-32 px-6">
