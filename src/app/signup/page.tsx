@@ -72,6 +72,38 @@ function SignupForm() {
   const router = useRouter();
   const supabase = createClient();
 
+  const createProfileRows = async (userId: string, userEmail: string | undefined) => {
+    const { error: userErr } = await supabase.from("users").upsert(
+      { id: userId, email: userEmail, full_name: `${firstName} ${lastName}`.trim() || userEmail?.split("@")[0] || "User", role },
+      { onConflict: "id" }
+    );
+    if (userErr) {
+      console.error("users upsert failed:", userErr.message);
+      return userErr.message;
+    }
+
+    if (role === "founder") {
+      const { error: profErr } = await supabase.from("founder_profiles").upsert(
+        { founder_id: userId, company_name: companyName || null },
+        { onConflict: "founder_id" }
+      );
+      if (profErr) {
+        console.error("founder_profiles upsert failed:", profErr.message);
+        return profErr.message;
+      }
+    } else {
+      const { error: profErr } = await supabase.from("setter_profiles").upsert(
+        { setter_id: userId },
+        { onConflict: "setter_id" }
+      );
+      if (profErr) {
+        console.error("setter_profiles upsert failed:", profErr.message);
+        return profErr.message;
+      }
+    }
+    return null;
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -97,13 +129,14 @@ function SignupForm() {
     });
 
     if (authError) {
-      // If the trigger failed, the user may already exist in auth but not
+      // If the trigger failed the user may already exist in auth but not
       // in public.users. Try signing in instead.
       if (authError.message.includes("Database error")) {
         const { data: signInData, error: signInError } =
           await supabase.auth.signInWithPassword({ email, password });
 
         if (signInError) {
+          console.error("signUp Database error, signIn recovery also failed:", signInError.message);
           setError(
             "Account setup failed. Please try again or contact support."
           );
@@ -112,33 +145,12 @@ function SignupForm() {
         }
 
         if (signInData.user) {
-          // Auth user exists but public row may be missing — create it
-          await supabase.from("users").upsert(
-            {
-              id: signInData.user.id,
-              email: signInData.user.email,
-              full_name: fullName,
-              role,
-            },
-            { onConflict: "id" }
-          );
-
-          if (role === "founder") {
-            await supabase
-              .from("founder_profiles")
-              .upsert(
-                { founder_id: signInData.user.id, company_name: companyName || null },
-                { onConflict: "founder_id" }
-              );
-          } else {
-            await supabase
-              .from("setter_profiles")
-              .upsert(
-                { setter_id: signInData.user.id },
-                { onConflict: "setter_id" }
-              );
+          const profileErr = await createProfileRows(signInData.user.id, signInData.user.email);
+          if (profileErr) {
+            setError(`Profile setup failed: ${profileErr}`);
+            setLoading(false);
+            return;
           }
-
           router.push(`/dashboard/${role}`);
           return;
         }
@@ -154,32 +166,11 @@ function SignupForm() {
     }
 
     if (data.user) {
-      // Step 2: Create public.users row — upsert to avoid conflicts with DB trigger
-      await supabase.from("users").upsert(
-        {
-          id: data.user.id,
-          email: data.user.email,
-          full_name: fullName,
-          role,
-        },
-        { onConflict: "id" }
-      );
-
-      // Step 3: Create role-specific profile (ignore duplicates)
-      if (role === "founder") {
-        await supabase
-          .from("founder_profiles")
-          .upsert(
-            { founder_id: data.user.id, company_name: companyName || null },
-            { onConflict: "founder_id" }
-          );
-      } else {
-        await supabase
-          .from("setter_profiles")
-          .upsert(
-            { setter_id: data.user.id },
-            { onConflict: "setter_id" }
-          );
+      // Step 2: Create public.users + role profile (trigger may have already done this)
+      const profileErr = await createProfileRows(data.user.id, data.user.email);
+      if (profileErr) {
+        console.error("Profile setup error:", profileErr);
+        // Don't block navigation — trigger may have created the rows already
       }
 
       router.push(`/dashboard/${role}`);
