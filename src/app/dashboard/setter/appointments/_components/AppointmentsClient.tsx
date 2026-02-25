@@ -235,12 +235,13 @@ export function AppointmentsClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Calendly Event URL</label>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Calendly Event URL *</label>
                 <input
                   type="url"
                   name="calendly_event_url"
                   className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
                   placeholder="https://calendly.com/..."
+                  required
                 />
               </div>
 
