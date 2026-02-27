@@ -3,22 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --background: #030305;
-  --foreground: #ededed;
+  --background: #FFFFFF;
+  --background-secondary: #F8F9FA;
+  --foreground: #1F2937;
+  --foreground-muted: #6B7280;
+  --foreground-hint: #9CA3AF;
+  --accent: #1F2937;
+  --accent-hover: #374151;
+  --cta: #10B981;
+  --cta-hover: #059669;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --card: #FFFFFF;
+  --star: #F59E0B;
+  --warm: #78716C;
+  --destructive: #EF4444;
+}
+
+.dark {
+  --background: #0F0F0F;
+  --background-secondary: #141414;
+  --foreground: #F9FAFB;
+  --foreground-muted: #9CA3AF;
+  --foreground-hint: #6B7280;
+  --accent: #F9FAFB;
+  --accent-hover: #D1D5DB;
+  --cta: #10B981;
+  --cta-hover: #059669;
+  --border: #2A2A2A;
+  --border-light: #1F1F1F;
+  --card: #1A1A1A;
+  --star: #F59E0B;
+  --warm: #A8A29E;
+  --destructive: #EF4444;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Smooth scrolling for GSAP ScrollTrigger */
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+::selection {
+  background: var(--cta);
+  color: #FFF;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -26,17 +60,11 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Selection color */
-::selection {
-  background: #00FF94;
-  color: #000;
+  background: var(--foreground-hint);
 }
 
 @layer utilities {
