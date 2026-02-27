@@ -25,6 +25,8 @@ export async function createListing(formData: FormData): Promise<{ error: string
   const coverImageUrl = formData.get('cover_image_url') as string
   const tagsRaw = formData.get('tags') as string
   const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : null
+  const maxAppointments = formData.get('max_appointments') as string
+  const dailySetterCap = formData.get('daily_setter_cap') as string
 
   // Fetch company name from founder profile
   const { data: profile } = await supabase
@@ -47,6 +49,9 @@ export async function createListing(formData: FormData): Promise<{ error: string
     category_id: categoryId || null,
     cover_image_url: coverImageUrl || null,
     tags: tags,
+    max_appointments: parseInt(maxAppointments || '0', 10),
+    daily_setter_cap: parseInt(dailySetterCap || '3', 10),
+    appointments_used: 0,
     status: 'active',
   })
 

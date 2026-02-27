@@ -150,7 +150,22 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
   )
 }
 
-export function AppointmentsClient({ appointments }: { appointments: Appointment[] }) {
+type BudgetInfo = {
+  listing_title: string
+  appointments_used: number
+  max_appointments: number
+  daily_setter_cap: number
+}
+
+export function AppointmentsClient({
+  appointments,
+  walletBalance = 0,
+  budgets = [],
+}: {
+  appointments: Appointment[]
+  walletBalance?: number
+  budgets?: BudgetInfo[]
+}) {
   const [tab, setTab] = useState<'all' | 'pending' | 'confirmed'>('all')
 
   const filtered = appointments.filter((apt) => {
@@ -167,6 +182,30 @@ export function AppointmentsClient({ appointments }: { appointments: Appointment
 
   return (
     <div>
+      {/* Wallet & Budget Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-4">
+          <p className="text-gray-400 text-xs uppercase">Wallet Balance</p>
+          <p className="text-2xl font-bold text-[#00FF94]">${(walletBalance / 100).toFixed(2)}</p>
+        </div>
+        {budgets.filter(b => b.max_appointments > 0).map((b) => (
+          <div key={b.listing_title} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-4">
+            <p className="text-gray-400 text-xs uppercase truncate">{b.listing_title}</p>
+            <p className="text-lg font-bold text-white">
+              {b.appointments_used}/{b.max_appointments}
+              <span className="text-gray-500 text-sm font-normal ml-2">appointments used</span>
+            </p>
+            <div className="w-full bg-[#333] rounded-full h-1.5 mt-2">
+              <div
+                className={`h-1.5 rounded-full ${b.appointments_used >= b.max_appointments ? 'bg-red-500' : 'bg-[#00FF94]'}`}
+                style={{ width: `${Math.min(100, (b.appointments_used / b.max_appointments) * 100)}%` }}
+              />
+            </div>
+            <p className="text-gray-500 text-xs mt-1">Daily cap: {b.daily_setter_cap}/setter</p>
+          </div>
+        ))}
+      </div>
+
       <div className="flex gap-1 mb-6">
         {tabs.map((t) => (
           <button

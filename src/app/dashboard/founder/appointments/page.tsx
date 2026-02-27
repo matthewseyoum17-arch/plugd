@@ -10,6 +10,25 @@ export default async function Appointments() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  const { data: wallet } = await supabase
+    .from('founder_wallets')
+    .select('balance')
+    .eq('founder_id', user.id)
+    .single()
+
+  const { data: listings } = await supabase
+    .from('listings')
+    .select('title, appointments_used, max_appointments, daily_setter_cap')
+    .eq('company_id', user.id)
+    .gt('max_appointments', 0)
+
+  const budgets = (listings || []).map((l) => ({
+    listing_title: l.title,
+    appointments_used: l.appointments_used || 0,
+    max_appointments: l.max_appointments || 0,
+    daily_setter_cap: l.daily_setter_cap || 3,
+  }))
+
   const { data: appointments } = await supabase
     .from('appointments')
     .select('*, listings(id, title, commission_per_appointment, commission_per_close), users!appointments_setter_id_fkey(full_name)')
@@ -41,7 +60,7 @@ export default async function Appointments() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Appointments</h1>
-      <AppointmentsClient appointments={mapped} />
+      <AppointmentsClient appointments={mapped} walletBalance={wallet?.balance || 0} budgets={budgets} />
     </div>
   )
 }

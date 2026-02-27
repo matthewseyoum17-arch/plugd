@@ -233,6 +233,42 @@ export default function CreateListing() {
           </div>
         </div>
 
+        {/* Budget Controls */}
+        <div className="border border-[#2a2a2a] rounded-lg p-4 space-y-4">
+          <h3 className="text-sm font-medium text-[#00FF94]">Budget Controls</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Max Appointments *
+              </label>
+              <input
+                type="number"
+                min="1"
+                name="max_appointments"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+                placeholder="20"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">Total appointments you&apos;re willing to pay for</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Daily Cap per Setter
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                name="daily_setter_cap"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+                placeholder="3"
+                defaultValue="3"
+              />
+              <p className="text-xs text-gray-500 mt-1">Max submissions per setter per day</p>
+            </div>
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Qualified Meeting Definition *

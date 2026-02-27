@@ -13,17 +13,29 @@ export default async function SetterAppointments() {
   // Get approved listings for the submit form
   const { data: approvedApps } = await supabase
     .from('setter_applications')
-    .select('listing_id, listings(title, commission_per_appointment, commission_per_close)')
+    .select('listing_id, locked_commission_per_appointment, locked_commission_per_close, listings(title, commission_per_appointment, commission_per_close, max_appointments, appointments_used, daily_setter_cap, status)')
     .eq('setter_id', user.id)
     .eq('status', 'approved')
 
   const approvedListings = (approvedApps || []).map((app) => {
-    const listing = app.listings as unknown as { title: string; commission_per_appointment: number; commission_per_close: number } | null
+    const listing = app.listings as unknown as {
+      title: string;
+      commission_per_appointment: number;
+      commission_per_close: number;
+      max_appointments: number;
+      appointments_used: number;
+      daily_setter_cap: number;
+      status: string;
+    } | null
     return {
       listing_id: app.listing_id,
       title: listing?.title || 'Unknown',
-      commission_per_appointment: listing?.commission_per_appointment || 0,
-      commission_per_close: listing?.commission_per_close || 0,
+      commission_per_appointment: app.locked_commission_per_appointment ?? listing?.commission_per_appointment ?? 0,
+      commission_per_close: app.locked_commission_per_close ?? listing?.commission_per_close ?? 0,
+      max_appointments: listing?.max_appointments || 0,
+      appointments_used: listing?.appointments_used || 0,
+      daily_setter_cap: listing?.daily_setter_cap || 3,
+      listing_status: listing?.status || 'active',
     }
   })
 

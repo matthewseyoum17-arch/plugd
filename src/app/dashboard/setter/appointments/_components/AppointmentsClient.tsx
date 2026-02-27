@@ -10,6 +10,10 @@ type ApprovedListing = {
   title: string
   commission_per_appointment: number
   commission_per_close: number
+  max_appointments: number
+  appointments_used: number
+  daily_setter_cap: number
+  listing_status: string
 }
 
 type Appointment = {
@@ -192,13 +196,35 @@ export function AppointmentsClient({
                   required
                 >
                   <option value="">Select a listing</option>
-                  {approvedListings.map((l) => (
-                    <option key={l.listing_id} value={l.listing_id}>
-                      {l.title}
-                    </option>
-                  ))}
+                  {approvedListings.map((l) => {
+                    const isFull = l.max_appointments > 0 && l.appointments_used >= l.max_appointments
+                    return (
+                      <option key={l.listing_id} value={l.listing_id} disabled={isFull || l.listing_status !== 'active'}>
+                        {l.title}{isFull ? ' (Budget Full)' : l.listing_status !== 'active' ? ' (Paused)' : ''}
+                      </option>
+                    )
+                  })}
                 </select>
               </div>
+
+              {/* Budget info for selected listing */}
+              {selected && selected.max_appointments > 0 && (
+                <div className="p-3 bg-[#111] border border-[#333] rounded-md">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Budget:</span>
+                    <span className={`font-medium ${selected.appointments_used >= selected.max_appointments ? 'text-red-400' : 'text-white'}`}>
+                      {selected.appointments_used}/{selected.max_appointments} appointments used
+                    </span>
+                  </div>
+                  <div className="w-full bg-[#333] rounded-full h-1.5 mt-2">
+                    <div
+                      className={`h-1.5 rounded-full ${selected.appointments_used >= selected.max_appointments ? 'bg-red-500' : 'bg-[#00FF94]'}`}
+                      style={{ width: `${Math.min(100, (selected.appointments_used / selected.max_appointments) * 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-gray-500 text-xs mt-1">Daily cap: {selected.daily_setter_cap} submissions/day</p>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -258,7 +284,7 @@ export function AppointmentsClient({
                       className="w-4 h-4 accent-[#00FF94]"
                     />
                     <span className="text-white text-sm">
-                      Appointment{selected ? ` ($${((selected.commission_per_appointment || 0) / 100).toFixed(2)})` : ''}
+                      Appointment{selected ? ` ($${(((selected.commission_per_appointment || 0) * 0.93) / 100).toFixed(2)} after 7% fee)` : ''}
                     </span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -271,7 +297,7 @@ export function AppointmentsClient({
                       className="w-4 h-4 accent-[#00FF94]"
                     />
                     <span className="text-white text-sm">
-                      Close{selected ? ` ($${((selected.commission_per_close || 0) / 100).toFixed(2)})` : ''}
+                      Close{selected ? ` ($${(((selected.commission_per_close || 0) * 0.95) / 100).toFixed(2)} after 5% fee)` : ''}
                     </span>
                   </label>
                 </div>
