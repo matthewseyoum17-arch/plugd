@@ -29,6 +29,8 @@ export default async function Applications() {
   const statusColor = (s: string) => {
     if (s === "approved") return "bg-green-900/20 text-green-400 border border-green-800";
     if (s === "rejected") return "bg-red-900/20 text-red-400 border border-red-800";
+    if (s === "waitlisted") return "bg-blue-900/20 text-blue-400 border border-blue-800";
+    if (s === "inactive") return "bg-gray-900/20 text-gray-400 border border-gray-700";
     return "bg-orange-900/20 text-orange-400 border border-orange-800";
   };
 

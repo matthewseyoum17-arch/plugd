@@ -207,16 +207,18 @@ export default function CreateListing() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Commission per Appointment ($)
+              Commission per Appointment ($) *
             </label>
             <input
               type="number"
               step="0.01"
-              min="0"
+              min="25"
               name="commission_per_appointment"
               className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
               placeholder="25.00"
+              required
             />
+            <p className="text-xs text-gray-500 mt-1">Minimum $25.00</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -233,9 +235,24 @@ export default function CreateListing() {
           </div>
         </div>
 
-        {/* Budget Controls */}
+        {/* Budget & Setter Controls */}
         <div className="border border-[#2a2a2a] rounded-lg p-4 space-y-4">
-          <h3 className="text-sm font-medium text-[#00FF94]">Budget Controls</h3>
+          <h3 className="text-sm font-medium text-[#00FF94]">Budget & Setter Controls</h3>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Max Active Setters
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="50"
+              name="max_setters"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              placeholder="5"
+              defaultValue="5"
+            />
+            <p className="text-xs text-gray-500 mt-1">Max setters that can be approved at once. Extra applicants go to waitlist.</p>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">

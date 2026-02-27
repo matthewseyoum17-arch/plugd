@@ -47,6 +47,7 @@ export default async function MyProducts() {
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Company</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">$/Appt</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">$/Close</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Resources</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
             </tr>
@@ -58,6 +59,19 @@ export default async function MyProducts() {
                 <td className="px-6 py-4 text-gray-300">{app.listings?.company_name || 'N/A'}</td>
                 <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_appointment || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_close || 0) / 100).toFixed(2)}</td>
+                <td className="px-6 py-4">
+                  <div className="flex flex-col gap-1">
+                    {app.listings?.pitch_kit_url && (
+                      <a href={app.listings.pitch_kit_url} target="_blank" rel="noopener noreferrer" className="text-xs text-[#00FF94] hover:underline">Pitch Kit</a>
+                    )}
+                    {app.listings?.qualified_meeting_definition && (
+                      <span className="text-xs text-gray-400" title={app.listings.qualified_meeting_definition}>Meeting Def ℹ</span>
+                    )}
+                    {!app.listings?.pitch_kit_url && !app.listings?.qualified_meeting_definition && (
+                      <span className="text-xs text-gray-600">—</span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(app.status)}`}>
                     {app.status}
@@ -75,7 +89,7 @@ export default async function MyProducts() {
             ))}
             {(!applications || applications.length === 0) && (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
                   You haven&apos;t applied to promote any products yet.
                 </td>
               </tr>

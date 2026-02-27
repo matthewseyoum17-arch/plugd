@@ -27,6 +27,7 @@ export default function EditListing() {
   const [closeComm, setCloseComm] = useState("");
   const [meetingDef, setMeetingDef] = useState("");
   const [pitchKit, setPitchKit] = useState("");
+  const [maxSetters, setMaxSetters] = useState("5");
 
   useEffect(() => {
     const load = async () => {
@@ -42,13 +43,17 @@ export default function EditListing() {
       setCloseComm(((listing.commission_per_close || 0) / 100).toString());
       setMeetingDef(listing.qualified_meeting_definition || "");
       setPitchKit(listing.pitch_kit_url || "");
+      setMaxSetters((listing.max_setters || 5).toString());
       setStatus(listing.status || "active");
       setLoading(false);
     };
     load();
   }, [listingId, router, supabase]);
 
+  const commissionTooLow = parseFloat(apptComm || "0") < 25;
+
   const handleSave = async () => {
+    if (commissionTooLow) { setError("Minimum commission per appointment is $25.00"); return; }
     setSaving(true);
     setError("");
     const { error } = await supabase.from("listings").update({
@@ -59,6 +64,7 @@ export default function EditListing() {
       commission_per_close: Math.round(parseFloat(closeComm || "0") * 100),
       qualified_meeting_definition: meetingDef,
       pitch_kit_url: pitchKit,
+      max_setters: parseInt(maxSetters || "5", 10),
     }).eq("id", listingId);
     if (error) setError(error.message);
     else { setSuccess(true); setTimeout(() => router.push("/dashboard/founder/listings"), 800); }
@@ -95,8 +101,18 @@ export default function EditListing() {
         <div><label className={lbl}>Ideal Customer</label><input type="text" value={idealCustomer} onChange={e=>setIdealCustomer(e.target.value)} className={inp} /></div>
         <div><label className={lbl}>Product URL</label><input type="url" value={productUrl} onChange={e=>setProductUrl(e.target.value)} className={inp} /></div>
         <div className="grid grid-cols-2 gap-4">
-          <div><label className={lbl}>Commission per Appointment ($)</label><input type="number" step="0.01" min="0" value={apptComm} onChange={e=>setApptComm(e.target.value)} className={inp} /></div>
+          <div>
+            <label className={lbl}>Commission per Appointment ($) *</label>
+            <input type="number" step="0.01" min="25" value={apptComm} onChange={e=>setApptComm(e.target.value)} className={inp} />
+            {commissionTooLow && <p className="text-red-400 text-xs mt-1">Minimum $25.00</p>}
+            {!commissionTooLow && apptComm && <p className="text-gray-500 text-xs mt-1">Setter earns ${(parseFloat(apptComm) * 0.93).toFixed(2)} after 7% fee</p>}
+          </div>
           <div><label className={lbl}>Commission per Close ($)</label><input type="number" step="0.01" min="0" value={closeComm} onChange={e=>setCloseComm(e.target.value)} className={inp} /></div>
+        </div>
+        <div>
+          <label className={lbl}>Max Active Setters</label>
+          <input type="number" min="1" max="50" value={maxSetters} onChange={e=>setMaxSetters(e.target.value)} className={inp} />
+          <p className="text-xs text-gray-500 mt-1">Extra applicants go to waitlist when this cap is reached.</p>
         </div>
         <div><label className={lbl}>Qualified Meeting Definition</label><textarea value={meetingDef} onChange={e=>setMeetingDef(e.target.value)} className={`${inp} h-24`} /></div>
         <div><label className={lbl}>Pitch Kit URL</label><input type="url" value={pitchKit} onChange={e=>setPitchKit(e.target.value)} className={inp} /></div>

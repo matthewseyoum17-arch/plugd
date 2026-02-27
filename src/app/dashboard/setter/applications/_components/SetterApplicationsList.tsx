@@ -18,6 +18,8 @@ const statusColor: Record<string, string> = {
   pending: "bg-yellow-900 text-yellow-300",
   approved: "bg-green-900 text-green-300",
   rejected: "bg-red-900 text-red-300",
+  waitlisted: "bg-blue-900 text-blue-300",
+  inactive: "bg-gray-800 text-gray-400",
 };
 
 function ApplicationCard({ app }: { app: Application }) {

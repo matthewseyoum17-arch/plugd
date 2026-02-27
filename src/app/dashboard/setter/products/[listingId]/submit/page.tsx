@@ -15,6 +15,9 @@ export default function SubmitAppointment() {
   const [contactCompany, setContactCompany] = useState("");
   const [calendlyUrl, setCalendlyUrl] = useState("");
   const [appointmentType, setAppointmentType] = useState<"appointment"|"close">("appointment");
+  const [meetingDate, setMeetingDate] = useState("");
+  const [contactLinkedin, setContactLinkedin] = useState("");
+  const [contactWebsite, setContactWebsite] = useState("");
   const [notes, setNotes] = useState("");
 
   const router = useRouter();
@@ -49,6 +52,9 @@ export default function SubmitAppointment() {
         contact_company: contactCompany,
         calendly_event_url: calendlyUrl,
         appointment_type: appointmentType,
+        meeting_date: meetingDate || undefined,
+        contact_linkedin: contactLinkedin || undefined,
+        contact_website: contactWebsite || undefined,
         notes,
       });
       if (result.error) setError(result.error);
@@ -100,6 +106,20 @@ export default function SubmitAppointment() {
               <input type="radio" value="close" checked={appointmentType==="close"} onChange={()=>setAppointmentType("close")} className="w-4 h-4 accent-[#00FF94]" />
               <span className="text-white">Closed Deal (${((listing.commission_per_close||0)/100).toFixed(2)})</span>
             </label>
+          </div>
+        </div>
+        <div>
+          <label className={lbl}>Meeting Date <span className="text-gray-500 font-normal">(optional)</span></label>
+          <input type="datetime-local" value={meetingDate} onChange={e=>setMeetingDate(e.target.value)} className={inp} />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={lbl}>Contact LinkedIn <span className="text-gray-500 font-normal">(optional)</span></label>
+            <input type="url" value={contactLinkedin} onChange={e=>setContactLinkedin(e.target.value)} className={inp} placeholder="https://linkedin.com/in/..." />
+          </div>
+          <div>
+            <label className={lbl}>Contact Website <span className="text-gray-500 font-normal">(optional)</span></label>
+            <input type="url" value={contactWebsite} onChange={e=>setContactWebsite(e.target.value)} className={inp} placeholder="https://company.com" />
           </div>
         </div>
         <div>

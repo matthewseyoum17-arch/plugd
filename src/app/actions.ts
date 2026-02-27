@@ -175,7 +175,7 @@ export async function applyToListing(listingId: string, sampleEmail: string) {
   // Verify listing is active
   const { data: listing } = await supabase
     .from("listings")
-    .select("id, status")
+    .select("id, status, max_setters")
     .eq("id", listingId)
     .eq("status", "active")
     .single();
@@ -189,11 +189,21 @@ export async function applyToListing(listingId: string, sampleEmail: string) {
     .single();
   if (existing) return { error: "Already applied" };
 
+  // Check if listing is at max setters — if so, waitlist
+  const maxSetters = listing.max_setters || 5;
+  const { count: approvedCount } = await supabase
+    .from("setter_applications")
+    .select("id", { count: "exact", head: true })
+    .eq("listing_id", listingId)
+    .eq("status", "approved");
+
+  const applicationStatus = (approvedCount || 0) >= maxSetters ? "waitlisted" : "pending";
+
   const { error } = await supabase.from("setter_applications").insert({
     setter_id: user.id,
     listing_id: listingId,
     sample_email: sampleEmail.trim(),
-    status: "pending",
+    status: applicationStatus,
   });
 
   if (error) {
@@ -256,6 +266,9 @@ type SubmitAppointmentInput = {
   contact_company: string;
   calendly_event_url: string;
   appointment_type: "appointment" | "close";
+  meeting_date?: string;
+  contact_linkedin?: string;
+  contact_website?: string;
   notes?: string;
 };
 
@@ -349,12 +362,24 @@ export async function submitAppointment(input: SubmitAppointmentInput) {
     contact_company: input.contact_company.trim(),
     calendly_event_url: input.calendly_event_url.trim(),
     appointment_type: input.appointment_type,
+    meeting_date: input.meeting_date || null,
+    contact_linkedin: input.contact_linkedin?.trim() || null,
+    contact_website: input.contact_website?.trim() || null,
     notes: input.notes?.trim() || null,
     status: "submitted",
     submitted_at: new Date().toISOString(),
   });
 
   if (error) return { error: error.message };
+
+  // ── Track setter activity ──
+  await supabase
+    .from("setter_applications")
+    .update({ last_submission_at: new Date().toISOString() })
+    .eq("setter_id", user.id)
+    .eq("listing_id", input.listing_id)
+    .eq("status", "approved");
+
   revalidatePath("/dashboard/setter/appointments");
   return { success: true };
 }
@@ -618,5 +643,58 @@ export async function requestWithdrawal(amountCents: number) {
 
   if (error) return { error: error.message };
   revalidatePath("/dashboard/setter/earnings");
+  return { success: true };
+}
+
+// ─── Lead Registration ──────────────────────────────────────────────
+
+export async function registerLead(listingId: string, contactEmail: string) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  if (!listingId) return { error: "Listing ID required" };
+  if (!contactEmail?.trim()) return { error: "Contact email is required" };
+  if (!isValidEmail(contactEmail.trim())) return { error: "Invalid email format" };
+
+  // Verify setter has approved application for this listing
+  const { data: application } = await supabase
+    .from("setter_applications")
+    .select("id")
+    .eq("setter_id", user.id)
+    .eq("listing_id", listingId)
+    .eq("status", "approved")
+    .single();
+  if (!application) return { error: "You must have an approved application for this listing" };
+
+  // Check if this email is already registered for this listing (by any setter)
+  const { data: existing } = await supabase
+    .from("lead_registrations")
+    .select("id, setter_id")
+    .eq("listing_id", listingId)
+    .eq("contact_email", contactEmail.trim().toLowerCase())
+    .gt("expires_at", new Date().toISOString())
+    .single();
+
+  if (existing) {
+    if (existing.setter_id === user.id) {
+      return { error: "You already registered this lead" };
+    }
+    return { error: "This prospect has already been claimed by another setter for this listing" };
+  }
+
+  const { error } = await supabase.from("lead_registrations").insert({
+    setter_id: user.id,
+    listing_id: listingId,
+    contact_email: contactEmail.trim().toLowerCase(),
+  });
+
+  if (error) {
+    if (error.message.includes("duplicate") || error.message.includes("unique")) {
+      return { error: "This prospect has already been claimed for this listing" };
+    }
+    return { error: error.message };
+  }
+
   return { success: true };
 }

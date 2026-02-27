@@ -8,6 +8,9 @@ type SubmitAppointmentInput = {
   contact_company: string;
   calendly_event_url: string;
   appointment_type: "appointment" | "close";
+  meeting_date?: string;
+  contact_linkedin?: string;
+  contact_website?: string;
   notes?: string;
 };
 
