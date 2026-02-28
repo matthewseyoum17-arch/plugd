@@ -1,177 +1,226 @@
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
-import { GigCard, GigCardSkeleton, type GigCardData } from "@/components/gig-card";
-import Link from "next/link";
-import { Suspense } from "react";
+import { createClient } from '@/lib/supabase/server'
+import { GigCard, type GigCardData } from '@/components/gig-card'
+import { SearchBar } from '@/components/search-bar'
+import { CategoryChips } from '@/components/category-chips'
+import { Suspense } from 'react'
+import Link from 'next/link'
+import { ArrowLeft, Zap } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme-toggle'
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic'
 
 interface BrowsePageProps {
-  searchParams: { category?: string; search?: string };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function toGigCard(row: any): GigCardData {
-  return {
-    id: row.id,
-    title: row.title,
-    thumbnail_url: row.thumbnail_url || null,
-    price_basic_cents: row.price_basic_cents ?? 0,
-    average_rating: row.average_rating ?? 0,
-    review_count: row.review_count ?? 0,
-    seller_id: row.users?.id || row.seller_id || "",
-    seller_username: row.users?.username || "seller",
-    seller_avatar: row.users?.avatar_url || null,
-    seller_level: row.users?.seller_level || "",
-    category_name: row.categories?.name || null,
-  };
+  searchParams: { category?: string; search?: string }
 }
 
 async function BrowseResults({
   category,
   search,
 }: {
-  category?: string;
-  search?: string;
+  category?: string
+  search?: string
 }) {
-  let categories: { id: string; name: string; slug: string }[] = [];
-  let results: GigCardData[] = [];
+  const supabase = createClient()
 
-  if (isSupabaseConfigured) {
-    try {
-      const supabase = createClient();
+  // Fetch categories
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('id, name, slug')
+    .order('sort_order')
 
-      const { data: cats } = await supabase
-        .from("categories")
-        .select("id, name, slug")
-        .order("display_order");
-      categories = cats || [];
+  // Build listings query
+  let query = supabase
+    .from('listings')
+    .select(
+      '*, categories(name, slug), users!listings_company_id_fkey(full_name), setter_applications(id, status)'
+    )
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
 
-      let query = supabase
-        .from("gigs")
-        .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-        .eq("status", "active");
-
-      if (category) {
-        const cat = categories.find((c) => c.slug === category);
-        if (cat) {
-          query = query.eq("category_id", cat.id);
-        }
-      }
-
-      if (search) {
-        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
-      }
-
-      query = query.order("orders_completed", { ascending: false }).limit(40);
-
-      const { data: gigs } = await query;
-      results = (gigs || []).map(toGigCard);
-    } catch {
-      // Supabase not reachable
+  // Filter by category
+  if (category) {
+    const cat = categories?.find((c) => c.slug === category)
+    if (cat) {
+      query = query.eq('category_id', cat.id)
     }
   }
 
+  // Filter by search
+  if (search) {
+    query = query.ilike('title', `%${search}%`)
+  }
+
+  const { data: listings } = await query
+
+  // Fetch reviews for rating info
+  const companyIds = Array.from(new Set(listings?.map((l) => l.company_id) || []))
+  const reviewsMap: Record<string, { avg: number; count: number }> = {}
+
+  if (companyIds.length > 0) {
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('reviewee_id, rating')
+      .in('reviewee_id', companyIds)
+
+    if (reviews) {
+      const grouped: Record<string, number[]> = {}
+      reviews.forEach((r) => {
+        if (!grouped[r.reviewee_id]) grouped[r.reviewee_id] = []
+        grouped[r.reviewee_id].push(r.rating)
+      })
+      Object.entries(grouped).forEach(([id, ratings]) => {
+        reviewsMap[id] = {
+          avg: ratings.reduce((a, b) => a + b, 0) / ratings.length,
+          count: ratings.length,
+        }
+      })
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const gigs: GigCardData[] = (listings || []).map((l: any) => ({
+    id: l.id,
+    title: l.title,
+    description: l.description || '',
+    cover_image_url: l.cover_image_url || null,
+    commission_per_appointment: l.commission_per_appointment || 0,
+    commission_per_close: l.commission_per_close || 0,
+    company_name: l.company_name || 'Company',
+    category_name: l.categories?.name || null,
+    category_slug: l.categories?.slug || null,
+    avg_rating: reviewsMap[l.company_id]?.avg || null,
+    review_count: reviewsMap[l.company_id]?.count || 0,
+    setter_count:
+      l.setter_applications?.filter(
+        (a: { status: string }) => a.status === 'approved'
+      ).length || 0,
+    created_at: l.created_at,
+    seller_name: l.users?.full_name || 'Seller',
+    ideal_customer: l.ideal_customer || null,
+  }))
+
   return (
     <>
-      {/* Category chips */}
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-6">
-        <Link
-          href="/browse"
-          className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
-            !category
-              ? "bg-[var(--cta)] text-white border-[var(--cta)]"
-              : "bg-[var(--card)] text-[var(--foreground-muted)] border-[var(--border)] hover:border-[var(--foreground-hint)] hover:text-[var(--foreground)]"
-          }`}
-        >
-          All
-        </Link>
-        {(categories || []).map((cat) => (
-          <Link
-            key={cat.id}
-            href={`/browse?category=${cat.slug}${search ? `&search=${encodeURIComponent(search)}` : ""}`}
-            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
-              category === cat.slug
-                ? "bg-[var(--cta)] text-white border-[var(--cta)]"
-                : "bg-[var(--card)] text-[var(--foreground-muted)] border-[var(--border)] hover:border-[var(--foreground-hint)] hover:text-[var(--foreground)]"
-            }`}
-          >
-            {cat.name}
-          </Link>
-        ))}
-      </div>
+      <Suspense fallback={null}>
+        <CategoryChips categories={categories || []} />
+      </Suspense>
 
-      {results.length === 0 ? (
+      {gigs.length === 0 ? (
         <div className="text-center py-20">
-          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-            No services found
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
+            <Zap className="w-8 h-8 text-gray-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            No listings found
           </h3>
-          <p className="text-[var(--foreground-muted)] text-sm">
+          <p className="text-gray-500 text-sm">
             {search
               ? `No results for "${search}". Try a different search.`
-              : "No services in this category yet."}
+              : 'No listings in this category yet.'}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {results.map((gig) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+          {gigs.map((gig) => (
             <GigCard key={gig.id} gig={gig} />
           ))}
         </div>
       )}
     </>
-  );
+  )
 }
 
-export default function BrowsePage({ searchParams }: BrowsePageProps) {
+export default async function BrowsePage({ searchParams }: BrowsePageProps) {
+  const supabase = createClient()
+
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('id, name, slug')
+    .order('sort_order')
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[var(--foreground)] mb-2">
-          Browse Services
-        </h1>
-        <p className="text-[var(--foreground-muted)]">
-          Find the perfect freelance service for your project.
-        </p>
-      </div>
-
-      {/* Search */}
-      <div className="mb-8">
-        <form action="/browse" method="GET" className="max-w-xl flex">
-          <input
-            type="text"
-            name="search"
-            defaultValue={searchParams.search || ""}
-            placeholder="Search services..."
-            className="flex-1 px-4 py-2.5 rounded-l-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cta)]"
-          />
-          {searchParams.category && (
-            <input type="hidden" name="category" value={searchParams.category} />
-          )}
-          <button
-            type="submit"
-            className="bg-[var(--cta)] text-white font-semibold px-5 py-2.5 rounded-r-lg hover:opacity-90 transition text-sm"
+    <div className="min-h-screen bg-[#030305] text-white">
+      {/* Nav */}
+      <nav className="sticky top-0 z-40 border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link
+            href="/"
+            className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5"
           >
-            Search
-          </button>
-        </form>
-      </div>
-
-      {/* Results */}
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <GigCardSkeleton key={i} />
-            ))}
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,148,0.25)]">
+              <Zap className="w-3.5 h-3.5 text-black" />
+            </div>
+            Plugd
+          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              href="/login"
+              className="text-sm px-4 py-2 text-gray-400 hover:text-white font-medium transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="text-sm px-5 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all hidden sm:block"
+            >
+              Get Started
+            </Link>
           </div>
-        }
-      >
-        <BrowseResults
-          category={searchParams.category}
-          search={searchParams.search}
-        />
-      </Suspense>
+        </div>
+      </nav>
+
+      <main className="max-w-7xl mx-auto px-6 py-10">
+        {/* Header */}
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-white transition-colors mb-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to home
+          </Link>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+            Browse Listings
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Find high-ticket products to promote and earn commissions.
+          </p>
+        </div>
+
+        {/* Search */}
+        <div className="mb-8">
+          <Suspense fallback={null}>
+            <SearchBar categories={categories || []} />
+          </Suspense>
+        </div>
+
+        {/* Results */}
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden"
+                >
+                  <div className="aspect-[16/10] bg-white/[0.04] animate-pulse" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-3 bg-white/[0.04] rounded animate-pulse w-2/3" />
+                    <div className="h-4 bg-white/[0.04] rounded animate-pulse" />
+                    <div className="h-3 bg-white/[0.04] rounded animate-pulse w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          }
+        >
+          <BrowseResults
+            category={searchParams.category}
+            search={searchParams.search}
+          />
+        </Suspense>
+      </main>
     </div>
-  );
+  )
 }

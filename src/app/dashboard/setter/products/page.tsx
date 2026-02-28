@@ -1,11 +1,10 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
 export default async function MyProducts() {
-  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
