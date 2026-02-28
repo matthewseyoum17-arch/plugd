@@ -26,7 +26,7 @@ export function ApplyButton({
     return (
       <a
         href={`/signup?role=setter`}
-        className="w-full py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-[#00cc76] transition-all text-sm text-center block"
+        className="w-full py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-zinc-200 transition-all text-sm text-center block"
       >
         Sign Up to Apply
       </a>
@@ -97,7 +97,7 @@ export function ApplyButton({
           <button
             onClick={handleApply}
             disabled={loading}
-            className="flex-1 py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-[#00cc76] transition-all text-sm disabled:opacity-50"
+            className="flex-1 py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-zinc-200 transition-all text-sm disabled:opacity-50"
           >
             {loading ? 'Submitting...' : 'Submit Application'}
           </button>
@@ -115,7 +115,7 @@ export function ApplyButton({
   return (
     <button
       onClick={() => setShowForm(true)}
-      className="w-full py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-[#00cc76] transition-all text-sm"
+      className="w-full py-3 px-4 bg-[#ffffff] text-black font-semibold rounded-xl hover:bg-zinc-200 transition-all text-sm"
     >
       Apply to Promote
     </button>

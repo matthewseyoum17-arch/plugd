@@ -588,6 +588,152 @@ export async function disputeAppointment(appointmentId: string) {
   return { success: true };
 }
 
+// ─── Auto-Approve Stale Appointments ────────────────────────────────
+
+const AUTO_APPROVE_HOURS = 48;
+
+export async function autoApproveStaleAppointments() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  // Find all submitted appointments for this founder older than 48 hours
+  const cutoff = new Date(Date.now() - AUTO_APPROVE_HOURS * 60 * 60 * 1000).toISOString();
+
+  const { data: staleAppointments } = await supabase
+    .from("appointments")
+    .select("id, setter_id, listing_id, appointment_type, listings(commission_per_appointment, commission_per_close)")
+    .eq("company_id", user.id)
+    .eq("status", "submitted")
+    .lte("submitted_at", cutoff);
+
+  if (!staleAppointments || staleAppointments.length === 0) {
+    return { count: 0 };
+  }
+
+  let approved = 0;
+
+  for (const apt of staleAppointments) {
+    const { data: existingPayout } = await supabase
+      .from("payouts")
+      .select("id")
+      .eq("appointment_id", apt.id)
+      .maybeSingle();
+    if (existingPayout) continue;
+
+    const listing = apt.listings as unknown as {
+      commission_per_appointment: number;
+      commission_per_close: number;
+    } | null;
+
+    const grossCommission = apt.appointment_type === "close"
+      ? (listing?.commission_per_close ?? 0)
+      : (listing?.commission_per_appointment ?? 0);
+    const feeRate = apt.appointment_type === "close" ? FEE_RATE_CLOSE : FEE_RATE_APPOINTMENT;
+    const platformFee = Math.round(grossCommission * feeRate);
+    const netAmount = grossCommission - platformFee;
+
+    // Deduct from founder wallet if funds available
+    const { data: wallet } = await supabase
+      .from("founder_wallets")
+      .select("balance, total_spent")
+      .eq("founder_id", user.id)
+      .single();
+
+    if (wallet && wallet.balance >= grossCommission) {
+      const newBalance = wallet.balance - grossCommission;
+      await supabase
+        .from("founder_wallets")
+        .update({
+          balance: newBalance,
+          total_spent: (wallet.total_spent || 0) + grossCommission,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("founder_id", user.id);
+
+      await supabase.from("wallet_transactions").insert({
+        founder_id: user.id,
+        type: "payout_deduct",
+        amount: grossCommission,
+        balance_after: newBalance,
+        reference_id: apt.id,
+        description: `Auto-approved: $${(grossCommission / 100).toFixed(2)}`,
+      });
+    }
+
+    await supabase
+      .from("appointments")
+      .update({ status: "auto_approved" })
+      .eq("id", apt.id)
+      .eq("status", "submitted");
+
+    const clearsAt = new Date();
+    clearsAt.setDate(clearsAt.getDate() + PAYOUT_CLEARING_DAYS);
+
+    await supabase.from("payouts").insert({
+      founder_id: user.id,
+      setter_id: apt.setter_id,
+      appointment_id: apt.id,
+      amount: netAmount,
+      gross_amount: grossCommission,
+      platform_fee: platformFee,
+      clears_at: clearsAt.toISOString(),
+      status: "pending",
+    });
+
+    approved++;
+  }
+
+  if (approved > 0) {
+    revalidatePath("/dashboard/founder/appointments");
+    revalidatePath("/dashboard/founder/earnings");
+  }
+
+  return { count: approved };
+}
+
+// ─── Listing Management ─────────────────────────────────────────────
+
+export async function deleteListing(listingId: string) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  if (!listingId) return { error: "Listing ID required" };
+
+  // Verify ownership and check for active appointments
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("id, status")
+    .eq("id", listingId)
+    .eq("company_id", user.id)
+    .single();
+
+  if (!listing) return { error: "Listing not found or not authorized" };
+
+  // Check for pending appointments — don't allow delete if any exist
+  const { count: pendingCount } = await supabase
+    .from("appointments")
+    .select("id", { count: "exact", head: true })
+    .eq("listing_id", listingId)
+    .eq("status", "submitted");
+
+  if ((pendingCount || 0) > 0) {
+    return { error: "Cannot delete listing with pending appointments. Resolve them first." };
+  }
+
+  const { error } = await supabase
+    .from("listings")
+    .delete()
+    .eq("id", listingId)
+    .eq("company_id", user.id);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/dashboard/founder/listings");
+  return { success: true };
+}
+
 // ─── Setter Withdrawals ─────────────────────────────────────────────
 
 export async function requestWithdrawal(amountCents: number) {

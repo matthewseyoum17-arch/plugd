@@ -80,7 +80,7 @@ export default async function MyProducts() {
                 <td className="px-6 py-4">
                   <Link
                     href={`/dashboard/setter/products/${app.listing_id}/submit`}
-                    className="px-3 py-1 bg-[#ffffff] text-black text-xs font-medium rounded-lg hover:bg-[#00cc76] transition-colors"
+                    className="px-3 py-1 bg-[#ffffff] text-black text-xs font-medium rounded-lg hover:bg-zinc-200 transition-colors"
                   >
                     Submit Appointment
                   </Link>

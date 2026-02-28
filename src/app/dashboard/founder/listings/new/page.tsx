@@ -327,7 +327,7 @@ export default function CreateListing() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-[#ffffff] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-[#ffffff] text-black font-medium rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50"
           >
             {uploadingImage ? 'Uploading image...' : loading ? 'Creating...' : 'Create Listing'}
           </button>

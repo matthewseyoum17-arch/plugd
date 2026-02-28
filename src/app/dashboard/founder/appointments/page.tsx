@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AppointmentsClient } from './_components/AppointmentsClient'
+import { autoApproveStaleAppointments } from '@/app/actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,6 +10,9 @@ export default async function Appointments() {
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  // Auto-approve any appointments that have been pending for 48+ hours
+  await autoApproveStaleAppointments()
 
   const { data: wallet } = await supabase
     .from('founder_wallets')

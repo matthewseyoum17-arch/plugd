@@ -223,7 +223,13 @@ export default function LoginPage() {
             </motion.button>
           </form>
 
-          <motion.p variants={itemVars} className="mt-8 text-center text-sm text-gray-500">
+          <motion.div variants={itemVars} className="mt-6 text-center">
+            <Link href="/forgot-password" className="text-sm text-gray-500 hover:text-zinc-300 transition-colors">
+              Forgot your password?
+            </Link>
+          </motion.div>
+
+          <motion.p variants={itemVars} className="mt-4 text-center text-sm text-gray-500">
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-white hover:text-zinc-300 font-medium transition-colors">
               Create account

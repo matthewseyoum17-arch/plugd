@@ -128,7 +128,7 @@ export default function SubmitAppointment() {
         </div>
         <div className="flex gap-4">
           <button type="submit" disabled={isPending}
-            className="px-6 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50">
+            className="px-6 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50">
             {isPending ? "Submitting..." : "Submit Appointment"}
           </button>
           <button type="button" onClick={()=>router.back()}

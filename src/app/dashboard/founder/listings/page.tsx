@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { ListingActions } from './_components/ListingActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,12 +71,7 @@ export default async function MyListings() {
                 <span className="text-gray-400">Pending: <span className="text-yellow-300">{pendingCount}</span></span>
               </div>
 
-              <Link
-                href={`/dashboard/founder/listings/${listing.id}/edit`}
-                className="border border-[#333] text-white bg-transparent rounded-md px-4 py-2 text-xs hover:bg-[#1a1a1a] inline-block"
-              >
-                Edit
-              </Link>
+              <ListingActions listingId={listing.id} status={listing.status} />
             </div>
           )
         })}
