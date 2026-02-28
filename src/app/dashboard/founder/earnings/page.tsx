@@ -42,7 +42,7 @@ export default async function Earnings() {
   const totalFees = payouts?.reduce((sum, p) => sum + (p.platform_fee || 0), 0) || 0
 
   const stats = [
-    { name: 'Wallet Balance', value: `$${((wallet?.balance || 0) / 100).toFixed(2)}`, color: 'text-[#00FF94]' },
+    { name: 'Wallet Balance', value: `$${((wallet?.balance || 0) / 100).toFixed(2)}`, color: 'text-[#ffffff]' },
     { name: 'Total Spent', value: `$${((wallet?.total_spent || 0) / 100).toFixed(2)}`, color: 'text-white' },
     { name: 'Pending Payouts', value: `$${(totalPending / 100).toFixed(2)}`, color: 'text-yellow-400' },
     { name: 'Platform Fees', value: `$${(totalFees / 100).toFixed(2)}`, color: 'text-gray-400' },
@@ -146,7 +146,7 @@ export default async function Earnings() {
                 <td className="px-6 py-4 text-gray-300">{payout.appointments?.listings?.title || 'N/A'}</td>
                 <td className="px-6 py-4 text-white font-medium">${((payout.gross_amount || payout.amount || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4 text-gray-400">${((payout.platform_fee || 0) / 100).toFixed(2)}</td>
-                <td className="px-6 py-4 text-[#00FF94] font-medium">${((payout.amount || 0) / 100).toFixed(2)}</td>
+                <td className="px-6 py-4 text-[#ffffff] font-medium">${((payout.amount || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(payout.status)}`}>
                     {payout.status}

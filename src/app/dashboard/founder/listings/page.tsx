@@ -22,7 +22,7 @@ export default async function MyListings() {
         <h1 className="text-3xl font-bold">Listings</h1>
         <Link
           href="/dashboard/founder/listings/new"
-          className="bg-[#00FF94] text-black font-semibold rounded-md px-4 py-2 hover:brightness-90"
+          className="bg-[#ffffff] text-black font-semibold rounded-md px-4 py-2 hover:brightness-90"
         >
           + New Listing
         </Link>
@@ -47,7 +47,7 @@ export default async function MyListings() {
           return (
             <div
               key={listing.id}
-              className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 hover:border-[#00FF94] transition-all duration-150"
+              className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 hover:border-[#ffffff] transition-all duration-150"
             >
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-lg font-semibold text-white">{listing.title}</h3>
@@ -57,10 +57,10 @@ export default async function MyListings() {
               </div>
 
               <div className="flex gap-2 mb-4">
-                <span className="px-3 py-1 rounded-full text-xs bg-green-900/50 text-[#00FF94]">
+                <span className="px-3 py-1 rounded-full text-xs bg-green-900/50 text-[#ffffff]">
                   ${((listing.commission_per_appointment || 0) / 100).toFixed(2)}/appt
                 </span>
-                <span className="px-3 py-1 rounded-full text-xs bg-green-900/50 text-[#00FF94]">
+                <span className="px-3 py-1 rounded-full text-xs bg-green-900/50 text-[#ffffff]">
                   ${((listing.commission_per_close || 0) / 100).toFixed(2)}/close
                 </span>
               </div>

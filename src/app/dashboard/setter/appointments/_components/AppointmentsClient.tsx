@@ -65,12 +65,12 @@ function SetterAppointmentCard({ apt }: { apt: Appointment }) {
 
   return (
     <>
-      <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
+      <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#ffffff] transition-all duration-150">
         <div>
           <p className="text-white font-medium">{apt.listing_title}</p>
           <p className="text-gray-400 text-sm">Contact: {apt.contact_name}</p>
           <p className="text-gray-500 text-xs">Founder: {apt.company_name}</p>
-          <p className="text-[#00FF94] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</p>
+          <p className="text-[#ffffff] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</p>
           {apt.status === 'submitted' && apt.auto_approve_at && (
             <div className="mt-1"><Countdown autoApproveAt={apt.auto_approve_at} /></div>
           )}
@@ -160,7 +160,7 @@ export function AppointmentsClient({
             onClick={() => setTab(t.key)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               tab === t.key
-                ? 'text-[#00FF94] border-[#00FF94]'
+                ? 'text-[#ffffff] border-[#ffffff]'
                 : 'text-gray-400 border-transparent hover:text-white'
             }`}
           >
@@ -192,7 +192,7 @@ export function AppointmentsClient({
                   name="listing_id"
                   value={selectedListing}
                   onChange={(e) => setSelectedListing(e.target.value)}
-                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#ffffff] focus:outline-none w-full"
                   required
                 >
                   <option value="">Select a listing</option>
@@ -218,7 +218,7 @@ export function AppointmentsClient({
                   </div>
                   <div className="w-full bg-[#333] rounded-full h-1.5 mt-2">
                     <div
-                      className={`h-1.5 rounded-full ${selected.appointments_used >= selected.max_appointments ? 'bg-red-500' : 'bg-[#00FF94]'}`}
+                      className={`h-1.5 rounded-full ${selected.appointments_used >= selected.max_appointments ? 'bg-red-500' : 'bg-[#ffffff]'}`}
                       style={{ width: `${Math.min(100, (selected.appointments_used / selected.max_appointments) * 100)}%` }}
                     />
                   </div>
@@ -232,7 +232,7 @@ export function AppointmentsClient({
                   <input
                     type="text"
                     name="contact_name"
-                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#ffffff] focus:outline-none w-full"
                     required
                     placeholder="John Doe"
                   />
@@ -242,7 +242,7 @@ export function AppointmentsClient({
                   <input
                     type="email"
                     name="contact_email"
-                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                    className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#ffffff] focus:outline-none w-full"
                     required
                     placeholder="john@company.com"
                   />
@@ -254,7 +254,7 @@ export function AppointmentsClient({
                 <input
                   type="text"
                   name="contact_company"
-                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#ffffff] focus:outline-none w-full"
                   required
                   placeholder="Acme Corp"
                 />
@@ -265,7 +265,7 @@ export function AppointmentsClient({
                 <input
                   type="url"
                   name="calendly_event_url"
-                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#00FF94] focus:outline-none w-full"
+                  className="bg-[#1a1a1a] border border-[#333] text-white rounded-md px-3 py-2 focus:border-[#ffffff] focus:outline-none w-full"
                   placeholder="https://calendly.com/..."
                   required
                 />
@@ -281,7 +281,7 @@ export function AppointmentsClient({
                       value="appointment"
                       checked={appointmentType === 'appointment'}
                       onChange={() => setAppointmentType('appointment')}
-                      className="w-4 h-4 accent-[#00FF94]"
+                      className="w-4 h-4 accent-[#ffffff]"
                     />
                     <span className="text-white text-sm">
                       Appointment{selected ? ` ($${(((selected.commission_per_appointment || 0) * 0.93) / 100).toFixed(2)} after 7% fee)` : ''}
@@ -294,7 +294,7 @@ export function AppointmentsClient({
                       value="close"
                       checked={appointmentType === 'close'}
                       onChange={() => setAppointmentType('close')}
-                      className="w-4 h-4 accent-[#00FF94]"
+                      className="w-4 h-4 accent-[#ffffff]"
                     />
                     <span className="text-white text-sm">
                       Close{selected ? ` ($${(((selected.commission_per_close || 0) * 0.95) / 100).toFixed(2)} after 5% fee)` : ''}
@@ -306,7 +306,7 @@ export function AppointmentsClient({
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-[#00FF94] text-black font-semibold rounded-md px-4 py-2 hover:brightness-90 disabled:opacity-50"
+                className="bg-[#ffffff] text-black font-semibold rounded-md px-4 py-2 hover:brightness-90 disabled:opacity-50"
               >
                 {submitting ? 'Submitting...' : 'Submit Appointment'}
               </button>

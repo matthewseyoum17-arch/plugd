@@ -1,6 +1,6 @@
 export default function BrowseLoading() {
   return (
-    <div className="min-h-screen bg-[#030305] text-white">
+    <div className="min-h-screen bg-[#09090b] text-white">
       {/* Nav skeleton */}
       <nav className="sticky top-0 z-40 border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">

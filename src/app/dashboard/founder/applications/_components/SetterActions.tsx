@@ -21,7 +21,7 @@ export function SetterActions({ setterId, setterName }: { setterId: string; sett
         </button>
         <Link
           href={`/dashboard/founder/messages?thread=${setterId}`}
-          className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#00FF94] border border-[#00FF94]/20 rounded-lg hover:bg-[#00FF94]/10 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#ffffff] border border-[#ffffff]/20 rounded-lg hover:bg-[#ffffff]/10 transition-all"
           title={`Message ${setterName}`}
         >
           <MessageSquare className="w-3.5 h-3.5" />

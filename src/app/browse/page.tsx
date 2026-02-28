@@ -139,7 +139,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     .order('sort_order')
 
   return (
-    <div className="min-h-screen bg-[#030305] text-white">
+    <div className="min-h-screen bg-[#09090b] text-white">
       {/* Nav */}
       <nav className="sticky top-0 z-40 border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -147,7 +147,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
             href="/"
             className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5"
           >
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,148,0.25)]">
+            <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-black" />
             </div>
             Plugd

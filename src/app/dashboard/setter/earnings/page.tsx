@@ -57,7 +57,7 @@ export default async function SetterEarnings() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5">
           <p className="text-gray-400 text-sm">Available to Withdraw</p>
-          <p className="text-3xl font-bold mt-2 text-[#00FF94]">${(Math.max(0, availableBalance) / 100).toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-2 text-[#ffffff]">${(Math.max(0, availableBalance) / 100).toFixed(2)}</p>
         </div>
         <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5">
           <p className="text-gray-400 text-sm">Clearing (14 days)</p>
@@ -91,7 +91,7 @@ export default async function SetterEarnings() {
             const daysLeft = clearsDate ? Math.max(0, Math.ceil((clearsDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))) : 0
 
             return (
-              <div key={payout.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#00FF94] transition-all duration-150">
+              <div key={payout.id} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 flex items-center justify-between hover:border-[#ffffff] transition-all duration-150">
                 <div>
                   <p className="text-white font-medium">{payout.appointments?.listings?.title || 'N/A'}</p>
                   <p className="text-gray-400 text-sm">{payout.appointments?.contact_name || ''}</p>
@@ -108,7 +108,7 @@ export default async function SetterEarnings() {
                   )}
                 </div>
                 <div className="text-right">
-                  <p className="text-[#00FF94] font-semibold">${displayAmount.toFixed(2)}</p>
+                  <p className="text-[#ffffff] font-semibold">${displayAmount.toFixed(2)}</p>
                   {payout.gross_amount > 0 && payout.gross_amount !== payout.amount && (
                     <p className="text-gray-500 text-xs line-through">${((payout.gross_amount || 0) / 100).toFixed(2)}</p>
                   )}

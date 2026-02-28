@@ -68,14 +68,14 @@ export function WithdrawalPanel({ availableBalance }: { availableBalance: number
             max={availableBalance / 100}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 bg-[#111] border border-[#333] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#111] border border-[#333] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder={`${minWithdrawal}.00`}
           />
         </div>
         <button
           onClick={handleWithdraw}
           disabled={loading || !amount || availableBalance < minWithdrawal * 100}
-          className="px-5 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50"
+          className="px-5 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50"
         >
           {loading ? 'Processing...' : 'Request Withdrawal'}
         </button>
@@ -84,7 +84,7 @@ export function WithdrawalPanel({ availableBalance }: { availableBalance: number
       {availableBalance > 0 && (
         <button
           onClick={() => setAmount(String(availableBalance / 100))}
-          className="mt-2 text-xs text-[#00FF94] hover:underline"
+          className="mt-2 text-xs text-[#ffffff] hover:underline"
         >
           Withdraw all (${(availableBalance / 100).toFixed(2)})
         </button>

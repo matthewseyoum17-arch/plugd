@@ -57,12 +57,12 @@ export default async function MyProducts() {
               <tr key={app.id} className="hover:bg-[#1f1f1f]">
                 <td className="px-6 py-4 text-white">{app.listings?.title || 'N/A'}</td>
                 <td className="px-6 py-4 text-gray-300">{app.listings?.company_name || 'N/A'}</td>
-                <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_appointment || 0) / 100).toFixed(2)}</td>
-                <td className="px-6 py-4 text-[#00FF94]">${((app.listings?.commission_per_close || 0) / 100).toFixed(2)}</td>
+                <td className="px-6 py-4 text-[#ffffff]">${((app.listings?.commission_per_appointment || 0) / 100).toFixed(2)}</td>
+                <td className="px-6 py-4 text-[#ffffff]">${((app.listings?.commission_per_close || 0) / 100).toFixed(2)}</td>
                 <td className="px-6 py-4">
                   <div className="flex flex-col gap-1">
                     {app.listings?.pitch_kit_url && (
-                      <a href={app.listings.pitch_kit_url} target="_blank" rel="noopener noreferrer" className="text-xs text-[#00FF94] hover:underline">Pitch Kit</a>
+                      <a href={app.listings.pitch_kit_url} target="_blank" rel="noopener noreferrer" className="text-xs text-[#ffffff] hover:underline">Pitch Kit</a>
                     )}
                     {app.listings?.qualified_meeting_definition && (
                       <span className="text-xs text-gray-400" title={app.listings.qualified_meeting_definition}>Meeting Def ℹ</span>
@@ -80,7 +80,7 @@ export default async function MyProducts() {
                 <td className="px-6 py-4">
                   <Link
                     href={`/dashboard/setter/products/${app.listing_id}/submit`}
-                    className="px-3 py-1 bg-[#00FF94] text-black text-xs font-medium rounded-lg hover:bg-[#00cc76] transition-colors"
+                    className="px-3 py-1 bg-[#ffffff] text-black text-xs font-medium rounded-lg hover:bg-[#00cc76] transition-colors"
                   >
                     Submit Appointment
                   </Link>

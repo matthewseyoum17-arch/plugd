@@ -88,7 +88,7 @@ export default function ReviewModal({ appointmentId, revieweeId, revieweeName, o
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your experience (optional)..."
           maxLength={1000}
-          className="w-full px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#00FF94]/50 text-white text-sm placeholder:text-gray-600 h-24 resize-none"
+          className="w-full px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#ffffff]/50 text-white text-sm placeholder:text-gray-600 h-24 resize-none"
         />
         <p className="text-gray-600 text-xs mt-1 mb-6">{comment.length}/1000</p>
 
@@ -99,7 +99,7 @@ export default function ReviewModal({ appointmentId, revieweeId, revieweeName, o
           <button
             onClick={handleSubmit}
             disabled={submitting || rating === 0}
-            className="flex-1 py-3 bg-[#00FF94] text-black font-semibold rounded-xl hover:brightness-90 disabled:opacity-50 transition-all text-sm"
+            className="flex-1 py-3 bg-[#ffffff] text-black font-semibold rounded-xl hover:brightness-90 disabled:opacity-50 transition-all text-sm"
           >
             {submitting ? "Submitting..." : "Submit Review"}
           </button>

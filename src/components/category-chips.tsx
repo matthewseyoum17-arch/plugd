@@ -29,7 +29,7 @@ export function CategoryChips({ categories }: { categories: Category[] }) {
         onClick={() => handleClick('')}
         className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
           !activeSlug
-            ? 'bg-[#00FF94] text-black border-[#00FF94]'
+            ? 'bg-[#ffffff] text-black border-[#ffffff]'
             : 'bg-white/[0.03] text-gray-400 border-white/[0.08] hover:border-white/[0.15] hover:text-white'
         }`}
       >
@@ -41,7 +41,7 @@ export function CategoryChips({ categories }: { categories: Category[] }) {
           onClick={() => handleClick(cat.slug)}
           className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
             activeSlug === cat.slug
-              ? 'bg-[#00FF94] text-black border-[#00FF94]'
+              ? 'bg-[#ffffff] text-black border-[#ffffff]'
               : 'bg-white/[0.03] text-gray-400 border-white/[0.08] hover:border-white/[0.15] hover:text-white'
           }`}
         >

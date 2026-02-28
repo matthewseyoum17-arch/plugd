@@ -1,6 +1,6 @@
 export default function GigDetailLoading() {
   return (
-    <div className="min-h-screen bg-[#030305] text-white">
+    <div className="min-h-screen bg-[#09090b] text-white">
       {/* Nav skeleton */}
       <nav className="sticky top-0 z-40 border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -39,7 +39,7 @@ export default function GigDetailLoading() {
                   <div className="w-16 h-3 bg-white/[0.04] rounded animate-pulse" />
                 </div>
               </div>
-              <div className="h-24 bg-[#00FF94]/[0.03] rounded-xl animate-pulse" />
+              <div className="h-24 bg-[#ffffff]/[0.03] rounded-xl animate-pulse" />
               <div className="h-11 bg-white/[0.06] rounded-xl animate-pulse" />
             </div>
           </div>

@@ -96,7 +96,7 @@ export default function MessagesPageClient({ initialThreadWith }: { initialThrea
           <button onClick={() => setActiveThread(null)} className="p-2 hover:bg-white/5 rounded-lg transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-400" />
           </button>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
             <span className="text-sm font-bold text-white">
               {(otherUser?.full_name || "?").split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
             </span>
@@ -119,12 +119,12 @@ export default function MessagesPageClient({ initialThreadWith }: { initialThrea
                 <div
                   className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm ${
                     isMine
-                      ? "bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20 rounded-br-md"
+                      ? "bg-[#ffffff]/10 text-[#ffffff] border border-[#ffffff]/20 rounded-br-md"
                       : "bg-[#111] text-gray-200 border border-[#1a1a1a] rounded-bl-md"
                   }`}
                 >
                   <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                  <p className={`text-[10px] mt-1 ${isMine ? "text-[#00FF94]/40" : "text-gray-600"}`}>
+                  <p className={`text-[10px] mt-1 ${isMine ? "text-[#ffffff]/40" : "text-gray-600"}`}>
                     {formatTime(msg.created_at)}
                   </p>
                 </div>
@@ -143,12 +143,12 @@ export default function MessagesPageClient({ initialThreadWith }: { initialThrea
               onChange={(e) => setNewMsg(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
               placeholder="Type a message..."
-              className="flex-1 px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#00FF94]/50 text-white text-sm placeholder:text-gray-600"
+              className="flex-1 px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#ffffff]/50 text-white text-sm placeholder:text-gray-600"
             />
             <button
               onClick={handleSend}
               disabled={sending || !newMsg.trim()}
-              className="p-3 bg-[#00FF94] text-black rounded-xl hover:brightness-90 disabled:opacity-30 transition-all"
+              className="p-3 bg-[#ffffff] text-black rounded-xl hover:brightness-90 disabled:opacity-30 transition-all"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -182,12 +182,12 @@ export default function MessagesPageClient({ initialThreadWith }: { initialThrea
               <button
                 key={conv.other_id}
                 onClick={() => setActiveThread(conv.other_id)}
-                className="w-full flex items-center gap-4 p-4 bg-[#0e0e0e] border border-[#1a1a1a] rounded-xl hover:border-[#00FF94]/20 transition-all text-left"
+                className="w-full flex items-center gap-4 p-4 bg-[#0e0e0e] border border-[#1a1a1a] rounded-xl hover:border-[#ffffff]/20 transition-all text-left"
               >
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0 relative">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center flex-shrink-0 relative">
                   <span className="text-sm font-bold text-white">{initials}</span>
                   {conv.unread_count > 0 && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#00FF94] rounded-full flex items-center justify-center">
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#ffffff] rounded-full flex items-center justify-center">
                       <span className="text-black text-[10px] font-bold">{conv.unread_count}</span>
                     </div>
                   )}

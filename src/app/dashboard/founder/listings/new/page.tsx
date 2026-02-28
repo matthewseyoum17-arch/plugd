@@ -109,7 +109,7 @@ export default function CreateListing() {
           <input
             type="text"
             name="title"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             required
             placeholder="e.g., AI Receptionist for Dental Offices"
           />
@@ -121,7 +121,7 @@ export default function CreateListing() {
           </label>
           <textarea
             name="description"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-32"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white h-32"
             required
             placeholder="Describe your AI product and its key features..."
           />
@@ -134,7 +134,7 @@ export default function CreateListing() {
           </label>
           <select
             name="category_id"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white appearance-none cursor-pointer"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white appearance-none cursor-pointer"
           >
             <option value="">Select a category...</option>
             {categories.map((cat) => (
@@ -166,7 +166,7 @@ export default function CreateListing() {
               </button>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center w-full h-48 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a2a] rounded-lg cursor-pointer hover:border-[#00FF94]/50 transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-48 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a2a] rounded-lg cursor-pointer hover:border-[#ffffff]/50 transition-colors">
               <ImageIcon className="w-8 h-8 text-gray-600 mb-2" />
               <span className="text-sm text-gray-500">Click to upload cover image</span>
               <span className="text-xs text-gray-600 mt-1">PNG, JPG up to 5MB</span>
@@ -187,7 +187,7 @@ export default function CreateListing() {
           <input
             type="text"
             name="ideal_customer"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder="e.g., Dental practices with 2-10 locations"
           />
         </div>
@@ -199,7 +199,7 @@ export default function CreateListing() {
           <input
             type="url"
             name="product_url"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder="https://yourproduct.com"
           />
         </div>
@@ -214,7 +214,7 @@ export default function CreateListing() {
               step="0.01"
               min="25"
               name="commission_per_appointment"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
               placeholder="25.00"
               required
             />
@@ -229,7 +229,7 @@ export default function CreateListing() {
               step="0.01"
               min="0"
               name="commission_per_close"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
               placeholder="250.00"
             />
           </div>
@@ -237,7 +237,7 @@ export default function CreateListing() {
 
         {/* Budget & Setter Controls */}
         <div className="border border-[#2a2a2a] rounded-lg p-4 space-y-4">
-          <h3 className="text-sm font-medium text-[#00FF94]">Budget & Setter Controls</h3>
+          <h3 className="text-sm font-medium text-[#ffffff]">Budget & Setter Controls</h3>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Max Active Setters
@@ -247,7 +247,7 @@ export default function CreateListing() {
               min="1"
               max="50"
               name="max_setters"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
               placeholder="5"
               defaultValue="5"
             />
@@ -262,7 +262,7 @@ export default function CreateListing() {
                 type="number"
                 min="1"
                 name="max_appointments"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
                 placeholder="20"
                 required
               />
@@ -277,7 +277,7 @@ export default function CreateListing() {
                 min="1"
                 max="10"
                 name="daily_setter_cap"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
                 placeholder="3"
                 defaultValue="3"
               />
@@ -292,7 +292,7 @@ export default function CreateListing() {
           </label>
           <textarea
             name="qualified_meeting_definition"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-24"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white h-24"
             required
             placeholder="Define what counts as a qualified meeting..."
           />
@@ -305,7 +305,7 @@ export default function CreateListing() {
           <input
             type="url"
             name="pitch_kit_url"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder="https://docs.google.com/..."
           />
         </div>
@@ -318,7 +318,7 @@ export default function CreateListing() {
           <input
             type="text"
             name="tags"
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder="e.g., AI, SaaS, Healthcare, B2B"
           />
         </div>
@@ -327,7 +327,7 @@ export default function CreateListing() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-[#00FF94] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-[#ffffff] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
           >
             {uploadingImage ? 'Uploading image...' : loading ? 'Creating...' : 'Create Listing'}
           </button>

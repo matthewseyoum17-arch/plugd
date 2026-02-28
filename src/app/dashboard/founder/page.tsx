@@ -77,7 +77,7 @@ export default async function FounderOverview() {
             className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5"
           >
             <p className="text-gray-400 text-sm">{stat.name}</p>
-            <p className="text-3xl font-bold mt-2 text-[#00FF94]">{stat.value}</p>
+            <p className="text-3xl font-bold mt-2 text-[#ffffff]">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -138,7 +138,7 @@ export default async function FounderOverview() {
           <p className="text-gray-400">No activity yet — share your listing to start getting setters.</p>
         ) : (
           <p className="text-gray-400">
-            <Link href="/dashboard/founder/listings/new" className="text-[#00FF94] hover:underline">
+            <Link href="/dashboard/founder/listings/new" className="text-[#ffffff] hover:underline">
               Create your first listing
             </Link>{' '}
             to get started.

@@ -10,7 +10,7 @@ function Badge({ className, variant = "default", ...props }: BadgeProps) {
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
         {
-          "border-transparent bg-[#00FF94]/10 text-[#00FF94]":
+          "border-transparent bg-[#ffffff]/10 text-[#ffffff]":
             variant === "default",
           "border-transparent bg-white/[0.06] text-gray-300":
             variant === "secondary",

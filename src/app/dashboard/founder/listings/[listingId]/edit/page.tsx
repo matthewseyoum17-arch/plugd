@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { toggleListingStatus } from "@/app/actions";
 
-const inp = "w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg focus:outline-none focus:border-[#00FF94] text-white placeholder:text-gray-600";
+const inp = "w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg focus:outline-none focus:border-[#ffffff] text-white placeholder:text-gray-600";
 const lbl = "block text-sm font-medium text-gray-300 mb-2";
 
 export default function EditListing() {
@@ -119,7 +119,7 @@ export default function EditListing() {
       </div>
       <div className="flex gap-4 mt-8">
         <button onClick={handleSave} disabled={saving || !title.trim()}
-          className="px-6 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50">
+          className="px-6 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50">
           {saving ? "Saving..." : "Save Changes"}
         </button>
         <button onClick={() => router.push("/dashboard/founder/listings")} className="px-6 py-3 text-gray-500 hover:text-gray-300 transition-colors">

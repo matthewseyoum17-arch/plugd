@@ -85,7 +85,7 @@ export default async function Home() {
   }))
 
   return (
-    <div className="relative min-h-screen bg-[#030305] text-white selection:bg-[#00FF94] selection:text-black font-sans overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#09090b] text-white selection:bg-white/20 selection:text-white font-sans overflow-x-hidden">
 
       {/* Film grain overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.02] mix-blend-overlay"
@@ -98,7 +98,7 @@ export default async function Home() {
       <nav className="fixed w-full z-40 border-b border-white/[0.04] bg-black/40 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,148,0.25)]">
+            <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-black" />
             </div>
             Plugd
@@ -136,13 +136,13 @@ export default async function Home() {
           <div className="max-w-5xl mx-auto text-center relative">
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] mb-10 backdrop-blur-sm">
-              <span className="flex h-2 w-2 rounded-full bg-[#00FF94] animate-pulse" />
-              <span className="text-xs font-semibold text-gray-300 tracking-widest uppercase">Now in Beta</span>
+              <span className="flex h-2 w-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs font-semibold text-zinc-300 tracking-widest uppercase">Now in Beta</span>
             </div>
 
             <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-extrabold mb-8 tracking-[-0.04em] leading-[1.05]">
               <span className="block text-white">WE BUILD</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#00FF94] via-[#0088ff] to-[#7722cc] animate-gradient-x">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-400 to-zinc-600 animate-gradient-x">
                 DIGITAL REALITIES
               </span>
             </h1>
@@ -154,7 +154,7 @@ export default async function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/signup?role=founder"
-                className="group relative px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.15)]">
+                className="group relative px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.1)]">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:animate-shimmer" />
                 <span className="relative z-10 flex items-center gap-2">
                   Start as Founder
@@ -180,7 +180,7 @@ export default async function Home() {
           <section className="py-20 px-6">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
-                <p className="text-[#00FF94] text-xs font-bold tracking-[0.3em] uppercase mb-4">Explore</p>
+                <p className="text-zinc-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">Explore</p>
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Browse by Category</h2>
               </div>
 
@@ -189,9 +189,9 @@ export default async function Home() {
                   <Link
                     key={cat.id}
                     href={`/browse?category=${cat.slug}`}
-                    className="group flex-shrink-0 bg-white/[0.02] border border-white/[0.06] rounded-2xl px-6 py-5 backdrop-blur-xl hover:border-[#00FF94]/30 hover:bg-white/[0.04] transition-all duration-300 text-center min-w-[140px]"
+                    className="group flex-shrink-0 bg-white/[0.02] border border-white/[0.06] rounded-2xl px-6 py-5 backdrop-blur-xl hover:border-white/20 hover:bg-white/[0.04] transition-all duration-300 text-center min-w-[140px]"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mx-auto mb-3 text-gray-400 group-hover:text-[#00FF94] transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mx-auto mb-3 text-zinc-500 group-hover:text-white transition-colors">
                       {categoryIcons[cat.icon || ''] || <MoreHorizontal className="w-5 h-5" />}
                     </div>
                     <p className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">{cat.name}</p>
@@ -208,10 +208,10 @@ export default async function Home() {
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center justify-between mb-10">
                 <div>
-                  <p className="text-[#0088ff] text-xs font-bold tracking-[0.3em] uppercase mb-3">Featured</p>
+                  <p className="text-zinc-500 text-xs font-bold tracking-[0.3em] uppercase mb-3">Featured</p>
                   <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Latest Listings</h2>
                 </div>
-                <Link href="/browse" className="text-sm text-gray-400 hover:text-[#00FF94] font-medium transition-colors flex items-center gap-1">
+                <Link href="/browse" className="text-sm text-zinc-500 hover:text-white font-medium transition-colors flex items-center gap-1">
                   View All <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -229,15 +229,15 @@ export default async function Home() {
         <section className="py-32 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-20">
-              <p className="text-[#00FF94] text-xs font-bold tracking-[0.3em] uppercase mb-4">How It Works</p>
+              <p className="text-zinc-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">How It Works</p>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Three steps to revenue</h2>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { step: '01', icon: <Target className="w-6 h-6" />, title: 'List Your Product', desc: 'Founders create a listing with commission rates, ideal customer profiles, and pitch kits for their B2B product.', color: '#00FF94' },
-                { step: '02', icon: <Users className="w-6 h-6" />, title: 'Setters Apply', desc: 'Elite appointment setters browse listings, submit sample outreach, and get approved to promote your product.', color: '#0088ff' },
-                { step: '03', icon: <DollarSign className="w-6 h-6" />, title: 'Earn on Results', desc: 'Setters book qualified meetings via Calendly. Founders confirm, and payouts are processed automatically.', color: '#7722cc' },
+                { step: '01', icon: <Target className="w-6 h-6" />, title: 'List Your Product', desc: 'Founders create a listing with commission rates, ideal customer profiles, and pitch kits for their B2B product.', color: '#ffffff' },
+                { step: '02', icon: <Users className="w-6 h-6" />, title: 'Setters Apply', desc: 'Elite appointment setters browse listings, submit sample outreach, and get approved to promote your product.', color: '#a1a1aa' },
+                { step: '03', icon: <DollarSign className="w-6 h-6" />, title: 'Earn on Results', desc: 'Setters book qualified meetings via Calendly. Founders confirm, and payouts are processed automatically.', color: '#71717a' },
               ].map((item) => (
                 <div key={item.step} className="group relative">
                   <div className="absolute -top-4 -left-2 text-7xl font-black text-white/[0.03] select-none">{item.step}</div>
@@ -259,41 +259,41 @@ export default async function Home() {
         <section className="py-32 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-20">
-              <p className="text-[#0088ff] text-xs font-bold tracking-[0.3em] uppercase mb-4">Platform</p>
+              <p className="text-zinc-500 text-xs font-bold tracking-[0.3em] uppercase mb-4">Platform</p>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Everything you need to scale</h2>
               <p className="text-gray-400 text-lg max-w-xl mx-auto">Purpose-built tools for modern B2B outbound teams.</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-[#00FF94]/30 hover:shadow-[0_0_40px_rgba(0,255,148,0.06)] transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#00FF94]/[0.04] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
-                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-[#00FF94]">
+              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/[0.02] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
+                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-white">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white">Curated Opportunities</h3>
-                <p className="text-gray-400 leading-relaxed text-sm">
+                <p className="text-zinc-400 leading-relaxed text-sm">
                   Access a vetted marketplace of high-ticket SaaS and agency offers. No more cold outreach for low-converting products.
                 </p>
               </div>
 
-              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-[#0088ff]/30 hover:shadow-[0_0_40px_rgba(0,136,255,0.06)] transition-all duration-500 overflow-hidden md:-translate-y-4">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#0088ff]/[0.04] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
-                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-[#0088ff]">
+              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] transition-all duration-500 overflow-hidden md:-translate-y-4">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/[0.02] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
+                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-zinc-300">
                   <TrendingUp className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white">Performance Tracking</h3>
-                <p className="text-gray-400 leading-relaxed text-sm">
+                <p className="text-zinc-400 leading-relaxed text-sm">
                   Real-time analytics on your outreach, meeting show rates, and closed-won commissions all in one elegant dashboard.
                 </p>
               </div>
 
-              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-[#7722cc]/30 hover:shadow-[0_0_40px_rgba(119,34,204,0.06)] transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#7722cc]/[0.04] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
-                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-[#7722cc]">
+              <div className="group relative bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 backdrop-blur-xl hover:border-white/[0.15] hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/[0.02] rounded-bl-full -mr-20 -mt-20 transition-transform group-hover:scale-150 duration-700" />
+                <div className="w-12 h-12 bg-white/[0.03] border border-white/[0.08] rounded-xl flex items-center justify-center mb-6 text-zinc-400">
                   <Shield className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white">Guaranteed Payouts</h3>
-                <p className="text-gray-400 leading-relaxed text-sm">
+                <p className="text-zinc-400 leading-relaxed text-sm">
                   Automated escrow and transparent payout tracking means you never have to chase down a founder for your commission again.
                 </p>
               </div>
@@ -304,22 +304,22 @@ export default async function Home() {
         {/* Two-Column Split */}
         <section className="py-32 px-6">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
-            <div className="relative bg-white/[0.02] border border-white/[0.06] rounded-2xl p-10 backdrop-blur-xl overflow-hidden group hover:border-[#00FF94]/20 transition-all duration-500">
-              <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-[#00FF94]/[0.05] rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-700" />
-              <p className="text-[#00FF94] text-xs font-bold tracking-[0.2em] uppercase mb-6">For Founders</p>
+            <div className="relative bg-white/[0.02] border border-white/[0.06] rounded-2xl p-10 backdrop-blur-xl overflow-hidden group hover:border-white/[0.15] transition-all duration-500">
+              <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-white/[0.03] rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-700" />
+              <p className="text-zinc-400 text-xs font-bold tracking-[0.2em] uppercase mb-6">For Founders</p>
               <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tight">Stop hiring SDRs.<br />Start paying for meetings.</h3>
-              <p className="text-gray-400 mb-8 leading-relaxed">List your product once. Get a vetted network of setters promoting it. Pay commissions only when qualified appointments are confirmed.</p>
-              <Link href="/signup?role=founder" className="inline-flex items-center gap-2 text-[#00FF94] font-semibold hover:gap-3 transition-all">
+              <p className="text-zinc-400 mb-8 leading-relaxed">List your product once. Get a vetted network of setters promoting it. Pay commissions only when qualified appointments are confirmed.</p>
+              <Link href="/signup?role=founder" className="inline-flex items-center gap-2 text-white font-semibold hover:gap-3 transition-all">
                 List your product <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="relative bg-white/[0.02] border border-white/[0.06] rounded-2xl p-10 backdrop-blur-xl overflow-hidden group hover:border-[#0088ff]/20 transition-all duration-500">
-              <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-[#0088ff]/[0.05] rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-700" />
-              <p className="text-[#0088ff] text-xs font-bold tracking-[0.2em] uppercase mb-6">For Setters</p>
+            <div className="relative bg-white/[0.02] border border-white/[0.06] rounded-2xl p-10 backdrop-blur-xl overflow-hidden group hover:border-white/[0.15] transition-all duration-500">
+              <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-white/[0.03] rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-700" />
+              <p className="text-zinc-500 text-xs font-bold tracking-[0.2em] uppercase mb-6">For Setters</p>
               <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tight">Your outreach skills<br />deserve real commissions.</h3>
-              <p className="text-gray-400 mb-8 leading-relaxed">Browse high-ticket offers, pick the ones you believe in, and earn $25–$500+ per qualified meeting you book. No cold-calling required.</p>
-              <Link href="/signup?role=setter" className="inline-flex items-center gap-2 text-[#0088ff] font-semibold hover:gap-3 transition-all">
+              <p className="text-zinc-400 mb-8 leading-relaxed">Browse high-ticket offers, pick the ones you believe in, and earn $25–$500+ per qualified meeting you book. No cold-calling required.</p>
+              <Link href="/signup?role=setter" className="inline-flex items-center gap-2 text-zinc-300 font-semibold hover:gap-3 hover:text-white transition-all">
                 Start earning <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -330,7 +330,7 @@ export default async function Home() {
         <section className="py-32 px-6">
           <div className="max-w-4xl mx-auto">
             <div className="relative rounded-3xl border border-white/[0.08] bg-white/[0.02] p-12 md:p-20 overflow-hidden text-center backdrop-blur-xl">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-gradient-to-r from-[#00FF94]/10 via-[#0088ff]/10 to-[#7722cc]/10 blur-[100px] rounded-full pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-gradient-to-r from-white/[0.04] via-zinc-400/[0.06] to-white/[0.04] blur-[100px] rounded-full pointer-events-none" />
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 relative z-10">Ready to scale your revenue?</h2>
               <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto relative z-10 font-light">
                 Join founders and setters already using Plugd to close more deals.
@@ -350,9 +350,9 @@ export default async function Home() {
       {/* Footer */}
       <footer className="border-t border-white/[0.04] bg-black/60 py-12 relative z-10 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2 text-white/40">
+          <div className="flex items-center gap-2 text-zinc-600">
             <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
-              <Zap className="w-3 h-3 text-white/40" />
+              <Zap className="w-3 h-3 text-zinc-500" />
             </div>
             <span className="font-bold tracking-tight">Plugd</span>
           </div>

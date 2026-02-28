@@ -30,7 +30,7 @@ export default function ProfileDrawer({ userId, onClose, messageLinkPrefix }: Pr
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="relative w-full max-w-md bg-[#0a0a0a] border-l border-[#1a1a1a] overflow-y-auto">
+      <div className="relative w-full max-w-md bg-[#0f0f11] border-l border-[#1a1a1a] overflow-y-auto">
         {/* Close */}
         <button onClick={onClose} className="absolute top-4 right-4 p-2 hover:bg-white/5 rounded-lg transition-colors z-10">
           <X className="w-5 h-5 text-gray-400" />
@@ -46,7 +46,7 @@ export default function ProfileDrawer({ userId, onClose, messageLinkPrefix }: Pr
           <div className="p-6">
             {/* Header */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
                 <span className="text-xl font-bold text-white">
                   {(data?.user?.full_name || "?").split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
                 </span>
@@ -108,12 +108,12 @@ export default function ProfileDrawer({ userId, onClose, messageLinkPrefix }: Pr
                 </div>
               )}
               {data?.profile?.linkedin_url && (
-                <a href={data.profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#00FF94] hover:underline">
+                <a href={data.profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#ffffff] hover:underline">
                   <Linkedin className="w-4 h-4" /> LinkedIn
                 </a>
               )}
               {data?.profile?.website && (
-                <a href={data.profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#00FF94] hover:underline">
+                <a href={data.profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#ffffff] hover:underline">
                   <Globe className="w-4 h-4" /> Website
                 </a>
               )}
@@ -138,7 +138,7 @@ export default function ProfileDrawer({ userId, onClose, messageLinkPrefix }: Pr
             {/* Message button */}
             <Link
               href={`${messageLinkPrefix}?thread=${userId}`}
-              className="flex items-center justify-center gap-2 w-full py-3 bg-[#00FF94] text-black font-semibold rounded-xl hover:brightness-90 transition-all text-sm"
+              className="flex items-center justify-center gap-2 w-full py-3 bg-[#ffffff] text-black font-semibold rounded-xl hover:brightness-90 transition-all text-sm"
             >
               <MessageSquare className="w-4 h-4" />
               Send Message

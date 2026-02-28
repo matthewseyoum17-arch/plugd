@@ -73,7 +73,7 @@ export default async function GigDetailPage({
   const userRole = user?.user_metadata?.role
 
   return (
-    <div className="min-h-screen bg-[#030305] text-white">
+    <div className="min-h-screen bg-[#09090b] text-white">
       {/* Nav */}
       <nav className="sticky top-0 z-40 border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -81,7 +81,7 @@ export default async function GigDetailPage({
             href="/"
             className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5"
           >
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#ffffff] to-[#a1a1aa] flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-black" />
             </div>
             Plugd
@@ -128,7 +128,7 @@ export default async function GigDetailPage({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-[#00FF94]/10 via-[#0088ff]/10 to-[#7722cc]/10 flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-br from-[#ffffff]/10 via-[#a1a1aa]/10 to-[#71717a]/10 flex items-center justify-center">
                   <div className="text-6xl font-black text-white/[0.06] select-none">
                     {listing.company_name?.slice(0, 3).toUpperCase()}
                   </div>
@@ -164,7 +164,7 @@ export default async function GigDetailPage({
               {listing.ideal_customer && (
                 <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <MapPin className="w-4 h-4 text-[#00FF94]" />
+                    <MapPin className="w-4 h-4 text-[#ffffff]" />
                     <span className="text-sm font-semibold text-white">
                       Ideal Customer
                     </span>
@@ -178,7 +178,7 @@ export default async function GigDetailPage({
               {listing.qualified_meeting_definition && (
                 <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0088ff]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#a1a1aa]" />
                     <span className="text-sm font-semibold text-white">
                       Qualified Meeting
                     </span>
@@ -193,7 +193,7 @@ export default async function GigDetailPage({
                 listing.commission_per_close > 0) && (
                 <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <DollarSign className="w-4 h-4 text-[#00FF94]" />
+                    <DollarSign className="w-4 h-4 text-[#ffffff]" />
                     <span className="text-sm font-semibold text-white">
                       Commission Rates
                     </span>
@@ -201,7 +201,7 @@ export default async function GigDetailPage({
                   <div className="space-y-1">
                     {listing.commission_per_appointment > 0 && (
                       <p className="text-sm text-gray-400">
-                        <span className="text-[#00FF94] font-semibold">
+                        <span className="text-[#ffffff] font-semibold">
                           {formatCents(listing.commission_per_appointment)}
                         </span>{' '}
                         per meeting
@@ -209,7 +209,7 @@ export default async function GigDetailPage({
                     )}
                     {listing.commission_per_close > 0 && (
                       <p className="text-sm text-gray-400">
-                        <span className="text-[#00FF94] font-semibold">
+                        <span className="text-[#ffffff] font-semibold">
                           {formatCents(listing.commission_per_close)}
                         </span>{' '}
                         per close
@@ -222,7 +222,7 @@ export default async function GigDetailPage({
               {listing.product_url && (
                 <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <ExternalLink className="w-4 h-4 text-[#7722cc]" />
+                    <ExternalLink className="w-4 h-4 text-[#71717a]" />
                     <span className="text-sm font-semibold text-white">
                       Product
                     </span>
@@ -231,7 +231,7 @@ export default async function GigDetailPage({
                     href={listing.product_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[#0088ff] hover:underline break-all"
+                    className="text-sm text-[#a1a1aa] hover:underline break-all"
                   >
                     {listing.product_url}
                   </a>
@@ -260,7 +260,7 @@ export default async function GigDetailPage({
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center">
                             <span className="text-[10px] font-bold text-white">
                               {getInitials(
                                 review.users?.full_name || 'Anonymous'
@@ -309,7 +309,7 @@ export default async function GigDetailPage({
             <div className="sticky top-24 space-y-6">
               <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 backdrop-blur-xl">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center">
                     <span className="text-sm font-bold text-white">
                       {getInitials(
                         listing.users?.full_name || listing.company_name || 'S'
@@ -360,9 +360,9 @@ export default async function GigDetailPage({
 
                 <div className="border-t border-white/[0.06] pt-4 space-y-3">
                   {/* Commission highlight */}
-                  <div className="bg-[#00FF94]/[0.06] border border-[#00FF94]/20 rounded-xl p-4 text-center">
+                  <div className="bg-[#ffffff]/[0.06] border border-[#ffffff]/20 rounded-xl p-4 text-center">
                     <p className="text-xs text-gray-400 mb-1">Earn up to</p>
-                    <p className="text-2xl font-bold text-[#00FF94]">
+                    <p className="text-2xl font-bold text-[#ffffff]">
                       {listing.commission_per_close > 0
                         ? formatCents(listing.commission_per_close)
                         : listing.commission_per_appointment > 0

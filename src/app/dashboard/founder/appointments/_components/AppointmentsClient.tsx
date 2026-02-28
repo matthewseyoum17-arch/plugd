@@ -97,7 +97,7 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
           {apt.appointment_type}
         </span>
       </td>
-      <td className="px-5 py-4 text-[#00FF94] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</td>
+      <td className="px-5 py-4 text-[#ffffff] text-sm font-medium">${(apt.commission_amount / 100).toFixed(2)}</td>
       <td className="px-5 py-4"><StatusBadge status={currentStatus} /></td>
       <td className="px-5 py-4 text-gray-500 text-xs">
         {new Date(apt.created_at).toLocaleDateString()}
@@ -111,7 +111,7 @@ function AppointmentRow({ apt }: { apt: Appointment }) {
             <button
               onClick={handleConfirm}
               disabled={loading}
-              className="bg-[#00FF94] text-black font-semibold rounded-md px-3 py-1.5 hover:brightness-90 text-xs disabled:opacity-50"
+              className="bg-[#ffffff] text-black font-semibold rounded-md px-3 py-1.5 hover:brightness-90 text-xs disabled:opacity-50"
             >
               Confirm
             </button>
@@ -186,7 +186,7 @@ export function AppointmentsClient({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-4">
           <p className="text-gray-400 text-xs uppercase">Wallet Balance</p>
-          <p className="text-2xl font-bold text-[#00FF94]">${(walletBalance / 100).toFixed(2)}</p>
+          <p className="text-2xl font-bold text-[#ffffff]">${(walletBalance / 100).toFixed(2)}</p>
         </div>
         {budgets.filter(b => b.max_appointments > 0).map((b) => (
           <div key={b.listing_title} className="bg-[#1a1a1a] border border-[#222] rounded-lg p-4">
@@ -197,7 +197,7 @@ export function AppointmentsClient({
             </p>
             <div className="w-full bg-[#333] rounded-full h-1.5 mt-2">
               <div
-                className={`h-1.5 rounded-full ${b.appointments_used >= b.max_appointments ? 'bg-red-500' : 'bg-[#00FF94]'}`}
+                className={`h-1.5 rounded-full ${b.appointments_used >= b.max_appointments ? 'bg-red-500' : 'bg-[#ffffff]'}`}
                 style={{ width: `${Math.min(100, (b.appointments_used / b.max_appointments) * 100)}%` }}
               />
             </div>
@@ -213,7 +213,7 @@ export function AppointmentsClient({
             onClick={() => setTab(t.key)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               tab === t.key
-                ? 'text-[#00FF94] border-[#00FF94]'
+                ? 'text-[#ffffff] border-[#ffffff]'
                 : 'text-gray-400 border-transparent hover:text-white'
             }`}
           >

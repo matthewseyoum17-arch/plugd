@@ -59,8 +59,8 @@ export default function SetterDashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#060606] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-[#00FF94]/30 border-t-[#00FF94] rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-zinc-700 border-t-white rounded-full animate-spin" />
       </div>
     )
   }
@@ -83,13 +83,13 @@ export default function SetterDashboardLayout({
     <>
       <div className="p-6 pb-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
             <Zap className="w-4 h-4 text-black" />
           </div>
           <span className="text-lg font-bold text-white tracking-tight">Plugd</span>
         </Link>
         <div className="mt-1 ml-[42px]">
-          <span className="text-[10px] font-medium text-[#0088ff]/60 uppercase tracking-widest">Setter</span>
+          <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest">Setter</span>
         </div>
       </div>
 
@@ -103,20 +103,20 @@ export default function SetterDashboardLayout({
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                 active
-                  ? 'bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20'
-                  : 'text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent'
+                  ? 'bg-white/10 text-white border border-white/20'
+                  : 'text-zinc-500 hover:text-white hover:bg-white/[0.03] border border-transparent'
               }`}
             >
-              <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-[#00FF94]' : ''}`} />
+              <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : ''}`} />
               {item.name}
             </Link>
           )
         })}
       </nav>
 
-      <div className="p-4 border-t border-[#141414]">
+      <div className="p-4 border-t border-zinc-800">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center flex-shrink-0">
             <span className="text-xs font-semibold text-white">{initials}</span>
           </div>
           <div className="min-w-0">
@@ -136,10 +136,10 @@ export default function SetterDashboardLayout({
   )
 
   return (
-    <div className="min-h-screen bg-[#060606] text-white">
-      <div className="lg:hidden sticky top-0 z-30 bg-[#0a0a0a] border-b border-[#141414] px-4 h-14 flex items-center justify-between">
+    <div className="min-h-screen bg-[#09090b] text-white">
+      <div className="lg:hidden sticky top-0 z-30 bg-[#0f0f11] border-b border-zinc-800 px-4 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
             <Zap className="w-3.5 h-3.5 text-black" />
           </div>
           <span className="text-base font-bold text-white">Plugd</span>
@@ -157,11 +157,11 @@ export default function SetterDashboardLayout({
       )}
 
       <div className="flex">
-        <aside className="hidden lg:flex w-64 bg-[#0a0a0a] min-h-screen fixed border-r border-[#141414] flex-col">
+        <aside className="hidden lg:flex w-64 bg-[#0f0f11] min-h-screen fixed border-r border-zinc-800 flex-col">
           {sidebarContent}
         </aside>
 
-        <aside className={`lg:hidden fixed top-14 left-0 bottom-0 w-72 bg-[#0a0a0a] border-r border-[#141414] flex flex-col z-50 transition-transform duration-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <aside className={`lg:hidden fixed top-14 left-0 bottom-0 w-72 bg-[#0f0f11] border-r border-zinc-800 flex flex-col z-50 transition-transform duration-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           {sidebarContent}
         </aside>
 

@@ -62,7 +62,7 @@ export default function SubmitAppointment() {
     });
   };
 
-  const inp = "w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white";
+  const inp = "w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#ffffff] text-white";
   const lbl = "block text-sm font-medium text-gray-300 mb-2";
 
   if (loading) return <div className="text-white py-20 text-center">Loading...</div>;
@@ -99,11 +99,11 @@ export default function SubmitAppointment() {
           <label className={lbl}>Appointment Type *</label>
           <div className="flex gap-6">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" value="appointment" checked={appointmentType==="appointment"} onChange={()=>setAppointmentType("appointment")} className="w-4 h-4 accent-[#00FF94]" />
+              <input type="radio" value="appointment" checked={appointmentType==="appointment"} onChange={()=>setAppointmentType("appointment")} className="w-4 h-4 accent-[#ffffff]" />
               <span className="text-white">Qualified Meeting (${((listing.commission_per_appointment||0)/100).toFixed(2)})</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" value="close" checked={appointmentType==="close"} onChange={()=>setAppointmentType("close")} className="w-4 h-4 accent-[#00FF94]" />
+              <input type="radio" value="close" checked={appointmentType==="close"} onChange={()=>setAppointmentType("close")} className="w-4 h-4 accent-[#ffffff]" />
               <span className="text-white">Closed Deal (${((listing.commission_per_close||0)/100).toFixed(2)})</span>
             </label>
           </div>
@@ -128,7 +128,7 @@ export default function SubmitAppointment() {
         </div>
         <div className="flex gap-4">
           <button type="submit" disabled={isPending}
-            className="px-6 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50">
+            className="px-6 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50">
             {isPending ? "Submitting..." : "Submit Appointment"}
           </button>
           <button type="button" onClick={()=>router.back()}

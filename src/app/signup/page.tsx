@@ -14,30 +14,30 @@ const BackgroundOrbs = () => (
     <motion.div
       animate={{
         scale: [1, 1.3, 1],
-        opacity: [0.08, 0.18, 0.08],
+        opacity: [0.03, 0.07, 0.03],
         x: [0, 60, 0],
         y: [0, -40, 0],
       }}
       transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-      className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#00FF94]/10 rounded-full blur-[120px]"
+      className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]"
     />
     <motion.div
       animate={{
         scale: [1, 1.4, 1],
-        opacity: [0.05, 0.12, 0.05],
+        opacity: [0.03, 0.06, 0.03],
         x: [0, -50, 0],
         y: [0, 50, 0],
       }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-[#0088ff]/10 rounded-full blur-[130px]"
+      className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-zinc-500/10 rounded-full blur-[130px]"
     />
     <motion.div
       animate={{
         scale: [1, 1.2, 1],
-        opacity: [0.04, 0.1, 0.04],
+        opacity: [0.02, 0.05, 0.02],
       }}
       transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#7722cc]/10 rounded-full blur-[100px]"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-zinc-600/10 rounded-full blur-[100px]"
     />
   </div>
 );
@@ -46,7 +46,7 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#030305] flex items-center justify-center">
+        <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
           <div className="text-gray-400">Loading...</div>
         </div>
       }
@@ -196,7 +196,7 @@ function SignupForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030305] flex flex-col items-center justify-center p-4 relative overflow-hidden selection:bg-[#00FF94]/30">
+    <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4 relative overflow-hidden selection:bg-white/20">
       <BackgroundOrbs />
 
       <div className="w-full max-w-md relative z-10 my-auto">
@@ -208,7 +208,7 @@ function SignupForm() {
           className="text-center mb-10"
         >
           <div className="inline-flex items-center justify-center p-3 bg-white/[0.03] border border-white/10 rounded-2xl mb-6 shadow-inner backdrop-blur-md">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
               <Zap className="w-4 h-4 text-black" />
             </div>
           </div>
@@ -255,12 +255,12 @@ function SignupForm() {
                     onClick={() => setRole(r)}
                     className={`relative p-4 rounded-xl border transition-all duration-300 text-left overflow-hidden group ${
                       role === r
-                        ? "border-[#00FF94]/40 bg-[#00FF94]/[0.06] shadow-[0_0_20px_rgba(0,255,148,0.08)]"
+                        ? "border-white/30 bg-white/[0.06] shadow-[0_0_20px_rgba(255,255,255,0.05)]"
                         : "border-white/[0.06] bg-black/30 hover:border-white/[0.12] hover:bg-white/[0.02]"
                     }`}
                   >
                     {role === r && (
-                      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#00FF94] shadow-[0_0_8px_rgba(0,255,148,0.6)]" />
+                      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
                     )}
                     <div
                       className={`text-sm font-semibold mb-1 ${
@@ -289,11 +289,11 @@ function SignupForm() {
                   onChange={(e) => setFirstName(e.target.value)}
                   required
                   placeholder="Jane"
-                  className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent text-sm"
+                  className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent text-sm"
                 />
                 <label
                   htmlFor="firstName"
-                  className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                  className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
                 >
                   First name
                 </label>
@@ -306,11 +306,11 @@ function SignupForm() {
                   onChange={(e) => setLastName(e.target.value)}
                   required
                   placeholder="Smith"
-                  className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent text-sm"
+                  className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent text-sm"
                 />
                 <label
                   htmlFor="lastName"
-                  className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                  className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
                 >
                   Last name
                 </label>
@@ -326,11 +326,11 @@ function SignupForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="jane@company.com"
-                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent text-sm"
+                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent text-sm"
               />
               <label
                 htmlFor="email"
-                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
               >
                 Email address
               </label>
@@ -346,11 +346,11 @@ function SignupForm() {
                 required
                 minLength={6}
                 placeholder="••••••••"
-                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent pr-12 text-sm"
+                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent pr-12 text-sm"
               />
               <label
                 htmlFor="password"
-                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
               >
                 Password
               </label>
@@ -384,11 +384,11 @@ function SignupForm() {
                       onChange={(e) => setCompanyName(e.target.value)}
                       required
                       placeholder="Acme AI"
-                      className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent text-sm"
+                      className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent text-sm"
                     />
                     <label
                       htmlFor="companyName"
-                      className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                      className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
                     >
                       Company name
                     </label>
@@ -404,7 +404,7 @@ function SignupForm() {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-[#00FF94] to-[#0088ff] hover:from-[#00ff94]/90 hover:to-[#0088ff]/90 text-black font-semibold rounded-xl transition-all shadow-[0_0_24px_rgba(0,255,148,0.25)] disabled:opacity-50 relative overflow-hidden group"
+              className="w-full py-3.5 px-4 bg-white hover:bg-zinc-200 text-black font-semibold rounded-xl transition-all shadow-[0_0_24px_rgba(255,255,255,0.1)] disabled:opacity-50 relative overflow-hidden group"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Creating account..." : "Create Account"}
@@ -421,7 +421,7 @@ function SignupForm() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-white hover:text-[#00FF94] font-medium transition-colors"
+              className="text-white hover:text-zinc-300 font-medium transition-colors"
             >
               Sign in
             </Link>
@@ -437,7 +437,7 @@ function SignupForm() {
         className="w-full max-w-5xl mt-20 mb-12 relative z-10 hidden md:block"
       >
         <div className="text-center mb-8">
-          <p className="text-xs font-semibold text-[#00FF94] tracking-[0.2em] uppercase mb-2">
+          <p className="text-xs font-semibold text-zinc-500 tracking-[0.2em] uppercase mb-2">
             Why Plugd
           </p>
           <h2 className="text-xl text-gray-400 font-light">
@@ -448,19 +448,19 @@ function SignupForm() {
         <div className="grid grid-cols-3 gap-6">
           {[
             {
-              icon: <Rocket className="w-5 h-5 text-[#00FF94]" />,
+              icon: <Rocket className="w-5 h-5 text-white" />,
               title: "Launch Fast",
               description:
                 "List your product in minutes and start receiving qualified meeting requests.",
             },
             {
-              icon: <TrendingUp className="w-5 h-5 text-[#0088ff]" />,
+              icon: <TrendingUp className="w-5 h-5 text-zinc-400" />,
               title: "Pay for Results",
               description:
                 "Commission-based payouts mean you only pay when meetings actually happen.",
             },
             {
-              icon: <Zap className="w-5 h-5 text-[#7722cc]" />,
+              icon: <Zap className="w-5 h-5 text-zinc-500" />,
               title: "Scale Revenue",
               description:
                 "Access a network of vetted setters who know how to book qualified demos.",

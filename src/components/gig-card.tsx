@@ -42,7 +42,7 @@ export function GigCard({ gig }: { gig: GigCardData }) {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#00FF94]/10 via-[#0088ff]/10 to-[#7722cc]/10 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-zinc-800/50 via-zinc-700/30 to-zinc-800/50 flex items-center justify-center">
               <div className="text-4xl font-black text-white/[0.06] select-none">
                 {gig.company_name.slice(0, 2).toUpperCase()}
               </div>
@@ -61,7 +61,7 @@ export function GigCard({ gig }: { gig: GigCardData }) {
         <div className="p-4">
           {/* Seller info */}
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center flex-shrink-0">
               <span className="text-[8px] font-bold text-white">
                 {gig.seller_name.slice(0, 1).toUpperCase()}
               </span>
@@ -72,7 +72,7 @@ export function GigCard({ gig }: { gig: GigCardData }) {
           </div>
 
           {/* Title */}
-          <h3 className="text-sm font-semibold text-white mb-2 line-clamp-2 leading-snug group-hover:text-[#00FF94] transition-colors">
+          <h3 className="text-sm font-semibold text-white mb-2 line-clamp-2 leading-snug group-hover:text-zinc-300 transition-colors">
             {gig.title}
           </h3>
 
@@ -108,7 +108,7 @@ export function GigCard({ gig }: { gig: GigCardData }) {
           {/* Divider + Price */}
           <div className="border-t border-white/[0.06] pt-3 flex items-center justify-between">
             <span className="text-xs text-gray-400">Commission</span>
-            <span className="text-sm font-bold text-[#00FF94]">
+            <span className="text-sm font-bold text-white">
               {commissionLabel}
             </span>
           </div>

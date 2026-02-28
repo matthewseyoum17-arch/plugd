@@ -104,7 +104,7 @@ export function BrowseClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by product, company, or target customer..."
-            className="w-full bg-[#111] border border-[#222] text-white rounded-xl pl-10 pr-4 py-3 focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 focus:outline-none text-sm placeholder:text-gray-600 transition-all"
+            className="w-full bg-[#111] border border-[#222] text-white rounded-xl pl-10 pr-4 py-3 focus:border-[#ffffff]/50 focus:ring-1 focus:ring-[#ffffff]/50 focus:outline-none text-sm placeholder:text-gray-600 transition-all"
           />
         </div>
         <div className="relative">
@@ -112,7 +112,7 @@ export function BrowseClient({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortKey)}
-            className="appearance-none bg-[#111] border border-[#222] text-gray-300 rounded-xl pl-10 pr-8 py-3 focus:border-[#00FF94]/50 focus:outline-none text-sm cursor-pointer"
+            className="appearance-none bg-[#111] border border-[#222] text-gray-300 rounded-xl pl-10 pr-8 py-3 focus:border-[#ffffff]/50 focus:outline-none text-sm cursor-pointer"
           >
             <option value="newest">Newest first</option>
             <option value="commission_high">Highest commission</option>
@@ -133,24 +133,24 @@ export function BrowseClient({
           return (
             <div
               key={listing.id}
-              className="group bg-[#0e0e0e] border border-[#1a1a1a] rounded-2xl overflow-hidden hover:border-[#00FF94]/30 transition-all duration-200 flex flex-col"
+              className="group bg-[#0e0e0e] border border-[#1a1a1a] rounded-2xl overflow-hidden hover:border-[#ffffff]/30 transition-all duration-200 flex flex-col"
             >
               {/* Card Header — colored gradient band */}
-              <div className="h-1.5 bg-gradient-to-r from-[#00FF94]/60 via-[#0088ff]/40 to-[#7722cc]/30" />
+              <div className="h-1.5 bg-gradient-to-r from-[#ffffff]/60 via-[#a1a1aa]/40 to-[#71717a]/30" />
 
               <div className="p-5 flex flex-col flex-1">
                 {/* Company & badges */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-8 h-8 rounded-lg bg-[#00FF94]/10 border border-[#00FF94]/20 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[#00FF94] text-xs font-bold">
+                    <div className="w-8 h-8 rounded-lg bg-[#ffffff]/10 border border-[#ffffff]/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-[#ffffff] text-xs font-bold">
                         {listing.company_name.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <span className="text-gray-400 text-sm truncate">{listing.company_name}</span>
                   </div>
                   {isApplied && (
-                    <span className="flex items-center gap-1 text-[#00FF94] text-xs font-medium flex-shrink-0">
+                    <span className="flex items-center gap-1 text-[#ffffff] text-xs font-medium flex-shrink-0">
                       <CheckCircle className="w-3.5 h-3.5" />
                       Applied
                     </span>
@@ -159,7 +159,7 @@ export function BrowseClient({
 
                 {/* Title */}
                 <h3
-                  className="text-white font-semibold text-base mb-2 line-clamp-2 cursor-pointer hover:text-[#00FF94] transition-colors"
+                  className="text-white font-semibold text-base mb-2 line-clamp-2 cursor-pointer hover:text-[#ffffff] transition-colors"
                   onClick={() => setDetailListing(listing)}
                 >
                   {listing.title}
@@ -172,17 +172,17 @@ export function BrowseClient({
 
                 {/* Commission badges */}
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00FF94]/[0.08] border border-[#00FF94]/20">
-                    <DollarSign className="w-3.5 h-3.5 text-[#00FF94]" />
-                    <span className="text-[#00FF94] text-sm font-semibold">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ffffff]/[0.08] border border-[#ffffff]/20">
+                    <DollarSign className="w-3.5 h-3.5 text-[#ffffff]" />
+                    <span className="text-[#ffffff] text-sm font-semibold">
                       {formatDollars(listing.commission_per_appointment)}
                     </span>
                     <span className="text-gray-500 text-xs">/appt</span>
                   </div>
                   {listing.commission_per_close > 0 && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0088ff]/[0.08] border border-[#0088ff]/20">
-                      <DollarSign className="w-3.5 h-3.5 text-[#0088ff]" />
-                      <span className="text-[#0088ff] text-sm font-semibold">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#a1a1aa]/[0.08] border border-[#a1a1aa]/20">
+                      <DollarSign className="w-3.5 h-3.5 text-[#a1a1aa]" />
+                      <span className="text-[#a1a1aa] text-sm font-semibold">
                         {formatDollars(listing.commission_per_close)}
                       </span>
                       <span className="text-gray-500 text-xs">/close</span>
@@ -202,7 +202,7 @@ export function BrowseClient({
                         href={listing.product_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 hover:text-[#00FF94] transition-colors"
+                        className="flex items-center gap-1 hover:text-[#ffffff] transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -221,7 +221,7 @@ export function BrowseClient({
                   ) : (
                     <button
                       onClick={() => openApplyModal(listing)}
-                      className="bg-[#00FF94] text-black font-semibold rounded-lg px-4 py-2 text-xs hover:brightness-90 transition-all"
+                      className="bg-[#ffffff] text-black font-semibold rounded-lg px-4 py-2 text-xs hover:brightness-90 transition-all"
                     >
                       Apply to Promote
                     </button>
@@ -234,7 +234,7 @@ export function BrowseClient({
         {filtered.length === 0 && (
           <div className="col-span-full text-center py-16">
             <div className="text-gray-600 mb-2">No listings match your search.</div>
-            <button onClick={() => setSearch('')} className="text-[#00FF94] text-sm hover:underline">
+            <button onClick={() => setSearch('')} className="text-[#ffffff] text-sm hover:underline">
               Clear search
             </button>
           </div>
@@ -249,7 +249,7 @@ export function BrowseClient({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Gradient header */}
-            <div className="h-2 bg-gradient-to-r from-[#00FF94] via-[#0088ff] to-[#7722cc]" />
+            <div className="h-2 bg-gradient-to-r from-[#ffffff] via-[#a1a1aa] to-[#71717a]" />
 
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
@@ -264,13 +264,13 @@ export function BrowseClient({
 
               {/* Commission cards */}
               <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-[#00FF94]/[0.06] border border-[#00FF94]/20 rounded-xl p-4">
+                <div className="bg-[#ffffff]/[0.06] border border-[#ffffff]/20 rounded-xl p-4">
                   <p className="text-gray-400 text-xs mb-1">Per Appointment</p>
-                  <p className="text-[#00FF94] text-2xl font-bold">{formatDollars(detailListing.commission_per_appointment)}</p>
+                  <p className="text-[#ffffff] text-2xl font-bold">{formatDollars(detailListing.commission_per_appointment)}</p>
                 </div>
-                <div className="bg-[#0088ff]/[0.06] border border-[#0088ff]/20 rounded-xl p-4">
+                <div className="bg-[#a1a1aa]/[0.06] border border-[#a1a1aa]/20 rounded-xl p-4">
                   <p className="text-gray-400 text-xs mb-1">Per Close</p>
-                  <p className="text-[#0088ff] text-2xl font-bold">{formatDollars(detailListing.commission_per_close)}</p>
+                  <p className="text-[#a1a1aa] text-2xl font-bold">{formatDollars(detailListing.commission_per_close)}</p>
                 </div>
               </div>
 
@@ -295,7 +295,7 @@ export function BrowseClient({
                     {detailListing.setter_count} active setter{detailListing.setter_count !== 1 ? 's' : ''}
                   </span>
                   {detailListing.product_url && (
-                    <a href={detailListing.product_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#00FF94] transition-colors">
+                    <a href={detailListing.product_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#ffffff] transition-colors">
                       <ExternalLink className="w-4 h-4" />
                       Visit product
                     </a>
@@ -306,14 +306,14 @@ export function BrowseClient({
               {/* CTA */}
               <div className="mt-8 pt-6 border-t border-[#1a1a1a]">
                 {appliedSet.has(detailListing.id) ? (
-                  <div className="flex items-center gap-2 text-[#00FF94] font-medium">
+                  <div className="flex items-center gap-2 text-[#ffffff] font-medium">
                     <CheckCircle className="w-5 h-5" />
                     You&apos;ve applied to this listing
                   </div>
                 ) : (
                   <button
                     onClick={() => openApplyModal(detailListing)}
-                    className="w-full bg-[#00FF94] text-black font-semibold rounded-xl px-6 py-3.5 hover:brightness-90 transition-all text-sm"
+                    className="w-full bg-[#ffffff] text-black font-semibold rounded-xl px-6 py-3.5 hover:brightness-90 transition-all text-sm"
                   >
                     Apply to Promote This Product
                   </button>
@@ -328,7 +328,7 @@ export function BrowseClient({
       {modalListing && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setModalListing(null)}>
           <div className="bg-[#111] border border-[#222] rounded-2xl w-full max-w-md overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="h-1 bg-gradient-to-r from-[#00FF94] to-[#0088ff]" />
+            <div className="h-1 bg-gradient-to-r from-[#ffffff] to-[#a1a1aa]" />
             <div className="p-6">
               <h3 className="text-lg font-bold text-white mb-1">Apply to Promote</h3>
               <p className="text-gray-500 text-sm mb-1">{modalListing.title}</p>
@@ -350,7 +350,7 @@ export function BrowseClient({
                 value={sampleEmail}
                 onChange={(e) => setSampleEmail(e.target.value)}
                 placeholder="Hi [Name],&#10;&#10;I noticed your company might benefit from..."
-                className="bg-[#0a0a0a] border border-[#222] text-white rounded-xl px-4 py-3 focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 focus:outline-none w-full h-40 mb-5 text-sm placeholder:text-gray-600 resize-none transition-all"
+                className="bg-[#0f0f11] border border-[#222] text-white rounded-xl px-4 py-3 focus:border-[#ffffff]/50 focus:ring-1 focus:ring-[#ffffff]/50 focus:outline-none w-full h-40 mb-5 text-sm placeholder:text-gray-600 resize-none transition-all"
                 required
               />
 
@@ -364,7 +364,7 @@ export function BrowseClient({
                 <button
                   onClick={handleApply}
                   disabled={submitting || !sampleEmail.trim()}
-                  className="flex-1 bg-[#00FF94] text-black font-semibold rounded-xl px-4 py-3 hover:brightness-90 text-sm disabled:opacity-50 transition-all"
+                  className="flex-1 bg-[#ffffff] text-black font-semibold rounded-xl px-4 py-3 hover:brightness-90 text-sm disabled:opacity-50 transition-all"
                 >
                   {submitting ? 'Submitting...' : 'Submit Application'}
                 </button>

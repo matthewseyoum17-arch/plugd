@@ -14,22 +14,22 @@ const BackgroundOrbs = () => (
     <motion.div
       animate={{
         scale: [1, 1.2, 1],
-        opacity: [0.1, 0.2, 0.1],
+        opacity: [0.04, 0.08, 0.04],
         x: [0, 50, 0],
         y: [0, -30, 0]
       }}
       transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-      className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#00FF94]/10 rounded-full blur-[100px]"
+      className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-white/10 rounded-full blur-[100px]"
     />
     <motion.div
       animate={{
         scale: [1, 1.5, 1],
-        opacity: [0.05, 0.15, 0.05],
+        opacity: [0.03, 0.07, 0.03],
         x: [0, -40, 0],
         y: [0, 60, 0]
       }}
       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-[#0088ff]/10 rounded-full blur-[120px]"
+      className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-zinc-500/10 rounded-full blur-[120px]"
     />
   </div>
 )
@@ -120,7 +120,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030305] flex flex-col items-center justify-center p-4 relative overflow-hidden selection:bg-[#00FF94]/30">
+    <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4 relative overflow-hidden selection:bg-white/20">
       <BackgroundOrbs />
 
       <div className="w-full max-w-md relative z-10 my-auto">
@@ -132,7 +132,7 @@ export default function LoginPage() {
           className="text-center mb-10"
         >
           <div className="inline-flex items-center justify-center p-3 bg-white/[0.03] border border-white/10 rounded-2xl mb-6 shadow-inner backdrop-blur-md">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF94] to-[#0088ff] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
               <Zap className="w-4 h-4 text-black" />
             </div>
           </div>
@@ -169,13 +169,13 @@ export default function LoginPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent text-sm"
+                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent text-sm"
                 required
                 placeholder="name@company.com"
               />
               <label
                 htmlFor="email"
-                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
               >
                 Email address
               </label>
@@ -188,13 +188,13 @@ export default function LoginPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white transition-all placeholder-transparent pr-12 text-sm"
+                className="peer w-full px-4 pt-6 pb-2 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-white transition-all placeholder-transparent pr-12 text-sm"
                 required
                 placeholder="••••••••"
               />
               <label
                 htmlFor="password"
-                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-[#00FF94]/70"
+                className="absolute left-4 top-2 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-zinc-400"
               >
                 Password
               </label>
@@ -213,7 +213,7 @@ export default function LoginPage() {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-[#00FF94] to-[#0088ff] hover:from-[#00ff94]/90 hover:to-[#0088ff]/90 text-black font-semibold rounded-xl transition-all shadow-[0_0_24px_rgba(0,255,148,0.25)] disabled:opacity-50 relative overflow-hidden group"
+              className="w-full py-3.5 px-4 bg-white hover:bg-zinc-200 text-black font-semibold rounded-xl transition-all shadow-[0_0_24px_rgba(255,255,255,0.1)] disabled:opacity-50 relative overflow-hidden group"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? 'Signing in...' : 'Sign In'}
@@ -225,7 +225,7 @@ export default function LoginPage() {
 
           <motion.p variants={itemVars} className="mt-8 text-center text-sm text-gray-500">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-white hover:text-[#00FF94] font-medium transition-colors">
+            <Link href="/signup" className="text-white hover:text-zinc-300 font-medium transition-colors">
               Create account
             </Link>
           </motion.p>
@@ -240,24 +240,24 @@ export default function LoginPage() {
         className="w-full max-w-5xl mt-20 mb-12 relative z-10 hidden md:block"
       >
         <div className="text-center mb-8">
-          <p className="text-xs font-semibold text-[#00FF94] tracking-[0.2em] uppercase mb-2">The Plugd Advantage</p>
+          <p className="text-xs font-semibold text-zinc-500 tracking-[0.2em] uppercase mb-2">The Plugd Advantage</p>
           <h2 className="text-xl text-gray-400 font-light">Everything you need to scale outbound.</h2>
         </div>
 
         <div className="grid grid-cols-3 gap-6">
           {[
             {
-              icon: <Target className="w-5 h-5 text-[#00FF94]" />,
+              icon: <Target className="w-5 h-5 text-white" />,
               title: "Qualified Meetings",
               description: "Only pay for verified appointments that meet your ideal customer profile."
             },
             {
-              icon: <TrendingUp className="w-5 h-5 text-[#0088ff]" />,
+              icon: <TrendingUp className="w-5 h-5 text-zinc-400" />,
               title: "Performance Tracking",
               description: "Real-time dashboards for meetings booked, show rates, and commission payouts."
             },
             {
-              icon: <Shield className="w-5 h-5 text-[#7722cc]" />,
+              icon: <Shield className="w-5 h-5 text-zinc-500" />,
               title: "Automated Payouts",
               description: "Transparent commission tracking with built-in dispute resolution."
             }

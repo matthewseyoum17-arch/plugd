@@ -27,7 +27,7 @@ function ApplicationCard({ app }: { app: Application }) {
 
   return (
     <>
-      <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 hover:border-[#00FF94] transition-all duration-150">
+      <div className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5 hover:border-[#ffffff] transition-all duration-150">
         <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-white font-medium">{app.listing_title}</p>
@@ -51,7 +51,7 @@ function ApplicationCard({ app }: { app: Application }) {
             </button>
             <Link
               href={`/dashboard/setter/messages?thread=${app.company_id}`}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#00FF94] border border-[#00FF94]/20 rounded-lg hover:bg-[#00FF94]/10 transition-all"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#ffffff] border border-[#ffffff]/20 rounded-lg hover:bg-[#ffffff]/10 transition-all"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               Message

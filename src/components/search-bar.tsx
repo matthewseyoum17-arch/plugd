@@ -45,7 +45,7 @@ export function SearchBar({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search listings..."
-            className="w-full pl-12 pr-10 py-3.5 bg-white/[0.03] border border-white/[0.08] rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white placeholder-gray-500 text-sm backdrop-blur-xl"
+            className="w-full pl-12 pr-10 py-3.5 bg-white/[0.03] border border-white/[0.08] rounded-xl focus:outline-none focus:border-[#ffffff]/50 focus:ring-1 focus:ring-[#ffffff]/50 text-white placeholder-gray-500 text-sm backdrop-blur-xl"
           />
           {search && (
             <button
@@ -61,7 +61,7 @@ export function SearchBar({
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-3.5 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-gray-300 focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 backdrop-blur-xl appearance-none cursor-pointer min-w-[180px]"
+          className="px-4 py-3.5 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-gray-300 focus:outline-none focus:border-[#ffffff]/50 focus:ring-1 focus:ring-[#ffffff]/50 backdrop-blur-xl appearance-none cursor-pointer min-w-[180px]"
         >
           <option value="" className="bg-[#111]">All Categories</option>
           {categories.map((cat) => (

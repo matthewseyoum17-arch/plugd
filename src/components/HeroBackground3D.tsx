@@ -66,28 +66,28 @@ export default function HeroBackground3D() {
     // Subtle wireframe overlay
     const wireGeo = new THREE.TorusKnotGeometry(1.42, 0.46, 100, 16, 2, 3)
     const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x00ff94,
+      color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.04,
+      opacity: 0.03,
     })
     const wireMesh = new THREE.Mesh(wireGeo, wireMat)
     scene.add(wireMesh)
 
-    // 3-Point Lighting
-    const keyLight = new THREE.DirectionalLight(0x0088ff, 3)
+    // 3-Point Lighting — silver/grey tones
+    const keyLight = new THREE.DirectionalLight(0xcccccc, 3)
     keyLight.position.set(3, 2, 4)
     scene.add(keyLight)
 
-    const fillLight = new THREE.PointLight(0x7722cc, 2.5, 15)
+    const fillLight = new THREE.PointLight(0x666666, 2.5, 15)
     fillLight.position.set(-4, -2, 2)
     scene.add(fillLight)
 
-    const rimLight = new THREE.DirectionalLight(0x00ff94, 1.2)
+    const rimLight = new THREE.DirectionalLight(0xffffff, 1.0)
     rimLight.position.set(0, 3, -5)
     scene.add(rimLight)
 
-    scene.add(new THREE.AmbientLight(0x111122, 0.4))
+    scene.add(new THREE.AmbientLight(0x111111, 0.5))
 
     // Particles
     const particleCount = 350
@@ -101,9 +101,9 @@ export default function HeroBackground3D() {
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     const particleMat = new THREE.PointsMaterial({
       size: 0.02,
-      color: 0x00ff94,
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.25,
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -189,8 +189,8 @@ export default function HeroBackground3D() {
       <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none" />
       <noscript>
         <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#0088ff]/10 blur-[120px] mix-blend-screen animate-pulse-slow" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#7722cc]/10 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-[120px] mix-blend-screen animate-pulse-slow" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-zinc-500/5 blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }} />
         </div>
       </noscript>
     </>

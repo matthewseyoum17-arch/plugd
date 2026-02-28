@@ -81,14 +81,14 @@ export function WalletPanel({ balance }: { balance: number }) {
             min="1"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 bg-[#111] border border-[#333] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className="w-full px-4 py-3 bg-[#111] border border-[#333] rounded-lg focus:outline-none focus:border-[#ffffff] text-white"
             placeholder="100.00"
           />
         </div>
         <button
           onClick={handleDeposit}
           disabled={loading || !amount}
-          className="px-5 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50"
+          className="px-5 py-3 bg-[#ffffff] text-black font-semibold rounded-lg hover:brightness-90 disabled:opacity-50"
         >
           {loading ? 'Processing...' : 'Deposit'}
         </button>
@@ -106,7 +106,7 @@ export function WalletPanel({ balance }: { balance: number }) {
           <button
             key={preset}
             onClick={() => setAmount(String(preset))}
-            className="px-3 py-1 text-xs bg-[#222] border border-[#333] text-gray-300 rounded-md hover:border-[#00FF94] hover:text-white transition-colors"
+            className="px-3 py-1 text-xs bg-[#222] border border-[#333] text-gray-300 rounded-md hover:border-[#ffffff] hover:text-white transition-colors"
           >
             ${preset}
           </button>

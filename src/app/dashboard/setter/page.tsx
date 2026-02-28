@@ -65,7 +65,7 @@ export default async function SetterOverview() {
             className="bg-[#1a1a1a] border border-[#222] rounded-lg p-5"
           >
             <p className="text-gray-400 text-sm">{stat.name}</p>
-            <p className="text-3xl font-bold mt-2 text-[#00FF94]">{stat.value}</p>
+            <p className="text-3xl font-bold mt-2 text-[#ffffff]">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -91,7 +91,7 @@ export default async function SetterOverview() {
                       ? apt.listings?.commission_per_close || 0
                       : apt.listings?.commission_per_appointment || 0
                     return commission > 0
-                      ? <p className="text-[#00FF94] text-sm font-medium mt-1">${(commission / 100).toFixed(2)}</p>
+                      ? <p className="text-[#ffffff] text-sm font-medium mt-1">${(commission / 100).toFixed(2)}</p>
                       : null
                   })()}
                 </div>

@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { updateSetterProfile } from "@/app/actions-profile";
 import { MapPin, Linkedin, Briefcase, Save, CheckCircle } from "lucide-react";
 
-const inp = "w-full px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#00FF94]/50 focus:ring-1 focus:ring-[#00FF94]/50 text-white text-sm placeholder:text-gray-600 transition-all";
+const inp = "w-full px-4 py-3 bg-[#111] border border-[#1a1a1a] rounded-xl focus:outline-none focus:border-[#ffffff]/50 focus:ring-1 focus:ring-[#ffffff]/50 text-white text-sm placeholder:text-gray-600 transition-all";
 const lbl = "block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2";
 
 export default function SetterProfilePage() {
@@ -89,7 +89,7 @@ export default function SetterProfilePage() {
 
       {/* Avatar + Name */}
       <div className="flex items-center gap-4 mb-8 p-5 bg-[#0e0e0e] border border-[#1a1a1a] rounded-2xl">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00FF94]/20 to-[#0088ff]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ffffff]/20 to-[#a1a1aa]/20 border border-white/10 flex items-center justify-center flex-shrink-0">
           <span className="text-xl font-bold text-white">{initials}</span>
         </div>
         <div>
@@ -171,7 +171,7 @@ export default function SetterProfilePage() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="mt-8 flex items-center gap-2 px-6 py-3 bg-[#00FF94] text-black font-semibold rounded-xl hover:brightness-90 disabled:opacity-50 transition-all text-sm"
+        className="mt-8 flex items-center gap-2 px-6 py-3 bg-[#ffffff] text-black font-semibold rounded-xl hover:brightness-90 disabled:opacity-50 transition-all text-sm"
       >
         <Save className="w-4 h-4" />
         {saving ? "Saving..." : "Save Profile"}
