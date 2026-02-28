@@ -1,11 +1,11 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { formatCents, timeAgo } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 
 export const dynamic = "force-dynamic";
 
 export default async function SellerOrdersPage() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient();
 
   const {

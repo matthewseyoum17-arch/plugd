@@ -1,10 +1,11 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { WalletPanel } from './_components/WalletPanel'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Earnings() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient()
 
   const { data: { user } } = await supabase.auth.getUser()

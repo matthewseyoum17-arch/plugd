@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { GigCard, GigCardSkeleton, type GigCardData } from "@/components/gig-card";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -25,33 +25,44 @@ function toGigCard(row: any): GigCardData {
 }
 
 async function CategoryGigs({ slug }: { slug: string }) {
-  const supabase = createClient();
+  if (!isSupabaseConfigured) notFound();
 
-  // Fetch the category
-  const { data: category, error } = await supabase
-    .from("categories")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  let category: { id: string; name: string; slug: string; description?: string } | null = null;
+  let allCategories: { id: string; name: string; slug: string }[] = [];
+  let results: GigCardData[] = [];
 
-  if (error || !category) notFound();
+  try {
+    const supabase = createClient();
 
-  // Fetch gigs in this category
-  const { data: gigs } = await supabase
-    .from("gigs")
-    .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-    .eq("status", "active")
-    .eq("category_id", category.id)
-    .order("orders_completed", { ascending: false })
-    .limit(40);
+    const { data: cat, error } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  // Fetch all categories for sidebar
-  const { data: allCategories } = await supabase
-    .from("categories")
-    .select("id, name, slug")
-    .order("display_order");
+    if (error || !cat) notFound();
+    category = cat;
 
-  const results: GigCardData[] = (gigs || []).map(toGigCard);
+    const { data: gigs } = await supabase
+      .from("gigs")
+      .select("*, users(id, username, avatar_url, seller_level), categories(name)")
+      .eq("status", "active")
+      .eq("category_id", category!.id)
+      .order("orders_completed", { ascending: false })
+      .limit(40);
+
+    const { data: cats } = await supabase
+      .from("categories")
+      .select("id, name, slug")
+      .order("display_order");
+    allCategories = cats || [];
+
+    results = (gigs || []).map(toGigCard);
+  } catch {
+    notFound();
+  }
+
+  if (!category) notFound();
 
   return (
     <>

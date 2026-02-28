@@ -1,10 +1,11 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { formatCents } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function SellerEarningsPage() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient();
 
   const {
@@ -21,8 +22,6 @@ export default async function SellerEarningsPage() {
 
   const totalEarnings =
     completedOrders?.reduce((sum, o) => sum + (o.price_cents || 0), 0) || 0;
-  const totalFees =
-    completedOrders?.reduce((sum, o) => sum + (o.service_fee_cents || 0), 0) || 0;
 
   // Pending earnings (active orders)
   const { data: pendingOrders } = await supabase

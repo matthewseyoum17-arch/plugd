@@ -1,49 +1,12 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { Search, ShieldCheck, ShoppingBag } from "lucide-react";
 import { GigCard, type GigCardData } from "@/components/gig-card";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
-  const supabase = createClient();
-
-  // Fetch categories
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("*")
-    .order("display_order");
-
-  // Fetch featured gigs
-  let { data: featuredRaw } = await supabase
-    .from("gigs")
-    .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-    .eq("status", "active")
-    .eq("is_featured", true)
-    .limit(8);
-
-  // If no featured gigs, fall back to top by orders_completed
-  if (!featuredRaw || featuredRaw.length === 0) {
-    const { data: fallback } = await supabase
-      .from("gigs")
-      .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-      .eq("status", "active")
-      .order("orders_completed", { ascending: false })
-      .limit(8);
-    featuredRaw = fallback;
-  }
-
-  // Fetch trending gigs (by average_rating desc)
-  const { data: trendingRaw } = await supabase
-    .from("gigs")
-    .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-    .eq("status", "active")
-    .order("average_rating", { ascending: false })
-    .limit(8);
-
-  // Map supabase rows to GigCardData
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function toGigCardData(row: any): GigCardData {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toGigCardData(row: any): GigCardData {
     return {
       id: row.id,
       title: row.title,
@@ -59,8 +22,51 @@ export default async function Home() {
     };
   }
 
-  const featuredGigs: GigCardData[] = (featuredRaw || []).map(toGigCardData);
-  const trendingGigs: GigCardData[] = (trendingRaw || []).map(toGigCardData);
+export default async function Home() {
+  let categories: { id: string; name: string; slug: string }[] = [];
+  let featuredGigs: GigCardData[] = [];
+  let trendingGigs: GigCardData[] = [];
+
+  if (isSupabaseConfigured) {
+    try {
+      const supabase = createClient();
+
+      const { data: cats } = await supabase
+        .from("categories")
+        .select("*")
+        .order("display_order");
+      categories = cats || [];
+
+      let { data: featuredRaw } = await supabase
+        .from("gigs")
+        .select("*, users(id, username, avatar_url, seller_level), categories(name)")
+        .eq("status", "active")
+        .eq("is_featured", true)
+        .limit(8);
+
+      if (!featuredRaw || featuredRaw.length === 0) {
+        const { data: fallback } = await supabase
+          .from("gigs")
+          .select("*, users(id, username, avatar_url, seller_level), categories(name)")
+          .eq("status", "active")
+          .order("orders_completed", { ascending: false })
+          .limit(8);
+        featuredRaw = fallback;
+      }
+
+      const { data: trendingRaw } = await supabase
+        .from("gigs")
+        .select("*, users(id, username, avatar_url, seller_level), categories(name)")
+        .eq("status", "active")
+        .order("average_rating", { ascending: false })
+        .limit(8);
+
+      featuredGigs = (featuredRaw || []).map(toGigCardData);
+      trendingGigs = (trendingRaw || []).map(toGigCardData);
+    } catch {
+      // Supabase not reachable — show empty state
+    }
+  }
 
   return (
     <div>

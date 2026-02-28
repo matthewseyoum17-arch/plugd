@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -9,7 +9,6 @@ import {
   Check,
 } from "lucide-react";
 import { formatCents, timeAgo, getInitials } from "@/lib/utils";
-import { Suspense } from "react";
 import { OrderButton } from "./order-button";
 
 export const dynamic = "force-dynamic";
@@ -28,37 +27,53 @@ export default async function GigDetailPage({
 }: {
   params: { id: string };
 }) {
-  const supabase = createClient();
+  if (!isSupabaseConfigured) notFound();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let gig: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let user: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let images: any[] | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let reviews: any[] | null = null;
 
-  // Fetch gig with seller + category
-  const { data: gig, error } = await supabase
-    .from("gigs")
-    .select(
-      "*, users(id, full_name, username, avatar_url, seller_level, created_at), categories(name, slug)"
-    )
-    .eq("id", params.id)
-    .single();
+  try {
+    const supabase = createClient();
 
-  if (error || !gig) notFound();
+    const { data: authData } = await supabase.auth.getUser();
+    user = authData?.user || null;
 
-  // Fetch gig images
-  const { data: images } = await supabase
-    .from("gig_images")
-    .select("*")
-    .eq("gig_id", gig.id)
-    .order("display_order");
+    const { data: gigData, error } = await supabase
+      .from("gigs")
+      .select(
+        "*, users(id, full_name, username, avatar_url, seller_level, created_at), categories(name, slug)"
+      )
+      .eq("id", params.id)
+      .single();
 
-  // Fetch reviews for this gig
-  const { data: reviews } = await supabase
-    .from("gig_reviews")
-    .select("*, users:reviewer_id(full_name, username, avatar_url)")
-    .eq("gig_id", gig.id)
-    .order("created_at", { ascending: false })
-    .limit(10);
+    if (error || !gigData) notFound();
+    gig = gigData;
+
+    const { data: imgData } = await supabase
+      .from("gig_images")
+      .select("*")
+      .eq("gig_id", gig.id)
+      .order("display_order");
+    images = imgData;
+
+    const { data: revData } = await supabase
+      .from("gig_reviews")
+      .select("*, users:reviewer_id(full_name, username, avatar_url)")
+      .eq("gig_id", gig.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    reviews = revData;
+  } catch {
+    notFound();
+  }
+
+  if (!gig) notFound();
 
   // Build pricing tiers
   const tiers: PricingTier[] = [];

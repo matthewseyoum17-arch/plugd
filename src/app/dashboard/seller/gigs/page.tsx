@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { formatCents, timeAgo } from "@/lib/utils";
@@ -7,6 +7,7 @@ import { Plus, Star } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function SellerGigsPage() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient();
 
   const {

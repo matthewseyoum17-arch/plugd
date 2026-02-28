@@ -1,9 +1,10 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default async function SetterOverview() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient()
 
   const { data: { user } } = await supabase.auth.getUser()

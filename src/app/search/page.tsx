@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { GigCard, GigCardSkeleton, type GigCardData } from "@/components/gig-card";
 import Link from "next/link";
 import { Search as SearchIcon } from "lucide-react";
@@ -28,47 +28,52 @@ function toGigCard(row: any): GigCardData {
 }
 
 async function SearchResults({ q, category, min, max }: { q?: string; category?: string; min?: string; max?: string }) {
-  const supabase = createClient();
+  let categories: { id: string; name: string; slug: string }[] = [];
+  let results: GigCardData[] = [];
 
-  // Fetch categories for filter sidebar
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id, name, slug")
-    .order("display_order");
+  if (isSupabaseConfigured) {
+    try {
+      const supabase = createClient();
 
-  // Build gigs query
-  let query = supabase
-    .from("gigs")
-    .select("*, users(id, username, avatar_url, seller_level), categories(name)")
-    .eq("status", "active");
+      const { data: cats } = await supabase
+        .from("categories")
+        .select("id, name, slug")
+        .order("display_order");
+      categories = cats || [];
 
-  // Text search
-  if (q) {
-    query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
-  }
+      let query = supabase
+        .from("gigs")
+        .select("*, users(id, username, avatar_url, seller_level), categories(name)")
+        .eq("status", "active");
 
-  // Category filter
-  if (category) {
-    const cat = categories?.find((c) => c.slug === category);
-    if (cat) {
-      query = query.eq("category_id", cat.id);
+      if (q) {
+        query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
+      }
+
+      if (category) {
+        const cat = categories.find((c) => c.slug === category);
+        if (cat) {
+          query = query.eq("category_id", cat.id);
+        }
+      }
+
+      if (min) {
+        const minCents = Math.round(parseFloat(min) * 100);
+        if (!isNaN(minCents)) query = query.gte("price_basic_cents", minCents);
+      }
+      if (max) {
+        const maxCents = Math.round(parseFloat(max) * 100);
+        if (!isNaN(maxCents)) query = query.lte("price_basic_cents", maxCents);
+      }
+
+      query = query.order("orders_completed", { ascending: false }).limit(40);
+
+      const { data: gigs } = await query;
+      results = (gigs || []).map(toGigCard);
+    } catch {
+      // Supabase not reachable
     }
   }
-
-  // Price range filters
-  if (min) {
-    const minCents = Math.round(parseFloat(min) * 100);
-    if (!isNaN(minCents)) query = query.gte("price_basic_cents", minCents);
-  }
-  if (max) {
-    const maxCents = Math.round(parseFloat(max) * 100);
-    if (!isNaN(maxCents)) query = query.lte("price_basic_cents", maxCents);
-  }
-
-  query = query.order("orders_completed", { ascending: false }).limit(40);
-
-  const { data: gigs } = await query;
-  const results: GigCardData[] = (gigs || []).map(toGigCard);
 
   return (
     <div className="flex flex-col lg:flex-row gap-8">

@@ -1,10 +1,11 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AppointmentsClient } from './_components/AppointmentsClient'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Appointments() {
+  if (!isSupabaseConfigured) redirect("/login");
   const supabase = createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
