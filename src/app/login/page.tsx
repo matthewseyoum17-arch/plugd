@@ -26,17 +26,17 @@ const itemVars: Variants = {
 
 const features = [
   {
-    icon: <Zap className="w-5 h-5 text-neon" />,
+    icon: <Zap className="w-5 h-5 text-white" />,
     title: "Elite Network",
     description: "Access vetted appointment setters with proven track records.",
   },
   {
-    icon: <Users className="w-5 h-5 text-cyan" />,
+    icon: <Users className="w-5 h-5 text-gray-400" />,
     title: "Instant Matching",
     description: "Get matched with the perfect setter for your product within hours.",
   },
   {
-    icon: <BarChart3 className="w-5 h-5 text-neon" />,
+    icon: <BarChart3 className="w-5 h-5 text-white" />,
     title: "Real-time Analytics",
     description: "Track appointments, conversions, and revenue in real-time.",
   },
@@ -94,13 +94,13 @@ export default function LoginPage() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center justify-center p-3 bg-neon/[0.08] border border-neon/20 rounded-2xl mb-6 backdrop-blur-md shadow-neon">
-            <Bot className="w-7 h-7 text-neon" />
+          <div className="inline-flex items-center justify-center p-3 bg-white/[0.06] border border-white/10 rounded-2xl mb-6 backdrop-blur-md">
+            <Bot className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight mb-2">
             Sign in to Plugd
           </h1>
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-500 text-sm">
             Where founders meet elite appointment setters.
           </p>
         </motion.div>
@@ -160,7 +160,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -171,13 +171,13 @@ export default function LoginPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-white/20 bg-black/40 text-neon focus:ring-neon/50 focus:ring-offset-0"
+                  className="w-4 h-4 rounded border-white/20 bg-black/40 text-white focus:ring-white/30 focus:ring-offset-0"
                 />
-                <span className="text-sm text-gray-400 select-none">Remember me</span>
+                <span className="text-sm text-gray-500 select-none">Remember me</span>
               </label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-neon/80 hover:text-neon transition-colors"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
               >
                 Forgot password?
               </Link>
@@ -202,7 +202,7 @@ export default function LoginPage() {
             {/* Divider */}
             <motion.div variants={itemVars} className="relative py-4 flex items-center">
               <div className="flex-grow border-t border-white/10" />
-              <span className="px-4 text-xs text-gray-500 uppercase tracking-wider">Or continue with</span>
+              <span className="px-4 text-xs text-gray-600 uppercase tracking-wider">Or continue with</span>
               <div className="flex-grow border-t border-white/10" />
             </motion.div>
 
@@ -226,7 +226,7 @@ export default function LoginPage() {
 
           <motion.p variants={itemVars} className="mt-8 text-center text-sm text-gray-500">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-white hover:text-neon font-medium transition-colors">
+            <Link href="/signup" className="text-white hover:text-gray-300 font-medium transition-colors">
               Request access
             </Link>
           </motion.p>
@@ -241,10 +241,10 @@ export default function LoginPage() {
         className="w-full max-w-5xl mt-24 mb-12 relative z-10 hidden md:block"
       >
         <div className="text-center mb-8">
-          <p className="text-xs font-semibold text-neon tracking-[0.2em] uppercase mb-2">
+          <p className="text-xs font-semibold text-gray-500 tracking-[0.2em] uppercase mb-2">
             The Plugd Advantage
           </p>
-          <h2 className="text-xl text-gray-400 font-light">
+          <h2 className="text-xl text-gray-500 font-light">
             Built for the next generation of AI sales.
           </h2>
         </div>
@@ -253,14 +253,14 @@ export default function LoginPage() {
           {features.map((feature, i) => (
             <motion.div
               key={i}
-              whileHover={{ y: -5, borderColor: "rgba(0,255,157,0.15)" }}
+              whileHover={{ y: -5, borderColor: "rgba(255,255,255,0.12)" }}
               className="p-6 rounded-2xl bg-glass-bg backdrop-blur-xl border border-glass-border transition-all"
             >
-              <div className="w-10 h-10 rounded-lg bg-neon/[0.08] flex items-center justify-center mb-4 border border-neon/20">
+              <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center justify-center mb-4 border border-white/10">
                 {feature.icon}
               </div>
               <h3 className="text-white font-medium mb-2">{feature.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{feature.description}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>

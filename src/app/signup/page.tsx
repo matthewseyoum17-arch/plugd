@@ -98,13 +98,13 @@ export default function SignupPage() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center justify-center p-3 bg-neon/[0.08] border border-neon/20 rounded-2xl mb-6 backdrop-blur-md shadow-neon">
-            <Bot className="w-7 h-7 text-neon" />
+          <div className="inline-flex items-center justify-center p-3 bg-white/[0.06] border border-white/10 rounded-2xl mb-6 backdrop-blur-md">
+            <Bot className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight mb-2">
             Join Plugd
           </h1>
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-500 text-sm">
             Start selling AI agents or close deals today.
           </p>
         </motion.div>
@@ -121,7 +121,7 @@ export default function SignupPage() {
             <div className="relative flex bg-black/30 rounded-xl p-1 border border-white/[0.06]">
               {/* Sliding indicator */}
               <motion.div
-                className="absolute top-1 bottom-1 rounded-lg bg-neon/[0.12] border border-neon/25 shadow-neon"
+                className="absolute top-1 bottom-1 rounded-lg bg-white/[0.08] border border-white/15"
                 animate={{ left: role === "founder" ? "4px" : "50%" }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 style={{ width: "calc(50% - 4px)" }}
@@ -130,7 +130,7 @@ export default function SignupPage() {
                 type="button"
                 onClick={() => setRole("founder")}
                 className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-colors ${
-                  role === "founder" ? "text-neon" : "text-gray-400 hover:text-white"
+                  role === "founder" ? "text-white" : "text-gray-500 hover:text-white"
                 }`}
               >
                 <Rocket className="w-4 h-4" />
@@ -140,14 +140,14 @@ export default function SignupPage() {
                 type="button"
                 onClick={() => setRole("setter")}
                 className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-colors ${
-                  role === "setter" ? "text-neon" : "text-gray-400 hover:text-white"
+                  role === "setter" ? "text-white" : "text-gray-500 hover:text-white"
                 }`}
               >
                 <Target className="w-4 h-4" />
                 Setter
               </button>
             </div>
-            <p className="text-xs text-gray-500 text-center mt-3">
+            <p className="text-xs text-gray-600 text-center mt-3">
               {role === "founder"
                 ? "List your AI agents and connect with elite setters"
                 : "Browse AI products and earn commissions on qualified meetings"}
@@ -227,7 +227,7 @@ export default function SignupPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -275,7 +275,7 @@ export default function SignupPage() {
 
           <motion.p variants={itemVars} className="mt-8 text-center text-sm text-gray-500">
             Already have an account?{" "}
-            <Link href="/login" className="text-white hover:text-neon font-medium transition-colors">
+            <Link href="/login" className="text-white hover:text-gray-300 font-medium transition-colors">
               Sign in
             </Link>
           </motion.p>

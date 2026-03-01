@@ -59,7 +59,7 @@ function SubmitForm({
   const selectedListing = selectedApp ? getListing(selectedApp) : null;
 
   const inputClass =
-    "w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-500 backdrop-blur-md transition-all font-medium text-sm";
+    "w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:border-white/25 focus:ring-1 focus:ring-white/15 text-white placeholder:text-gray-500 backdrop-blur-md transition-all font-medium text-sm";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,14 +134,14 @@ function SubmitForm({
 
         {selectedListing && (
           <div className="flex gap-3 text-sm">
-            <span className="px-3 py-1 bg-accent/10 text-accent rounded-full font-button font-semibold text-xs tracking-wider">
+            <span className="px-3 py-1 bg-white/10 text-gray-300 rounded-full font-button font-semibold text-xs tracking-wider">
               $
               {(
                 (selectedListing.commission_per_appointment || 0) / 100
               ).toFixed(2)}
               /appt
             </span>
-            <span className="px-3 py-1 bg-neon/10 text-neon rounded-full font-button font-semibold text-xs tracking-wider">
+            <span className="px-3 py-1 bg-white/10 text-white rounded-full font-button font-semibold text-xs tracking-wider">
               ${((selectedListing.commission_per_close || 0) / 100).toFixed(2)}
               /close
             </span>
@@ -211,10 +211,10 @@ function SubmitForm({
           <div className="flex gap-6">
             <label className="flex items-center gap-3 cursor-pointer group">
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "appointment" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "appointment" ? "border-white bg-white/15" : "border-gray-600 group-hover:border-gray-400"}`}
               >
                 {appointmentType === "appointment" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white" />
                 )}
               </div>
               <input
@@ -231,10 +231,10 @@ function SubmitForm({
             </label>
             <label className="flex items-center gap-3 cursor-pointer group">
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "close" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "close" ? "border-white bg-white/15" : "border-gray-600 group-hover:border-gray-400"}`}
               >
                 {appointmentType === "close" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white" />
                 )}
               </div>
               <input
@@ -280,10 +280,10 @@ function AppointmentList({ appointments }: { appointments: Appointment[] }) {
       {appointments.map((apt) => (
         <div
           key={apt.id}
-          className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-neon/25 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(0,255,157,0.08)] group"
+          className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-white/15 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(255,255,255,0.03)] group"
         >
           <div className="flex items-start justify-between mb-5">
-            <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-neon transition-colors pr-4">
+            <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-gray-300 transition-colors pr-4">
               {apt.listings?.title || "N/A"}
             </p>
             <StatusBadge status={apt.status} />
@@ -313,7 +313,7 @@ function AppointmentList({ appointments }: { appointments: Appointment[] }) {
             <span className="text-xs font-medium text-gray-500">
               {new Date(apt.submitted_at).toLocaleDateString()}
             </span>
-            <span className="text-neon font-semibold">
+            <span className="text-white font-semibold">
               $
               {((apt.appointment_type === "appointment"
                 ? apt.listings?.commission_per_appointment

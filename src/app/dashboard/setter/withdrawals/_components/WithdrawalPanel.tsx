@@ -45,7 +45,7 @@ export function WithdrawalPanel({
       {/* Request form */}
       <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-1">Available Balance</h2>
-        <p className="text-3xl font-bold text-neon mb-6">${availableBalance.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-white mb-6">${availableBalance.toFixed(2)}</p>
         <form onSubmit={handleWithdraw} className="flex gap-4 items-end">
           <div className="flex-1">
             <label className="block text-sm text-gray-400 mb-2">Amount ($)</label>
@@ -55,7 +55,7 @@ export function WithdrawalPanel({
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white focus:outline-none focus:border-neon/40"
+              className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white focus:outline-none focus:border-white/25"
               placeholder="Min $10.00"
               required
             />

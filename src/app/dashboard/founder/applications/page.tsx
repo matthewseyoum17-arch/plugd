@@ -28,7 +28,7 @@ export default async function Applications() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "approved":
-        return "bg-neon/10 text-neon border border-neon/20";
+        return "bg-white/10 text-white border border-white/20";
       case "pending":
         return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
       case "rejected":

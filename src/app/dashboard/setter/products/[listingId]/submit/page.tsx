@@ -16,7 +16,7 @@ interface Listing {
 }
 
 const inputClass =
-  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-600 transition-all";
+  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-white/25 focus:ring-1 focus:ring-white/15 text-white placeholder:text-gray-600 transition-all";
 
 export default function SubmitAppointment() {
   const [listing, setListing] = useState<Listing | null>(null);
@@ -119,7 +119,7 @@ export default function SubmitAppointment() {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 rounded-full border-t-2 border-neon animate-spin mb-4" />
+          <div className="w-12 h-12 rounded-full border-t-2 border-white animate-spin mb-4" />
           <span className="text-gray-400">Loading...</span>
         </div>
       </div>
@@ -199,10 +199,10 @@ export default function SubmitAppointment() {
           <div className="flex gap-6">
             <label className="flex items-center gap-3 cursor-pointer group">
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "appointment" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "appointment" ? "border-white bg-white/15" : "border-gray-600 group-hover:border-gray-400"}`}
               >
                 {appointmentType === "appointment" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white" />
                 )}
               </div>
               <input
@@ -220,10 +220,10 @@ export default function SubmitAppointment() {
             </label>
             <label className="flex items-center gap-3 cursor-pointer group">
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "close" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "close" ? "border-white bg-white/15" : "border-gray-600 group-hover:border-gray-400"}`}
               >
                 {appointmentType === "close" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white" />
                 )}
               </div>
               <input

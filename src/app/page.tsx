@@ -50,10 +50,10 @@ const Navbar = () => (
     <div className="flex items-center justify-between glass backdrop-blur-xl rounded-full px-6 py-3 shadow-glass-lg">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2.5 group">
-        <div className="w-8 h-8 rounded-full bg-neon/10 border border-neon/20 flex items-center justify-center group-hover:bg-neon/20 transition-all shadow-neon">
-          <Bot className="w-4 h-4 text-neon" />
+        <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-white/15 flex items-center justify-center group-hover:bg-white/[0.12] transition-all">
+          <Bot className="w-4 h-4 text-white" />
         </div>
-        <span className="font-bold text-lg tracking-tight text-white group-hover:text-neon transition-colors">
+        <span className="font-bold text-lg tracking-tight text-white">
           Plugd
         </span>
       </Link>
@@ -64,7 +64,7 @@ const Navbar = () => (
           <Link
             key={item}
             href={`#${item.toLowerCase().replace(/ /g, "-")}`}
-            className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+            className="text-sm font-medium text-gray-500 hover:text-white transition-colors"
           >
             {item}
           </Link>
@@ -75,7 +75,7 @@ const Navbar = () => (
       <div className="flex items-center gap-4">
         <Link
           href="/login"
-          className="hidden md:block text-sm font-medium text-gray-400 hover:text-white transition-colors"
+          className="hidden md:block text-sm font-medium text-gray-500 hover:text-white transition-colors"
         >
           Sign In
         </Link>
@@ -97,11 +97,11 @@ const Navbar = () => (
 const Hero = () => (
   <section className="relative min-h-screen flex flex-col items-center justify-center pt-28 pb-32 overflow-hidden">
     {/* Background Orbs */}
-    <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-neon/10 rounded-full blur-[140px] pointer-events-none animate-breathe-slow" />
-    <div className="absolute top-[50%] right-[20%] -translate-y-1/2 w-[500px] h-[500px] bg-cyan/15 rounded-full blur-[140px] pointer-events-none animate-breathe" />
+    <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-white/[0.03] rounded-full blur-[140px] pointer-events-none animate-breathe-slow" />
+    <div className="absolute top-[50%] right-[20%] -translate-y-1/2 w-[500px] h-[500px] bg-zinc-500/[0.05] rounded-full blur-[140px] pointer-events-none animate-breathe" />
 
     {/* Subtle Grid Lines */}
-    <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+    <div className="absolute inset-0 opacity-[0.025] pointer-events-none">
       <div className="w-full h-full" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)", backgroundSize: "80px 80px" }} />
     </div>
 
@@ -113,23 +113,23 @@ const Hero = () => (
       className="absolute top-[35%] left-[8%] lg:left-[12%] glass rounded-2xl p-5 shadow-glass animate-float hidden lg:block"
     >
       <div className="flex items-center gap-3">
-        <div className="w-2.5 h-2.5 rounded-full bg-neon animate-pulse shadow-[0_0_12px_rgba(0,255,157,0.6)]" />
-        <span className="font-mono text-xs font-semibold text-neon tracking-wider">
+        <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
+        <span className="font-mono text-xs font-semibold text-gray-400 tracking-wider">
           PLUGD MATCHER v2.0
         </span>
       </div>
       <div className="mt-4 space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div className="h-1.5 w-20 bg-white/15 rounded-full" />
-          <div className="h-1.5 w-12 bg-neon/40 rounded-full" />
+          <div className="h-1.5 w-12 bg-white/25 rounded-full" />
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="h-1.5 w-24 bg-white/15 rounded-full" />
-          <div className="h-1.5 w-8 bg-cyan/40 rounded-full" />
+          <div className="h-1.5 w-8 bg-zinc-400/30 rounded-full" />
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="h-1.5 w-16 bg-white/15 rounded-full" />
-          <div className="h-1.5 w-14 bg-neon/30 rounded-full" />
+          <div className="h-1.5 w-14 bg-white/20 rounded-full" />
         </div>
       </div>
     </motion.div>
@@ -143,13 +143,13 @@ const Hero = () => (
       style={{ animationDelay: "3s" }}
     >
       <div className="flex items-center gap-2 mb-3">
-        <CheckCircle2 className="w-4 h-4 text-neon" />
+        <CheckCircle2 className="w-4 h-4 text-white" />
         <span className="font-mono text-xs font-medium text-gray-400">
           MEETING BOOKED
         </span>
       </div>
       <div className="text-2xl font-bold text-white">$8,400</div>
-      <div className="text-xs text-neon/80 font-medium mt-1">
+      <div className="text-xs text-gray-400 font-medium mt-1">
         ARR value qualified
       </div>
     </motion.div>
@@ -164,10 +164,10 @@ const Hero = () => (
       {/* Badge */}
       <motion.div
         variants={fadeUp}
-        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-neon/[0.08] border border-neon/20 mb-8 shadow-neon backdrop-blur-md"
+        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.05] border border-white/10 mb-8 backdrop-blur-md"
       >
-        <Sparkles className="w-4 h-4 text-neon" />
-        <span className="text-xs font-bold text-neon tracking-[0.15em] uppercase">
+        <Sparkles className="w-4 h-4 text-white" />
+        <span className="text-xs font-bold text-gray-300 tracking-[0.15em] uppercase">
           The #1 AI Agent Marketplace
         </span>
       </motion.div>
@@ -185,7 +185,7 @@ const Hero = () => (
       {/* Subtext */}
       <motion.p
         variants={fadeUp}
-        className="text-lg md:text-xl text-gray-400 max-w-2xl mb-12 font-medium leading-relaxed"
+        className="text-lg md:text-xl text-gray-500 max-w-2xl mb-12 font-medium leading-relaxed"
       >
         Connect with elite appointment setters who sell your AI agents on
         commission. Zero retainers. Pay only for qualified meetings.
@@ -227,7 +227,7 @@ const TrustedBy = () => (
     <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
     <div className="max-w-7xl mx-auto px-4 text-center mb-8">
-      <p className="font-mono text-xs font-semibold text-gray-500 uppercase tracking-[0.2em]">
+      <p className="font-mono text-xs font-semibold text-gray-600 uppercase tracking-[0.2em]">
         Trusted by founders building with
       </p>
     </div>
@@ -238,7 +238,7 @@ const TrustedBy = () => (
           {trustedNames.map((name) => (
             <span
               key={`${set}-${name}`}
-              className="text-2xl font-bold tracking-tight text-white/40 hover:text-white/80 transition-colors whitespace-nowrap select-none"
+              className="text-2xl font-bold tracking-tight text-white/20 hover:text-white/50 transition-colors whitespace-nowrap select-none"
             >
               {name}
             </span>
@@ -275,7 +275,7 @@ const steps = [
 
 const HowItWorks = () => (
   <section id="how-it-works" className="py-32 px-4 max-w-7xl mx-auto relative">
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon/5 rounded-full blur-[160px] pointer-events-none" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.02] rounded-full blur-[160px] pointer-events-none" />
 
     <motion.div
       initial="hidden"
@@ -288,7 +288,7 @@ const HowItWorks = () => (
         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
           How <span className="text-gradient-neon">Plugd</span> Works
         </h2>
-        <p className="text-gray-400 text-lg font-medium max-w-xl mx-auto">
+        <p className="text-gray-500 text-lg font-medium max-w-xl mx-auto">
           Three simple steps from listing to qualified meeting.
         </p>
       </motion.div>
@@ -297,14 +297,14 @@ const HowItWorks = () => (
         {steps.map((step) => (
           <motion.div key={step.num} variants={fadeUp}>
             <GlassCard className="p-10 h-full">
-              <span className="font-mono text-sm font-bold text-neon mb-6 block">
+              <span className="font-mono text-sm font-bold text-gray-500 mb-6 block">
                 {step.num}
               </span>
-              <div className="w-12 h-12 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center mb-6 text-neon shadow-neon">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center mb-6 text-white">
                 {step.icon}
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">{step.title}</h3>
-              <p className="text-gray-400 leading-relaxed">{step.desc}</p>
+              <p className="text-gray-500 leading-relaxed">{step.desc}</p>
             </GlassCard>
           </motion.div>
         ))}
@@ -323,7 +323,6 @@ const features = [
     desc: "Our proprietary PLUGD Matcher analyzes your product mechanics and instantly pairs you with setters who have proven domain expertise.",
     span: "md:col-span-2",
     large: true,
-    color: "neon" as const,
   },
   {
     icon: <Shield className="w-6 h-6" />,
@@ -331,7 +330,6 @@ const features = [
     desc: "Top 3% acceptance rate. We thoroughly vet every setter for track record, communication skills, and professionalism.",
     span: "",
     large: false,
-    color: "cyan" as const,
   },
   {
     icon: <CheckCircle2 className="w-6 h-6" />,
@@ -339,7 +337,6 @@ const features = [
     desc: "Zero retainers. Zero setup fees. You only pay commission when a qualified meeting is booked on your calendar.",
     span: "",
     large: false,
-    color: "neon" as const,
   },
   {
     icon: <Activity className="w-6 h-6" />,
@@ -347,13 +344,12 @@ const features = [
     desc: "Track pipeline health, meeting conversions, and commission payouts in real-time with full transparency across the network.",
     span: "md:col-span-2",
     large: true,
-    color: "cyan" as const,
   },
 ];
 
 const Features = () => (
   <section id="for-founders" className="py-32 px-4 max-w-7xl mx-auto relative">
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-neon/[0.03] blur-[120px] pointer-events-none" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/[0.01] blur-[120px] pointer-events-none" />
 
     <motion.div
       initial="hidden"
@@ -366,111 +362,98 @@ const Features = () => (
         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-gradient-white">
           Engineered for Scale
         </h2>
-        <p className="text-gray-400 text-lg font-medium">
+        <p className="text-gray-500 text-lg font-medium">
           Everything you need to fill your pipeline with highly qualified meetings.
         </p>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {features.map((f, i) => {
-          const isNeon = f.color === "neon";
+        {features.map((f, i) => (
+          <motion.div
+            key={i}
+            variants={fadeUp}
+            className={cn(
+              f.span,
+              "group relative bg-glass-bg backdrop-blur-2xl border border-glass-border rounded-[2rem] p-10 overflow-hidden",
+              "transition-all duration-300",
+              "hover:border-white/15 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)]",
+              "hover:-translate-y-1"
+            )}
+          >
+            {/* Large background icon for wide cards */}
+            {f.large && (
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 group-hover:scale-110">
+                {f.title === "Live Dashboard" ? (
+                  <Activity className="w-48 h-48 text-white" />
+                ) : (
+                  <Bot className="w-48 h-48 text-white" />
+                )}
+              </div>
+            )}
 
-          return (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              className={cn(
-                f.span,
-                "group relative bg-glass-bg backdrop-blur-2xl border border-glass-border rounded-[2rem] p-10 overflow-hidden",
-                "transition-all duration-300",
-                isNeon
-                  ? "hover:border-neon/25 hover:shadow-[0_0_40px_rgba(0,255,157,0.08)]"
-                  : "hover:border-cyan/25 hover:shadow-[0_0_40px_rgba(6,182,212,0.08)]",
-                "hover:-translate-y-1"
-              )}
-            >
-              {/* Large background icon for wide cards */}
-              {f.large && (
-                <div className="absolute top-0 right-0 p-8 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-700 group-hover:scale-110">
-                  {isNeon ? (
-                    <Bot className="w-48 h-48 text-neon" />
-                  ) : (
-                    <Activity className="w-48 h-48 text-cyan" />
-                  )}
-                </div>
-              )}
-
-              {/* Dashboard Preview for Live Dashboard card */}
-              {f.title === "Live Dashboard" && (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-r from-glass-bg via-transparent to-transparent z-[1]" />
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2/3 h-4/5 border-y border-l border-white/10 rounded-l-2xl bg-background/80 backdrop-blur-xl p-6 opacity-40 group-hover:opacity-70 transition-all duration-500 group-hover:translate-x-[-10px] shadow-[-20px_0_40px_rgba(0,0,0,0.5)]">
-                    <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/5">
-                      <div className="flex gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-                      </div>
-                      <div className="h-3 w-20 bg-white/10 rounded-full" />
+            {/* Dashboard Preview for Live Dashboard card */}
+            {f.title === "Live Dashboard" && (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-glass-bg via-transparent to-transparent z-[1]" />
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2/3 h-4/5 border-y border-l border-white/10 rounded-l-2xl bg-background/80 backdrop-blur-xl p-6 opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:translate-x-[-10px] shadow-[-20px_0_40px_rgba(0,0,0,0.5)]">
+                  <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/5">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-neon/15" />
-                        <div className="flex-1 space-y-1.5">
-                          <div className="h-2.5 w-1/3 bg-white/15 rounded" />
-                          <div className="h-2 w-1/4 bg-white/10 rounded" />
-                        </div>
-                        <div className="h-5 w-14 bg-neon/15 rounded-full" />
+                    <div className="h-3 w-20 bg-white/10 rounded-full" />
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/10" />
+                      <div className="flex-1 space-y-1.5">
+                        <div className="h-2.5 w-1/3 bg-white/15 rounded" />
+                        <div className="h-2 w-1/4 bg-white/10 rounded" />
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-cyan/15" />
-                        <div className="flex-1 space-y-1.5">
-                          <div className="h-2.5 w-2/5 bg-white/15 rounded" />
-                          <div className="h-2 w-1/3 bg-white/10 rounded" />
-                        </div>
-                        <div className="h-5 w-14 bg-cyan/15 rounded-full" />
+                      <div className="h-5 w-14 bg-white/10 rounded-full" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.06]" />
+                      <div className="flex-1 space-y-1.5">
+                        <div className="h-2.5 w-2/5 bg-white/15 rounded" />
+                        <div className="h-2 w-1/3 bg-white/10 rounded" />
                       </div>
+                      <div className="h-5 w-14 bg-white/[0.06] rounded-full" />
                     </div>
                   </div>
-                </>
-              )}
+                </div>
+              </>
+            )}
 
-              <div
+            <div
+              className={cn(
+                "relative z-10 flex flex-col justify-end",
+                f.large ? "min-h-[300px]" : "min-h-[280px]"
+              )}
+            >
+              <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center mb-6 text-white">
+                {f.icon}
+              </div>
+              <h3
                 className={cn(
-                  "relative z-10 flex flex-col justify-end",
-                  f.large ? "min-h-[300px]" : "min-h-[280px]"
+                  "font-bold mb-3",
+                  f.large ? "text-3xl mb-4" : "text-2xl"
                 )}
               >
-                <div
-                  className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center mb-6",
-                    isNeon
-                      ? "bg-neon/10 border border-neon/20 text-neon shadow-neon"
-                      : "bg-cyan/10 border border-cyan/20 text-cyan shadow-cyan"
-                  )}
-                >
-                  {f.icon}
-                </div>
-                <h3
-                  className={cn(
-                    "font-bold mb-3",
-                    f.large ? "text-3xl mb-4" : "text-2xl"
-                  )}
-                >
-                  {f.title}
-                </h3>
-                <p
-                  className={cn(
-                    "text-gray-400 leading-relaxed",
-                    f.large ? "max-w-md text-lg" : ""
-                  )}
-                >
-                  {f.desc}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
+                {f.title}
+              </h3>
+              <p
+                className={cn(
+                  "text-gray-500 leading-relaxed",
+                  f.large ? "max-w-md text-lg" : ""
+                )}
+              >
+                {f.desc}
+              </p>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </motion.div>
   </section>
@@ -480,22 +463,22 @@ const Features = () => (
    LIVE PULSE
    ═══════════════════════════════════════════════════ */
 const pulseEntries = [
-  { tag: "MATCH", color: "text-neon", text: "SaaS Founder <> Enterprise Setter (San Francisco)" },
-  { tag: "BOOKED", color: "text-cyan", text: "$12k ARR Meeting Scheduled via HubSpot" },
-  { tag: "SYSTEM", color: "text-gray-400", text: "PLUGD Matcher v2.0 analyzed 1,240 profiles" },
-  { tag: "MATCH", color: "text-neon", text: "AI Agency <> B2B Closer (London)" },
-  { tag: "PAYOUT", color: "text-neon", text: "Commission cleared — $1,850 to Setter Wallet" },
-  { tag: "BOOKED", color: "text-cyan", text: "$5k Retainer Meeting Scheduled via Google Calendar" },
-  { tag: "MATCH", color: "text-neon", text: "Fintech Startup <> Outbound Specialist (NYC)" },
-  { tag: "SYSTEM", color: "text-gray-400", text: "Network uptime: 99.97% — 0 disputes open" },
-  { tag: "PAYOUT", color: "text-neon", text: "Commission cleared — $2,400 to Setter Wallet" },
-  { tag: "BOOKED", color: "text-cyan", text: "$28k ARR Enterprise Demo Confirmed" },
+  { tag: "MATCH", color: "text-white", text: "SaaS Founder <> Enterprise Setter (San Francisco)" },
+  { tag: "BOOKED", color: "text-gray-400", text: "$12k ARR Meeting Scheduled via HubSpot" },
+  { tag: "SYSTEM", color: "text-gray-600", text: "PLUGD Matcher v2.0 analyzed 1,240 profiles" },
+  { tag: "MATCH", color: "text-white", text: "AI Agency <> B2B Closer (London)" },
+  { tag: "PAYOUT", color: "text-white", text: "Commission cleared — $1,850 to Setter Wallet" },
+  { tag: "BOOKED", color: "text-gray-400", text: "$5k Retainer Meeting Scheduled via Google Calendar" },
+  { tag: "MATCH", color: "text-white", text: "Fintech Startup <> Outbound Specialist (NYC)" },
+  { tag: "SYSTEM", color: "text-gray-600", text: "Network uptime: 99.97% — 0 disputes open" },
+  { tag: "PAYOUT", color: "text-white", text: "Commission cleared — $2,400 to Setter Wallet" },
+  { tag: "BOOKED", color: "text-gray-400", text: "$28k ARR Enterprise Demo Confirmed" },
 ];
 
 const LivePulse = () => (
   <section className="py-24 bg-background border-y border-glass-border relative overflow-hidden">
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-neon/40 to-transparent shadow-[0_0_10px_rgba(0,255,157,0.3)]" />
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-neon/[0.03] blur-[100px] pointer-events-none" />
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/[0.015] blur-[100px] pointer-events-none" />
 
     <motion.div
       initial="hidden"
@@ -505,16 +488,16 @@ const LivePulse = () => (
       className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-16 relative z-10"
     >
       <motion.div variants={fadeUp} className="md:w-1/3">
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-neon/[0.08] border border-neon/20 mb-6">
-          <Activity className="w-5 h-5 text-neon animate-pulse" />
-          <span className="text-sm font-bold text-neon tracking-widest uppercase">
+        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 mb-6">
+          <Activity className="w-5 h-5 text-white animate-pulse" />
+          <span className="text-sm font-bold text-gray-300 tracking-widest uppercase">
             Live Pulse
           </span>
         </div>
         <h3 className="text-3xl font-extrabold mb-4 tracking-tight text-white">
           Marketplace Activity
         </h3>
-        <p className="text-gray-400 font-medium leading-relaxed">
+        <p className="text-gray-500 font-medium leading-relaxed">
           Real-time kernel log of matches, bookings, and payouts across the Plugd
           network.
         </p>
@@ -534,7 +517,7 @@ const LivePulse = () => (
                 <span className={cn("font-bold shrink-0", entry.color)}>
                   [{entry.tag}]
                 </span>
-                <span className={entry.tag === "BOOKED" ? "text-white" : "text-gray-300"}>
+                <span className={entry.tag === "BOOKED" ? "text-white" : "text-gray-400"}>
                   {entry.text}
                 </span>
               </div>
@@ -556,7 +539,6 @@ const testimonials = [
     quote:
       "Plugd connected us with a setter who understood our highly technical product immediately. 15 qualified enterprise meetings in month one.",
     metric: "+320% ROI",
-    metricColor: "neon" as const,
   },
   {
     name: "Marcus T.",
@@ -564,13 +546,12 @@ const testimonials = [
     quote:
       "The zero-retainer model completely de-risked our outbound motion. We only pay when the meeting happens. It's a no-brainer.",
     metric: "48hrs to first demo",
-    metricColor: "cyan" as const,
   },
 ];
 
 const Testimonials = () => (
   <section className="py-24 bg-surface/30 border-y border-glass-border relative overflow-hidden">
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan/5 blur-[120px] pointer-events-none" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-zinc-500/[0.02] blur-[120px] pointer-events-none" />
 
     <motion.div
       initial="hidden"
@@ -580,57 +561,40 @@ const Testimonials = () => (
       className="max-w-7xl mx-auto px-4 relative z-10"
     >
       <motion.div variants={fadeUp} className="flex items-center gap-3 mb-12">
-        <Star className="w-6 h-6 text-neon fill-neon" />
+        <Star className="w-6 h-6 text-white fill-white" />
         <h2 className="text-3xl font-extrabold tracking-tight">
           Founder Success
         </h2>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {testimonials.map((t, i) => {
-          const isNeon = t.metricColor === "neon";
-          return (
-            <motion.div key={i} variants={fadeUp}>
-              <GlassCard
-                className={cn(
-                  "p-10 relative group border-white/10",
-                  isNeon
-                    ? "hover:border-neon/20"
-                    : "hover:border-cyan/20"
-                )}
-              >
-                <Quote className="absolute top-8 right-8 w-12 h-12 text-white/[0.03] group-hover:text-neon/10 transition-colors" />
+        {testimonials.map((t, i) => (
+          <motion.div key={i} variants={fadeUp}>
+            <GlassCard className="p-10 relative group border-white/10 hover:border-white/15">
+              <Quote className="absolute top-8 right-8 w-12 h-12 text-white/[0.03] group-hover:text-white/[0.06] transition-colors" />
 
-                <div className="mb-8">
-                  <span
-                    className={cn(
-                      "inline-block px-4 py-1.5 rounded-full font-mono text-sm font-bold",
-                      isNeon
-                        ? "bg-neon/10 border border-neon/20 text-neon shadow-neon"
-                        : "bg-cyan/10 border border-cyan/20 text-cyan shadow-cyan"
-                    )}
-                  >
-                    {t.metric}
-                  </span>
+              <div className="mb-8">
+                <span className="inline-block px-4 py-1.5 rounded-full font-mono text-sm font-bold bg-white/[0.06] border border-white/10 text-white">
+                  {t.metric}
+                </span>
+              </div>
+
+              <p className="text-xl text-gray-400 font-medium leading-relaxed mb-8 relative z-10">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white to-zinc-500 p-[2px]">
+                  <div className="w-full h-full rounded-full bg-background" />
                 </div>
-
-                <p className="text-xl text-gray-300 font-medium leading-relaxed mb-8 relative z-10">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-neon to-cyan p-[2px]">
-                    <div className="w-full h-full rounded-full bg-background" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white">{t.name}</h4>
-                    <p className="text-sm text-gray-500">{t.role}</p>
-                  </div>
+                <div>
+                  <h4 className="font-bold text-white">{t.name}</h4>
+                  <p className="text-sm text-gray-600">{t.role}</p>
                 </div>
-              </GlassCard>
-            </motion.div>
-          );
-        })}
+              </div>
+            </GlassCard>
+          </motion.div>
+        ))}
       </div>
     </motion.div>
   </section>
@@ -642,8 +606,8 @@ const Testimonials = () => (
 const FooterCTA = () => (
   <footer className="relative border-t border-glass-border pt-40 pb-10 overflow-hidden bg-background">
     {/* Glow */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[400px] bg-neon/10 blur-[160px] pointer-events-none" />
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-neon/40 to-transparent shadow-[0_0_20px_rgba(0,255,157,0.3)]" />
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[400px] bg-white/[0.03] blur-[160px] pointer-events-none" />
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
     <motion.div
       initial="hidden"
@@ -660,7 +624,7 @@ const FooterCTA = () => (
       </motion.h2>
       <motion.p
         variants={fadeUp}
-        className="text-xl text-gray-400 font-medium mb-12 max-w-2xl mx-auto"
+        className="text-xl text-gray-500 font-medium mb-12 max-w-2xl mx-auto"
       >
         Join the exclusive network of elite founders and top-tier appointment
         setters.
@@ -695,16 +659,16 @@ const FooterCTA = () => (
     </div>
 
     {/* Footer Bar */}
-    <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm font-medium">
+    <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm font-medium">
       <div className="flex items-center gap-3">
-        <Bot className="w-5 h-5 text-neon/50" />
+        <Bot className="w-5 h-5 text-gray-600" />
         <p>&copy; 2026 Plugd Inc. All rights reserved.</p>
       </div>
       <div className="flex gap-8 mt-6 md:mt-0">
-        <Link href="#" className="hover:text-neon transition-colors">
+        <Link href="#" className="hover:text-white transition-colors">
           Twitter
         </Link>
-        <Link href="#" className="hover:text-neon transition-colors">
+        <Link href="#" className="hover:text-white transition-colors">
           LinkedIn
         </Link>
         <Link href="#" className="hover:text-white transition-colors">
@@ -723,7 +687,7 @@ const FooterCTA = () => (
    ═══════════════════════════════════════════════════ */
 export default function LandingPage() {
   return (
-    <main className="min-h-screen relative selection:bg-neon/20">
+    <main className="min-h-screen relative selection:bg-white/15">
       <Navbar />
       <Hero />
       <TrustedBy />

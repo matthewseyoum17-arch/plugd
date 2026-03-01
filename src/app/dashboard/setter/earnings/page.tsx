@@ -35,7 +35,7 @@ export default async function SetterEarnings() {
     {
       name: "Total Earned",
       value: `$${(totalPaid / 100).toFixed(2)}`,
-      color: "text-neon",
+      color: "text-white",
     },
     {
       name: "Pending",
@@ -48,7 +48,7 @@ export default async function SetterEarnings() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "paid":
-        return "bg-neon/10 text-neon border border-neon/20";
+        return "bg-white/10 text-white border border-white/20";
       case "pending":
         return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
       case "processing":
@@ -123,7 +123,7 @@ export default async function SetterEarnings() {
                 <td className="px-6 py-4 text-sm font-medium text-gray-300">
                   {payout.appointments?.listings?.title || "N/A"}
                 </td>
-                <td className="px-6 py-4 text-sm font-semibold text-neon">
+                <td className="px-6 py-4 text-sm font-semibold text-white">
                   ${((payout.amount || 0) / 100).toFixed(2)}
                 </td>
                 <td className="px-6 py-4">

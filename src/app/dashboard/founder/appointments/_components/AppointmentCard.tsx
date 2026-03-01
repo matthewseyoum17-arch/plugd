@@ -80,10 +80,10 @@ export function AppointmentCard(props: Props) {
   const showActions = optimisticStatus === "submitted";
 
   return (
-    <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-neon/25 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(0,255,157,0.08)] group">
+    <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-white/15 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(255,255,255,0.03)] group">
       <div className="flex items-start justify-between mb-5">
         <div className="flex-1 min-w-0 pr-4">
-          <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-neon transition-colors">
+          <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-gray-300 transition-colors">
             {props.listingTitle}
           </p>
           <p className="text-sm font-medium text-gray-400 mt-1">

@@ -7,7 +7,7 @@ import { createListing } from "@/app/actions";
 const STEPS = ["Product Info", "Commission & Criteria", "Review & Publish"];
 
 const inputClass =
-  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-600 transition-all";
+  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-white/25 focus:ring-1 focus:ring-white/15 text-white placeholder:text-gray-600 transition-all";
 const labelClass = "block text-sm font-medium text-gray-300 mb-2";
 
 export default function CreateListing() {
@@ -71,9 +71,9 @@ export default function CreateListing() {
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                 i < step
-                  ? "bg-neon text-background"
+                  ? "bg-white text-black"
                   : i === step
-                    ? "bg-neon/15 text-neon border border-neon/40"
+                    ? "bg-white/10 text-white border border-white/20"
                     : "bg-glass-bg text-gray-500 border border-glass-border"
               }`}
             >
@@ -86,7 +86,7 @@ export default function CreateListing() {
             </span>
             {i < STEPS.length - 1 && (
               <div
-                className={`flex-1 h-px ${i < step ? "bg-neon" : "bg-white/10"}`}
+                className={`flex-1 h-px ${i < step ? "bg-white" : "bg-white/10"}`}
               />
             )}
           </div>
@@ -232,7 +232,7 @@ export default function CreateListing() {
                   <p className="text-xs text-gray-500 uppercase tracking-wider">
                     $/Appointment
                   </p>
-                  <p className="text-neon font-semibold">
+                  <p className="text-white font-semibold">
                     ${commissionPerAppointment || "0.00"}
                   </p>
                 </div>
@@ -240,7 +240,7 @@ export default function CreateListing() {
                   <p className="text-xs text-gray-500 uppercase tracking-wider">
                     $/Close
                   </p>
-                  <p className="text-cyan font-semibold">
+                  <p className="text-gray-400 font-semibold">
                     ${commissionPerClose || "0.00"}
                   </p>
                 </div>

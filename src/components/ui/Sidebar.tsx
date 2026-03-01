@@ -32,10 +32,10 @@ export function Sidebar({ links, title = "Plugd" }: SidebarProps) {
 
       <div className="p-6 relative z-10">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-neon/[0.12] border border-neon/25 flex items-center justify-center shadow-neon group-hover:shadow-neon-lg transition-shadow">
-            <Bot className="w-4 h-4 text-neon" />
+          <div className="w-8 h-8 rounded-lg bg-white/[0.08] border border-white/15 flex items-center justify-center group-hover:bg-white/[0.12] transition-all">
+            <Bot className="w-4 h-4 text-white" />
           </div>
-          <span className="font-heading font-semibold tracking-tight text-xl text-white group-hover:text-neon transition-colors">
+          <span className="font-heading font-semibold tracking-tight text-xl text-white group-hover:text-gray-300 transition-colors">
             {title}
           </span>
         </Link>
@@ -50,7 +50,7 @@ export function Sidebar({ links, title = "Plugd" }: SidebarProps) {
               href={link.href}
               className={`block px-4 py-3 rounded-xl text-sm font-button font-medium transition-all ${
                 isActive
-                  ? "text-background bg-neon shadow-neon"
+                  ? "text-black bg-white shadow-[0_0_15px_rgba(255,255,255,0.06)]"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >

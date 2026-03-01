@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0f1a;
-  --foreground: #e2e8f0;
-  --neon: #00ff9d;
-  --cyan: #06b6d4;
-  --glass-bg: rgba(15,23,42,0.65);
+  --background: #09090b;
+  --foreground: #e4e4e7;
+  --neon: #ffffff;
+  --cyan: #a1a1aa;
+  --glass-bg: rgba(24,24,27,0.65);
   --glass-border: rgba(255,255,255,0.08);
 }
 
@@ -33,7 +33,7 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(0,255,157,0.2);
+  background: rgba(255,255,255,0.15);
   color: #fff;
 }
 
@@ -56,14 +56,14 @@ body {
     transition: all 0.3s ease;
   }
   .glass-hover:hover {
-    border-color: rgba(0,255,157,0.15);
-    box-shadow: 0 0 30px rgba(0,255,157,0.08);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 0 30px rgba(255,255,255,0.04);
     transform: translateY(-2px);
   }
 
   /* Gradient text */
   .text-gradient-neon {
-    background: linear-gradient(135deg, #00ff9d, #06b6d4);
+    background: linear-gradient(135deg, #ffffff, #a1a1aa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -76,10 +76,10 @@ body {
     background-clip: text;
   }
 
-  /* Neon button base */
+  /* Primary button */
   .btn-neon {
-    background: linear-gradient(135deg, #00ff9d, #00e68a);
-    color: #0a0f1a;
+    background: #ffffff;
+    color: #09090b;
     font-weight: 700;
     border-radius: 9999px;
     transition: all 0.2s ease;
@@ -87,13 +87,14 @@ body {
     overflow: hidden;
   }
   .btn-neon:hover {
-    box-shadow: 0 0 30px rgba(0,255,157,0.3);
+    box-shadow: 0 0 30px rgba(255,255,255,0.1);
     transform: scale(1.02);
+    background: #e4e4e7;
   }
 
   /* Ghost button */
   .btn-ghost {
-    background: rgba(15,23,42,0.65);
+    background: rgba(24,24,27,0.65);
     backdrop-filter: blur(24px);
     border: 1px solid rgba(255,255,255,0.1);
     color: #fff;
@@ -102,8 +103,8 @@ body {
     transition: all 0.2s ease;
   }
   .btn-ghost:hover {
-    border-color: rgba(0,255,157,0.3);
-    box-shadow: 0 0 20px rgba(0,255,157,0.1);
+    border-color: rgba(255,255,255,0.25);
+    box-shadow: 0 0 20px rgba(255,255,255,0.05);
     transform: scale(1.02);
   }
 
@@ -112,7 +113,7 @@ body {
     position: absolute;
     inset: 0;
     transform: translateX(-100%) skewX(12deg);
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
     pointer-events: none;
   }
   .group:hover .shimmer-overlay,
@@ -122,11 +123,11 @@ body {
 
   /* Floating label input */
   .floating-input {
-    @apply w-full px-4 pt-6 pb-2 bg-black/30 border border-white/10 rounded-xl text-white transition-all placeholder-transparent;
+    @apply w-full px-4 pt-6 pb-2 bg-white/[0.03] border border-white/10 rounded-xl text-white transition-all placeholder-transparent;
   }
   .floating-input:focus {
-    @apply outline-none border-neon/40 ring-1 ring-neon/30;
-    box-shadow: 0 0 15px rgba(0,255,157,0.1);
+    @apply outline-none border-white/25 ring-1 ring-white/15;
+    box-shadow: 0 0 15px rgba(255,255,255,0.04);
   }
 
   .floating-label {
@@ -136,7 +137,7 @@ body {
     @apply text-sm top-4;
   }
   .floating-input:focus ~ .floating-label {
-    @apply top-2 text-xs text-neon;
+    @apply top-2 text-xs text-white;
   }
   .floating-input:not(:placeholder-shown) ~ .floating-label {
     @apply top-2 text-xs;

@@ -14,7 +14,7 @@ export function StatCard({
       </p>
       <p className="text-3xl font-bold text-white font-sans">{value}</p>
       {sublabel && (
-        <p className="text-sm text-neon mt-2 font-medium">{sublabel}</p>
+        <p className="text-sm text-white mt-2 font-medium">{sublabel}</p>
       )}
     </div>
   );
