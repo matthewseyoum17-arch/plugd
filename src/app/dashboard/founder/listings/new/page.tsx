@@ -7,7 +7,7 @@ import { createListing } from "@/app/actions";
 const STEPS = ["Product Info", "Commission & Criteria", "Review & Publish"];
 
 const inputClass =
-  "w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg focus:outline-none focus:border-[#00FF94] text-white placeholder:text-gray-600";
+  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-600 transition-all";
 const labelClass = "block text-sm font-medium text-gray-300 mb-2";
 
 export default function CreateListing() {
@@ -16,7 +16,6 @@ export default function CreateListing() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [idealCustomer, setIdealCustomer] = useState("");
@@ -60,8 +59,8 @@ export default function CreateListing() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">New Listing</h1>
-      <p className="text-gray-500 mb-8">
+      <h1 className="text-3xl font-heading font-semibold text-white tracking-tight mb-2">New Listing</h1>
+      <p className="text-gray-400 mb-8 font-medium">
         Create a new product listing for setters to promote.
       </p>
 
@@ -72,10 +71,10 @@ export default function CreateListing() {
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                 i < step
-                  ? "bg-[#00FF94] text-black"
+                  ? "bg-neon text-background"
                   : i === step
-                    ? "bg-[#00FF94]/20 text-[#00FF94] border border-[#00FF94]"
-                    : "bg-[#1a1a1a] text-gray-500 border border-[#333]"
+                    ? "bg-neon/15 text-neon border border-neon/40"
+                    : "bg-glass-bg text-gray-500 border border-glass-border"
               }`}
             >
               {i < step ? "✓" : i + 1}
@@ -87,7 +86,7 @@ export default function CreateListing() {
             </span>
             {i < STEPS.length - 1 && (
               <div
-                className={`flex-1 h-px ${i < step ? "bg-[#00FF94]" : "bg-[#333]"}`}
+                className={`flex-1 h-px ${i < step ? "bg-neon" : "bg-white/10"}`}
               />
             )}
           </div>
@@ -95,7 +94,7 @@ export default function CreateListing() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400 mb-6 max-w-2xl">
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 mb-6 max-w-2xl text-sm">
           {error}
         </div>
       )}
@@ -207,7 +206,7 @@ export default function CreateListing() {
         {/* Step 3: Review */}
         {step === 2 && (
           <div className="space-y-4">
-            <div className="bg-[#1a1a1a] border border-[#222] rounded-xl p-6 space-y-4">
+            <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-xl p-6 space-y-4">
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider">
                   Title
@@ -233,7 +232,7 @@ export default function CreateListing() {
                   <p className="text-xs text-gray-500 uppercase tracking-wider">
                     $/Appointment
                   </p>
-                  <p className="text-[#00FF94] font-semibold">
+                  <p className="text-neon font-semibold">
                     ${commissionPerAppointment || "0.00"}
                   </p>
                 </div>
@@ -241,7 +240,7 @@ export default function CreateListing() {
                   <p className="text-xs text-gray-500 uppercase tracking-wider">
                     $/Close
                   </p>
-                  <p className="text-[#00FF94] font-semibold">
+                  <p className="text-cyan font-semibold">
                     ${commissionPerClose || "0.00"}
                   </p>
                 </div>
@@ -262,36 +261,33 @@ export default function CreateListing() {
         <div className="flex gap-4 mt-8">
           {step > 0 && (
             <button
-              type="button"
               onClick={() => setStep(step - 1)}
-              className="px-6 py-3 bg-transparent text-gray-300 border border-[#333] rounded-lg hover:bg-[#1a1a1a] transition-colors"
+              className="px-6 py-3 text-gray-400 hover:text-white border border-white/10 rounded-xl hover:bg-white/5 transition-all"
             >
               Back
             </button>
           )}
-          {step < 2 ? (
+          {step < STEPS.length - 1 ? (
             <button
-              type="button"
-              onClick={() => setStep(step + 1)}
+              onClick={() => canNext() && setStep(step + 1)}
               disabled={!canNext()}
-              className="px-6 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:brightness-90 transition-all disabled:opacity-50"
+              className="px-8 py-3 btn-neon rounded-xl disabled:opacity-50 ml-auto"
             >
-              Continue
+              Next
             </button>
           ) : (
             <button
-              type="button"
               onClick={handlePublish}
               disabled={isPending}
-              className="px-6 py-3 bg-[#00FF94] text-black font-semibold rounded-lg hover:brightness-90 transition-all disabled:opacity-50"
+              className="px-8 py-3 btn-neon rounded-xl disabled:opacity-50 ml-auto"
             >
-              {isPending ? "Publishing..." : "Publish Listing"}
+              {isPending ? "Publishing..." : "Publish Product"}
             </button>
           )}
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-3 text-gray-500 hover:text-gray-300 transition-colors ml-auto"
+            className="px-6 py-3 text-gray-500 hover:text-gray-300 transition-colors"
           >
             Cancel
           </button>

@@ -45,10 +45,10 @@ export default function SetterDashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-white font-sans">
+      <div className="min-h-screen bg-background flex items-center justify-center text-white font-sans">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin mb-4" />
-          Loading Datacore...
+          <div className="w-12 h-12 rounded-full border-t-2 border-neon animate-spin mb-4" />
+          <span className="text-gray-400">Loading Plugd...</span>
         </div>
       </div>
     );
@@ -57,11 +57,11 @@ export default function SetterDashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-black text-white font-sans">
-      <Sidebar links={setterLinks} title="Datacore Setter" />
+    <div className="flex min-h-screen bg-background text-white font-sans">
+      <Sidebar links={setterLinks} title="Plugd Setter" />
 
-      <main className="flex-1 ml-64 p-8 overflow-y-auto bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-glass-bg/20 via-black to-black relative">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+      <main className="flex-1 ml-64 p-8 overflow-y-auto relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(6,182,212,0.03)_0%,transparent_50%)] pointer-events-none" />
         <div className="max-w-6xl mx-auto relative z-10">{children}</div>
       </main>
     </div>

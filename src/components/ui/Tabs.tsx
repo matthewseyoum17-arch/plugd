@@ -26,7 +26,7 @@ export function Tabs({ tabs, defaultTab, children }: TabsProps) {
           >
             {tab}
             {active === tab && (
-              <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-accent" />
+              <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-neon shadow-[0_0_8px_rgba(0,255,157,0.4)]" />
             )}
           </button>
         ))}

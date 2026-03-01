@@ -39,7 +39,7 @@ export default async function Earnings() {
     {
       name: "Total Paid",
       value: `$${(totalPaid / 100).toFixed(2)}`,
-      color: "text-primary",
+      color: "text-neon",
     },
     {
       name: "Pending",
@@ -52,7 +52,7 @@ export default async function Earnings() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "paid":
-        return "bg-primary/10 text-primary border border-primary/20";
+        return "bg-neon/10 text-neon border border-neon/20";
       case "pending":
         return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
       case "processing":
@@ -127,7 +127,7 @@ export default async function Earnings() {
                 <td className="px-6 py-4 text-sm font-medium text-gray-300">
                   {payout.appointments?.listings?.title || "N/A"}
                 </td>
-                <td className="px-6 py-4 text-sm font-semibold text-primary">
+                <td className="px-6 py-4 text-sm font-semibold text-neon">
                   ${((payout.amount || 0) / 100).toFixed(2)}
                 </td>
                 <td className="px-6 py-4">

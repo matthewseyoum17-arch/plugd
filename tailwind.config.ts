@@ -10,56 +10,67 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-manrope)", "sans-serif"],
+        sans: ["var(--font-inter)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
         heading: ["var(--font-inter)", "sans-serif"],
-        button: ["var(--font-cabin)", "sans-serif"],
-        serif: ["var(--font-instrument)", "serif"],
+        button: ["var(--font-inter)", "sans-serif"],
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: {
-          DEFAULT: '#7b39fc',
-          hover: '#6a2ce0'
-        },
-        secondary: {
-          DEFAULT: '#2b2344',
-          hover: '#352b54'
-        },
-        accent: '#f87b52',
-        glass: {
-          border: 'rgba(164,132,215,0.5)',
-          bg: 'rgba(85,80,110,0.4)'
-        }
+        background: "#0a0f1a",
+        surface: "#0f172a",
+        "surface-light": "#1e293b",
+        primary: "#00ff9d",
+        "primary-hover": "#00e68a",
+        accent: "#06b6d4",
+        neon: "#00ff9d",
+        cyan: "#06b6d4",
+        "glass-bg": "rgba(15,23,42,0.65)",
+        "glass-border": "rgba(255,255,255,0.08)",
       },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        'glass-gradient': 'linear-gradient(180deg, rgba(85,80,110,0.4) 0%, rgba(43,35,68,0.2) 100%)',
+        'glass-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+        'neon-gradient': 'linear-gradient(135deg, #00ff9d 0%, #06b6d4 100%)',
+        'neon-gradient-r': 'linear-gradient(to right, #00ff9d, #06b6d4)',
+      },
+      boxShadow: {
+        'neon': '0 0 20px rgba(0,255,157,0.15)',
+        'neon-lg': '0 0 40px rgba(0,255,157,0.2)',
+        'neon-xl': '0 0 60px rgba(0,255,157,0.25)',
+        'cyan': '0 0 20px rgba(6,182,212,0.15)',
+        'cyan-lg': '0 0 40px rgba(6,182,212,0.2)',
+        'glass': '0 8px 32px rgba(0,0,0,0.4)',
+        'glass-lg': '0 16px 48px rgba(0,0,0,0.5)',
       },
       animation: {
-        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'gradient-x': 'gradient-x 10s ease infinite',
-        'shimmer': 'shimmer 2s infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        'spin-slow': 'spin 12s linear infinite',
+        'shimmer': 'shimmer 1.5s infinite',
+        'breathe': 'breathe 8s ease-in-out infinite',
+        'breathe-slow': 'breathe 12s ease-in-out infinite',
+        'marquee': 'marquee 30s linear infinite',
       },
       keyframes: {
-        'gradient-x': {
-          '0%, 100%': {
-            'background-size': '200% 200%',
-            'background-position': 'left center'
-          },
-          '50%': {
-            'background-size': '200% 200%',
-            'background-position': 'right center'
-          },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
-        'shimmer': {
-          '100%': {
-            'transform': 'translateX(100%)'
-          }
-        }
-      }
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.5', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.05)' },
+        },
+        shimmer: {
+          '100%': { transform: 'translateX(100%) skewX(12deg)' },
+        },
+        breathe: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.3' },
+          '50%': { transform: 'scale(1.15)', opacity: '0.6' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
     },
   },
   plugins: [],

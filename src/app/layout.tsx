@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Manrope, Inter, Cabin, Instrument_Serif } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-instrument",
-});
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Plugd | The Premium AI Automation Network",
-  description: "Connecting elite AI products with top closers.",
+  title: "Plugd | Where Founders Meet Elite Setters",
+  description: "The exclusive marketplace where AI automation & B2B founders instantly connect with elite appointment setters.",
 };
 
 export default function RootLayout({
@@ -22,11 +17,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${manrope.variable} ${inter.variable} ${cabin.variable} ${instrumentSerif.variable} font-sans antialiased bg-[#050505] text-white`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-white overflow-x-hidden`}
       >
-        {children}
+        <AnimatedBackground />
+        {/* Noise Texture */}
+        <div
+          className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+          }}
+        />
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );

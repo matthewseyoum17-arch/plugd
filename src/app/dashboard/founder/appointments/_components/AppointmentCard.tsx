@@ -80,10 +80,10 @@ export function AppointmentCard(props: Props) {
   const showActions = optimisticStatus === "submitted";
 
   return (
-    <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(123,57,252,0.1)] group">
+    <div className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-neon/25 transition-all duration-300 shadow-sm hover:shadow-[0_10px_40px_rgba(0,255,157,0.08)] group">
       <div className="flex items-start justify-between mb-5">
         <div className="flex-1 min-w-0 pr-4">
-          <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-primary transition-colors">
+          <p className="text-white font-heading font-semibold text-lg truncate group-hover:text-neon transition-colors">
             {props.listingTitle}
           </p>
           <p className="text-sm font-medium text-gray-400 mt-1">
@@ -130,7 +130,7 @@ export function AppointmentCard(props: Props) {
             <button
               onClick={handleConfirm}
               disabled={isPending}
-              className="px-4 py-2 bg-primary text-white text-xs font-button font-semibold rounded-lg hover:bg-primary-hover transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(123,57,252,0.2)]"
+              className="px-4 py-2 btn-neon text-xs font-button font-semibold rounded-lg disabled:opacity-50"
             >
               Confirm
             </button>

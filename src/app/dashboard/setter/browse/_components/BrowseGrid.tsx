@@ -112,7 +112,7 @@ export function BrowseGrid({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search products or ideal customers..."
-            className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 text-white placeholder:text-gray-500 backdrop-blur-md transition-all font-medium"
+            className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-2xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-500 backdrop-blur-md transition-all font-medium"
           />
         </div>
       </div>
@@ -154,12 +154,12 @@ export function BrowseGrid({
               return (
                 <div
                   key={listing.id}
-                  className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 flex flex-col hover:border-primary/50 transition-all duration-300 group shadow-sm hover:shadow-[0_10px_40px_rgba(123,57,252,0.1)]"
+                  className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 flex flex-col hover:border-neon/25 transition-all duration-300 group shadow-sm hover:shadow-[0_10px_40px_rgba(0,255,157,0.08)]"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0 pr-4">
-                      <h3 className="text-lg font-heading font-semibold text-white truncate group-hover:text-primary transition-colors">
+                      <h3 className="text-lg font-heading font-semibold text-white truncate group-hover:text-neon transition-colors">
                         {listing.title}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
@@ -169,11 +169,11 @@ export function BrowseGrid({
                         </span>
                         {listing.founder_profiles?.verified && (
                           <span
-                            className="inline-flex items-center justify-center w-4 h-4 bg-primary/20 rounded-full shrink-0"
+                            className="inline-flex items-center justify-center w-4 h-4 bg-neon/20 rounded-full shrink-0"
                             title="Verified"
                           >
                             <svg
-                              className="w-2.5 h-2.5 text-primary"
+                              className="w-2.5 h-2.5 text-neon"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -213,7 +213,7 @@ export function BrowseGrid({
                       <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-1 font-heading">
                         $/Close
                       </p>
-                      <p className="text-primary font-semibold">
+                      <p className="text-neon font-semibold">
                         $
                         {((listing.commission_per_close || 0) / 100).toFixed(0)}
                       </p>

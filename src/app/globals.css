@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: #050505;
-  --foreground: #ededed;
+  --background: #0a0f1a;
+  --foreground: #e2e8f0;
+  --neon: #00ff9d;
+  --cyan: #06b6d4;
+  --glass-bg: rgba(15,23,42,0.65);
+  --glass-border: rgba(255,255,255,0.08);
 }
 
 body {
@@ -12,8 +16,129 @@ body {
   background: var(--background);
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0,255,157,0.2);
+  color: #fff;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Glass utility */
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+  .glass-hover:hover {
+    border-color: rgba(0,255,157,0.15);
+    box-shadow: 0 0 30px rgba(0,255,157,0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Gradient text */
+  .text-gradient-neon {
+    background: linear-gradient(135deg, #00ff9d, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-white {
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Neon button base */
+  .btn-neon {
+    background: linear-gradient(135deg, #00ff9d, #00e68a);
+    color: #0a0f1a;
+    font-weight: 700;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-neon:hover {
+    box-shadow: 0 0 30px rgba(0,255,157,0.3);
+    transform: scale(1.02);
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    background: rgba(15,23,42,0.65);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(0,255,157,0.3);
+    box-shadow: 0 0 20px rgba(0,255,157,0.1);
+    transform: scale(1.02);
+  }
+
+  /* Shimmer overlay for buttons */
+  .shimmer-overlay {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%) skewX(12deg);
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+  }
+  .group:hover .shimmer-overlay,
+  .btn-neon:hover .shimmer-overlay {
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Floating label input */
+  .floating-input {
+    @apply w-full px-4 pt-6 pb-2 bg-black/30 border border-white/10 rounded-xl text-white transition-all placeholder-transparent;
+  }
+  .floating-input:focus {
+    @apply outline-none border-neon/40 ring-1 ring-neon/30;
+    box-shadow: 0 0 15px rgba(0,255,157,0.1);
+  }
+
+  .floating-label {
+    @apply absolute left-4 top-4 text-xs font-medium text-gray-500 transition-all pointer-events-none;
+  }
+  .floating-input:placeholder-shown ~ .floating-label {
+    @apply text-sm top-4;
+  }
+  .floating-input:focus ~ .floating-label {
+    @apply top-2 text-xs text-neon;
+  }
+  .floating-input:not(:placeholder-shown) ~ .floating-label {
+    @apply top-2 text-xs;
   }
 }

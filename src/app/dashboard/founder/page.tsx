@@ -65,7 +65,7 @@ export default async function FounderOverview() {
           Overview
         </h1>
         <p className="text-gray-400 mt-2 font-medium">
-          Welcome back to Datacore. Here&apos;s what&apos;s happening with your products.
+          Welcome back to Plugd. Here&apos;s what&apos;s happening with your products.
         </p>
       </div>
 

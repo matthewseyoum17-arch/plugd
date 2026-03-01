@@ -39,7 +39,7 @@ export default async function MyListings() {
         </div>
         <Link
           href="/dashboard/founder/listings/new"
-          className="px-5 py-2.5 bg-primary text-white font-button font-medium rounded-xl hover:bg-primary-hover transition-all shadow-[0_0_20px_rgba(123,57,252,0.2)] hover:shadow-[0_0_30px_rgba(123,57,252,0.4)]"
+          className="px-5 py-2.5 btn-neon font-button font-medium rounded-xl"
         >
           + New Product
         </Link>
@@ -79,11 +79,11 @@ export default async function MyListings() {
             return (
               <div
                 key={listing.id}
-                className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 flex flex-col shadow-sm hover:shadow-[0_10px_40px_rgba(123,57,252,0.1)] group"
+                className="bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-6 hover:border-neon/25 transition-all duration-300 flex flex-col shadow-sm hover:shadow-[0_10px_40px_rgba(0,255,157,0.08)] group"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex-1 min-w-0 pr-4">
-                    <h3 className="text-lg font-heading font-semibold text-white truncate group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-heading font-semibold text-white truncate group-hover:text-neon transition-colors">
                       {listing.title}
                     </h3>
                     <p className="text-sm text-gray-400 mt-1 truncate">
@@ -109,7 +109,7 @@ export default async function MyListings() {
                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1 font-heading">
                       $/Close
                     </p>
-                    <p className="text-primary font-semibold text-xl">
+                    <p className="text-neon font-semibold text-xl">
                       ${((listing.commission_per_close || 0) / 100).toFixed(2)}
                     </p>
                   </div>
@@ -122,7 +122,7 @@ export default async function MyListings() {
                   </span>
                   <span className="text-white/10">|</span>
                   <span className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <div className="w-2 h-2 rounded-full bg-neon" />
                     {pendingAppts} pending
                   </span>
                 </div>

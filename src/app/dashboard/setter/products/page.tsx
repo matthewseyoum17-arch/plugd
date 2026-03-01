@@ -27,7 +27,7 @@ export default async function MyProducts() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "approved":
-        return "bg-primary/10 text-primary border border-primary/20";
+        return "bg-neon/10 text-neon border border-neon/20";
       case "pending":
         return "bg-orange-500/10 text-orange-400 border border-orange-500/20";
       case "rejected":
@@ -90,7 +90,7 @@ export default async function MyProducts() {
                     (app.listings?.commission_per_appointment || 0) / 100
                   ).toFixed(2)}
                 </td>
-                <td className="px-6 py-4 text-sm font-semibold text-primary">
+                <td className="px-6 py-4 text-sm font-semibold text-neon">
                   $
                   {((app.listings?.commission_per_close || 0) / 100).toFixed(2)}
                 </td>

@@ -15,6 +15,9 @@ interface Listing {
   };
 }
 
+const inputClass =
+  "w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl focus:outline-none focus:border-neon/40 focus:ring-1 focus:ring-neon/30 text-white placeholder:text-gray-600 transition-all";
+
 export default function SubmitAppointment() {
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +52,6 @@ export default function SubmitAppointment() {
         router.push("/dashboard/founder");
       }
 
-      // Fetch listing details
       const { data: listingData } = await supabase
         .from("listings")
         .select("*, founder_profiles(company_name)")
@@ -73,7 +75,6 @@ export default function SubmitAppointment() {
       } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      // Verify setter has approved application for this listing
       const { data: application } = await supabase
         .from("setter_applications")
         .select("*")
@@ -116,58 +117,61 @@ export default function SubmitAppointment() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+      <div className="flex items-center justify-center py-24">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-12 h-12 rounded-full border-t-2 border-neon animate-spin mb-4" />
+          <span className="text-gray-400">Loading...</span>
+        </div>
       </div>
     );
   }
 
   if (!listing) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-white">Listing not found</div>
+      <div className="flex items-center justify-center py-24">
+        <div className="text-gray-400">Listing not found</div>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Submit Appointment</h1>
-      <p className="text-gray-400 mb-8">
+      <h1 className="text-3xl font-heading font-semibold text-white tracking-tight mb-2">Submit Appointment</h1>
+      <p className="text-gray-400 mb-8 font-medium">
         Promoting: <span className="text-white">{listing.title}</span> by{" "}
         {listing.founder_profiles?.company_name}
       </p>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6 bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl p-8">
         {error && (
-          <div className="p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
+          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
             {error}
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs font-button font-semibold text-gray-400 uppercase tracking-wider mb-2">
               Contact Name *
             </label>
             <input
               type="text"
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              className={inputClass}
               required
               placeholder="John Doe"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs font-button font-semibold text-gray-400 uppercase tracking-wider mb-2">
               Contact Email *
             </label>
             <input
               type="email"
               value={contactEmail}
               onChange={(e) => setContactEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+              className={inputClass}
               required
               placeholder="john@company.com"
             />
@@ -175,48 +179,62 @@ export default function SubmitAppointment() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-xs font-button font-semibold text-gray-400 uppercase tracking-wider mb-2">
             Contact Company *
           </label>
           <input
             type="text"
             value={contactCompany}
             onChange={(e) => setContactCompany(e.target.value)}
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white"
+            className={inputClass}
             required
             placeholder="Acme Corp"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-xs font-button font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Appointment Type *
           </label>
-          <div className="flex gap-4">
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div className="flex gap-6">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "appointment" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+              >
+                {appointmentType === "appointment" && (
+                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                )}
+              </div>
               <input
                 type="radio"
                 name="appointmentType"
                 value="appointment"
                 checked={appointmentType === "appointment"}
                 onChange={() => setAppointmentType("appointment")}
-                className="w-4 h-4 accent-[#00FF94]"
+                className="hidden"
               />
-              <span className="text-white">
+              <span className="text-white text-sm font-medium">
                 Qualified Meeting ($
                 {((listing.commission_per_appointment || 0) / 100).toFixed(2)})
               </span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div
+                className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${appointmentType === "close" ? "border-neon bg-neon/20" : "border-gray-600 group-hover:border-gray-400"}`}
+              >
+                {appointmentType === "close" && (
+                  <div className="w-2.5 h-2.5 rounded-full bg-neon" />
+                )}
+              </div>
               <input
                 type="radio"
                 name="appointmentType"
                 value="close"
                 checked={appointmentType === "close"}
                 onChange={() => setAppointmentType("close")}
-                className="w-4 h-4 accent-[#00FF94]"
+                className="hidden"
               />
-              <span className="text-white">
+              <span className="text-white text-sm font-medium">
                 Closed Deal ($
                 {((listing.commission_per_close || 0) / 100).toFixed(2)})
               </span>
@@ -225,29 +243,29 @@ export default function SubmitAppointment() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-xs font-button font-semibold text-gray-400 uppercase tracking-wider mb-2">
             Notes
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg focus:outline-none focus:border-[#00FF94] text-white h-24"
+            className={`${inputClass} h-24`}
             placeholder="Any additional context about this appointment..."
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 pt-2">
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-3 bg-[#00FF94] text-black font-medium rounded-lg hover:bg-[#00cc76] transition-colors disabled:opacity-50"
+            className="px-8 py-3 btn-neon rounded-xl font-button font-semibold disabled:opacity-50"
           >
             {submitting ? "Submitting..." : "Submit Appointment"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-3 bg-[#1a1a1a] text-gray-300 border border-[#2a2a2a] rounded-lg hover:bg-[#2a2a2a] transition-colors"
+            className="px-6 py-3 text-gray-400 border border-white/10 rounded-xl hover:bg-white/5 transition-all"
           >
             Cancel
           </button>
